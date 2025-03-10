@@ -62,6 +62,7 @@ public class OracaoGenerationService {
             // Chamar OpenAI API
             log.info("Iniciando chamada à API OpenAI para gerar oração...");
             String oracaoContent = openAIService.generateOracao(prompt);
+            processTrackingService.storeOracaoContent(processId, oracaoContent);
             log.info("Oração gerada com sucesso (tamanho: {} caracteres)", oracaoContent.length());
 
             // Atualizar status

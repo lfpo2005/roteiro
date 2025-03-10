@@ -43,7 +43,13 @@ public class DescriptionGenerationService {
             // Chamar OpenAI API
             log.info("Iniciando geração da descrição no idioma: {}", idioma);
             String descriptionContent = openAIService.generateDescription(prompt);
+            processTrackingService.storeDescriptionContent(processId, descriptionContent);
+
             log.info("Descrição gerada com sucesso: {} caracteres", descriptionContent.length());
+
+            processTrackingService.setImageBeingProcessed(
+                    processId,
+                    true);
 
             // Atualizar status
             processTrackingService.updateStatus(

@@ -74,7 +74,8 @@ public class TitleGenerationService {
                     event.getTema(),
                     event.getEstiloOracao(),
                     idioma,
-                    hasObservacoes ? observacoes : null
+                    hasObservacoes,
+                    observacoes
             );
 
             // Chamar OpenAI API

@@ -43,6 +43,8 @@ public class ShortGenerationService {
             // Chamar OpenAI API
             log.info("Iniciando geração da versão short no idioma: {}", idioma);
             String shortContent = openAIService.generateOracao(prompt);
+            processTrackingService.storeShortContent(processId, shortContent);
+
 
             // Verificar se o conteúdo está no idioma correto
             if (necessitaCorrecaoIdioma(shortContent, idioma)) {

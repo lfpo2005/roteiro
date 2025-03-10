@@ -36,7 +36,8 @@ public class FileStorageService {
     }
 
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
-                                 String shortContent, String description, List<String> allTitles) {
+                                 String shortContent, String description, List<String> allTitles,
+                                 String imagePath) {
         try {
             // Criar nome de arquivo seguro baseado no título
             String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
@@ -75,6 +76,12 @@ public class FileStorageService {
 
             txtContent.append("**Descrição para YouTube e TikTok**\n\n");
             txtContent.append(description);
+
+            // Adicionar informação sobre a imagem gerada, se disponível
+            if (imagePath != null) {
+                txtContent.append("\n\n**Imagem de Capa**\n\n");
+                txtContent.append("Uma imagem de capa foi gerada em: ").append(imagePath);
+            }
 
             // Escrever no arquivo de metadados
             try (FileWriter writer = new FileWriter(txtFilePath.toFile())) {

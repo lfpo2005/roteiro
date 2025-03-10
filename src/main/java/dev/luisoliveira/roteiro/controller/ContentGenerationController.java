@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/content")
+@RequestMapping("/content")
 @RequiredArgsConstructor
 @Slf4j
 public class ContentGenerationController {

@@ -26,8 +26,9 @@ public class PromptBuilder {
      * @param idioma Idioma (es, pt, en)
      * @return Prompt otimizado para geração de títulos
      */
-    public static String buildTitlePrompt(String tema, String estilo, String idioma) {
-        log.debug("Construindo prompt para títulos: tema={}, estilo={}, idioma={}", tema, estilo, idioma);
+    public static String buildTitlePrompt(String tema, String estilo, String idioma, boolean hasObservacoes, String observacoes) {
+        log.debug("Construindo prompt para títulos: tema={}, estilo={}, idioma={}, hasObservacoes={}",
+                tema, estilo, idioma, hasObservacoes);
 
         StringBuilder prompt = new StringBuilder();
 
@@ -76,6 +77,11 @@ public class PromptBuilder {
         prompt.append("- ORACIÓN PODEROSA para RENOVAR TUS FINANZAS #feyesperanza\n\n");
 
         prompt.append("Forneça apenas a lista de 5 títulos, sem comentários adicionais.");
+
+        // Adicionar observações, se existirem
+        if (hasObservacoes && observacoes != null && !observacoes.isEmpty()) {
+            prompt.append("\n\nObservações adicionais para considerar: ").append(observacoes);
+        }
 
         return prompt.toString();
     }

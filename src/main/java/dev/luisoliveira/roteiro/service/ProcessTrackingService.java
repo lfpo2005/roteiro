@@ -28,6 +28,10 @@ public class ProcessTrackingService {
         private String idioma;
         private String titulo;
         private String observacoes;
+        private String oracaoContent;
+        private String shortContent;
+        private String descriptionContent;
+        private boolean imageBeingProcessed = false;
 
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
@@ -49,6 +53,18 @@ public class ProcessTrackingService {
 
         public String getObservacoes() { return observacoes; }
         public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+
+        public String getOracaoContent() { return oracaoContent; }
+        public void setOracaoContent(String oracaoContent) { this.oracaoContent = oracaoContent; }
+
+        public String getShortContent() { return shortContent; }
+        public void setShortContent(String shortContent) { this.shortContent = shortContent; }
+
+        public String getDescriptionContent() { return descriptionContent; }
+        public void setDescriptionContent(String descriptionContent) { this.descriptionContent = descriptionContent; }
+
+        public boolean isImageBeingProcessed() { return imageBeingProcessed; }
+        public void setImageBeingProcessed(boolean imageBeingProcessed) { this.imageBeingProcessed = imageBeingProcessed; }
     }
 
     public void initializeProcess(String processId) {
@@ -161,5 +177,79 @@ public class ProcessTrackingService {
 
     public String getResult(String processId) {
         return processResults.get(processId);
+    }
+
+    public void storeOracaoContent(String processId, String oracaoContent) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setOracaoContent(oracaoContent);
+            log.debug("Conteúdo da oração armazenado para processo: {}", processId);
+        }
+    }
+
+    /**
+     * Armazena o conteúdo da versão short para uso posterior
+     */
+    public void storeShortContent(String processId, String shortContent) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setShortContent(shortContent);
+            log.debug("Conteúdo short armazenado para processo: {}", processId);
+        }
+    }
+
+    /**
+     * Armazena o conteúdo da descrição para uso posterior
+     */
+    public void storeDescriptionContent(String processId, String descriptionContent) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setDescriptionContent(descriptionContent);
+            log.debug("Conteúdo da descrição armazenado para processo: {}", processId);
+        }
+    }
+
+    /**
+     * Marca que a imagem está sendo processada
+     */
+    public void setImageBeingProcessed(String processId, boolean isProcessing) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setImageBeingProcessed(isProcessing);
+            log.debug("Status de processamento de imagem atualizado para {}: {}",
+                    processId, isProcessing ? "em processamento" : "concluído");
+        }
+    }
+
+    /**
+     * Verifica se a imagem está sendo processada
+     */
+    public boolean isImageBeingProcessed(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null && info.isImageBeingProcessed();
+    }
+
+    /**
+     * Recupera o conteúdo da oração
+     */
+    public String getOracaoContent(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getOracaoContent() : null;
+    }
+
+    /**
+     * Recupera o conteúdo da versão short
+     */
+    public String getShortContent(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getShortContent() : null;
+    }
+
+    /**
+     * Recupera o conteúdo da descrição
+     */
+    public String getDescriptionContent(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getDescriptionContent() : null;
     }
 }
