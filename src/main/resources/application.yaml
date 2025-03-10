@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: roteiro
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Configuração do OpenAI
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+  model: gpt-4
+ # model: gpt-3.5-turbo
+
+# Diretório para armazenamento de arquivos gerados
+file:
+  output:
+    path: ./gerados
+
+# Configuração de logging
+logging:
+  level:
+    dev.luisoliveira.roteiro: DEBUG
+    org.springframework: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %-5level - %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/roteiro.log
+    max-size: 10MB
+    max-history: 7
+
+# Configuração do Spring Boot Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized

@@ -1,22 +1,9 @@
 package dev.luisoliveira.roteiro.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.theokanning.openai.service.OpenAiService;
 
 @Slf4j
 @Configuration
 public class OpenAIConfig {
-
-    @Value("${openai.api.key}")
-    private String openaiApiKey;
-
-    private static final String GPT_URL = "https://api.openai.com/v1/chat/completions";
-
-    @Bean
-    public OpenAiService openAiService() {
-        return new OpenAiService(openaiApiKey);
-    }
 }
