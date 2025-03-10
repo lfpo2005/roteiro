@@ -71,3 +71,111 @@ Tamanho total: 1.800-2.200 caracteres (5 minutos)
 2025-03-10 18:25:04 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
 2025-03-10 18:25:04 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
 2025-03-10 18:25:04 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-10 18:25:09 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 47972 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-10 18:25:09 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-10 18:25:09 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-10 18:25:10 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-10 18:25:10 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-10 18:25:10 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-10 18:25:10 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-10 18:25:10 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-10 18:25:10 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-10 18:25:10 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1595 ms
+2025-03-10 18:25:11 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-10 18:25:11 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-10 18:25:11 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-10 18:25:11 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-10 18:25:11 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.079 seconds (process running for 3.492)
+2025-03-10 18:25:28 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-10 18:25:28 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-10 18:25:28 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-10 18:25:28 [http-nio-8080-exec-1] INFO  d.l.r.c.ContentGenerationController - Iniciando processo de geração com ID: 76153822-789f-4398-8b8c-88fcf7866939 (idioma: es-MX)
+2025-03-10 18:25:28 [http-nio-8080-exec-1] DEBUG d.l.r.service.ProcessTrackingService - Processo inicializado: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:28 [http-nio-8080-exec-1] DEBUG d.l.r.service.ProcessTrackingService - Informações do processo configuradas: processId=76153822-789f-4398-8b8c-88fcf7866939, idioma=es-MX
+2025-03-10 18:25:28 [http-nio-8080-exec-1] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ContentInitiatedEvent para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:28 [http-nio-8080-exec-1] INFO  d.l.roteiro.service.EventBusService - Evento ContentInitiatedEvent publicado com sucesso para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:28 [SimpleAsyncTaskExecutor-12] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Gerando títulos..., progress=20%
+2025-03-10 18:25:28 [SimpleAsyncTaskExecutor-12] INFO  d.l.r.service.TitleGenerationService - Gerando títulos para o processo 76153822-789f-4398-8b8c-88fcf7866939 no idioma es-MX
+2025-03-10 18:25:28 [SimpleAsyncTaskExecutor-12] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para títulos: tema=protección de los hijos, estilo=Reflexiva, idioma=es-MX
+2025-03-10 18:25:28 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] DEBUG d.l.r.service.ProcessTrackingService - Títulos armazenados: processId=76153822-789f-4398-8b8c-88fcf7866939, quantidade=5
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Títulos gerados com sucesso, progress=40%
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] INFO  d.l.r.service.TitleGenerationService - Gerados 5 títulos com sucesso para o processo 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] INFO  d.l.r.service.TitleGenerationService - Título selecionado automaticamente: PODEROSA ORACIÓN para PROTEGER a los HIJOS de todo MAL #oración #bendiciones 🙏
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Título selecionado: PODEROSA ORACIÓN para PROTEGER a los HIJOS de todo MAL #oración #bendiciones 🙏, progress=45%
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.EventBusService - Publicando evento: TitleSelectedEvent para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.EventBusService - Evento TitleSelectedEvent publicado com sucesso para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Recebido evento TitleSelectedEvent para processId: 76153822-789f-4398-8b8c-88fcf7866939 com título: PODEROSA ORACIÓN para PROTEGER a los HIJOS de todo MAL #oración #bendiciones 🙏
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Gerando oração para o título selecionado..., progress=50%
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Gerando oração...' (50%)
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Recuperadas informações do processo: tema=protección de los hijos, estilo=Reflexiva, duracao=Padrão, idioma=es-MX
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Construindo prompt para oração no idioma: es-MX
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para oração: tema=protección de los hijos, estilo=Reflexiva, duracao=Padrão, titulo=PODEROSA ORACIÓN para PROTEGER a los HIJOS de todo MAL #oración #bendiciones 🙏, idioma=es-MX
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] DEBUG d.l.roteiro.util.PromptBuilder - Prompt construído com sucesso (tamanho: 923 caracteres)
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.s.OracaoGenerationService - Prompt construído: Crea una oración en español latino/mexicano con el título: "PODEROSA ORACIÓN para PROTEGER a los HIJOS de todo MAL #oración #bendiciones 🙏"
+
+Utiliza expresiones, palabras y giros típicos del español de México y Latinoamérica. Evita términos o expresiones propias del español de España.
+
+Tema: protección de los hijos
+Estilo: Reflexiva
+Duração: Padrão
+
+A oração deve seguir esta estrutura:
+1. Versículo inicial relevante ("Versículo del día:")
+2. Introdução com saudação e relevância do tema (6-8 linhas)
+3. Reflexão bíblica com passagem relevante (6-8 linhas)
+4. Oração principal com:
+   - Invocação inicial
+   - Desenvolvimento do tema
+   - Aplicação prática
+   - Pedidos específicos
+   - Declaração de fé
+5. Encerramento com:
+   - Recapitulação
+   - Versículo final (diferente do inicial)
+   - Bênção final
+   - Convite para inscrição
+   - "En el nombre de Jesús, Amén"
+
+Tamanho total: 1.800-2.200 caracteres (5 minutos)
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Iniciando chamada à API OpenAI para gerar oração...
+2025-03-10 18:25:31 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Oração gerada com sucesso (tamanho: 2386 caracteres)
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Oração gerada com sucesso, progress=70%
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Oração gerada com sucesso' (70%)
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Publicando evento OracaoGeneratedEvent...
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.EventBusService - Publicando evento: OracaoGeneratedEvent para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.EventBusService - Evento OracaoGeneratedEvent publicado com sucesso para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Evento OracaoGeneratedEvent publicado com sucesso
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-14] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Gerando versão short da oração..., progress=75%
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-14] INFO  d.l.r.service.ShortGenerationService - Gerando versão short da oração no idioma: es-MX
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-14] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para versão short: titulo=PODEROSA ORACIÓN para PROTEGER a los HIJOS de todo MAL #oración #bendiciones 🙏, tamanho da oração=2386 caracteres, idioma=es-MX
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-14] INFO  d.l.r.service.ShortGenerationService - Iniciando geração da versão short no idioma: es-MX
+2025-03-10 18:25:38 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-14] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Versão short gerada com sucesso, progress=80%
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-14] INFO  d.l.r.service.ShortGenerationService - Versão short gerada com sucesso: 390 caracteres
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ShortGeneratedEvent para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.EventBusService - Evento ShortGeneratedEvent publicado com sucesso para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-15] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Gerando descrição para YouTube e TikTok..., progress=85%
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-15] INFO  d.l.r.s.DescriptionGenerationService - Gerando descrição para YouTube e TikTok no idioma: es-MX
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-15] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para descrição: titulo=PODEROSA ORACIÓN para PROTEGER a los HIJOS de todo MAL #oración #bendiciones 🙏, tamanho da oração=2386 caracteres, idioma=es-MX
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-15] INFO  d.l.r.s.DescriptionGenerationService - Iniciando geração da descrição no idioma: es-MX
+2025-03-10 18:25:40 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-15] INFO  d.l.r.s.DescriptionGenerationService - Descrição gerada com sucesso: 557 caracteres
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-15] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Descrição gerada com sucesso, progress=90%
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.EventBusService - Publicando evento: DescriptionGeneratedEvent para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.EventBusService - Evento DescriptionGeneratedEvent publicado com sucesso para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Compilando conteúdo final..., progress=95%
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.s.ContentCompilationService - Compilando conteúdo final para processo: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.service.FileStorageService - Arquivo de metadados salvo com sucesso: .\gerados\76153822-789f-4398-8b8c-88fcf7866939\PODEROSA_ORACI_N_para_PROTEGER_a_los_HIJOS_de_todo_MAL_oraci_n_bendiciones__meta.txt
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.service.FileStorageService - Arquivo SRT salvo com sucesso: .\gerados\76153822-789f-4398-8b8c-88fcf7866939\PODEROSA_ORACI_N_para_PROTEGER_a_los_HIJOS_de_todo_MAL_oraci_n_bendiciones_.srt
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.service.FileStorageService - Arquivo SRT da versão curta salvo com sucesso: .\gerados\76153822-789f-4398-8b8c-88fcf7866939\PODEROSA_ORACI_N_para_PROTEGER_a_los_HIJOS_de_todo_MAL_oraci_n_bendiciones__short.srt
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.service.ProcessTrackingService - Processo concluído: processId=76153822-789f-4398-8b8c-88fcf7866939, resultPath=.\gerados\76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=76153822-789f-4398-8b8c-88fcf7866939, stage=Processo concluído com sucesso! Arquivos gerados em: .\gerados\76153822-789f-4398-8b8c-88fcf7866939, progress=100%
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.s.ContentCompilationService - Conteúdo compilado com sucesso. Arquivos gerados em: .\gerados\76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ContentCompletedEvent para o processId: 76153822-789f-4398-8b8c-88fcf7866939
+2025-03-10 18:25:42 [SimpleAsyncTaskExecutor-16] INFO  d.l.roteiro.service.EventBusService - Evento ContentCompletedEvent publicado com sucesso para o processId: 76153822-789f-4398-8b8c-88fcf7866939
