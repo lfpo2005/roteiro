@@ -2,6 +2,10 @@ package dev.luisoliveira.roteiro.util;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Classe utilitária para construção de prompts otimizados para API OpenAI.
+ * Gera prompts para diferentes etapas do processo de geração de conteúdo para orações.
+ */
 @Slf4j
 public class PromptBuilder {
 
@@ -14,6 +18,14 @@ public class PromptBuilder {
             "protección familiar", "mensajes diarios", "renovación financiera", "transformación personal"
     };
 
+    /**
+     * Constrói prompt para geração de títulos
+     *
+     * @param tema Tema da oração
+     * @param estilo Estilo da oração
+     * @param idioma Idioma (es, pt, en)
+     * @return Prompt otimizado para geração de títulos
+     */
     public static String buildTitlePrompt(String tema, String estilo, String idioma) {
         log.debug("Construindo prompt para títulos: tema={}, estilo={}, idioma={}", tema, estilo, idioma);
 
@@ -68,6 +80,16 @@ public class PromptBuilder {
         return prompt.toString();
     }
 
+    /**
+     * Constrói prompt para geração da oração principal
+     *
+     * @param tema Tema da oração
+     * @param estilo Estilo da oração
+     * @param duracao Duração desejada
+     * @param titulo Título selecionado
+     * @param idioma Idioma (es, pt, en)
+     * @return Prompt otimizado para geração de oração
+     */
     public static String buildOracaoPrompt(String tema, String estilo, String duracao, String titulo, String idioma) {
         // Verificar parâmetros de entrada
         if (tema == null || estilo == null || duracao == null || titulo == null) {
@@ -138,6 +160,14 @@ public class PromptBuilder {
         return promptStr;
     }
 
+    /**
+     * Constrói prompt para geração da versão curta (short) da oração
+     *
+     * @param oracaoContent Conteúdo da oração original
+     * @param titulo Título da oração
+     * @param idioma Idioma (es, pt, en)
+     * @return Prompt otimizado para geração de versão short
+     */
     public static String buildShortPrompt(String oracaoContent, String titulo, String idioma) {
         log.debug("Construindo prompt para versão short: titulo={}, tamanho da oração={} caracteres, idioma={}",
                 titulo, oracaoContent.length(), idioma);
@@ -185,6 +215,14 @@ public class PromptBuilder {
         return prompt.toString();
     }
 
+    /**
+     * Constrói prompt para geração de descrição para YouTube e TikTok
+     *
+     * @param title Título da oração
+     * @param oracaoContent Conteúdo da oração
+     * @param idioma Idioma (es, pt, en)
+     * @return Prompt otimizado para geração de descrição
+     */
     public static String buildDescriptionPrompt(String title, String oracaoContent, String idioma) {
         log.debug("Construindo prompt para descrição: titulo={}, tamanho da oração={} caracteres, idioma={}",
                 title, oracaoContent.length(), idioma);
@@ -233,6 +271,15 @@ public class PromptBuilder {
         return prompt.toString();
     }
 
+    /**
+     * Constrói prompt para geração de prompt de imagem
+     * (para usar com ferramentas de geração de imagem como DALL-E ou Midjourney)
+     *
+     * @param title Título da oração
+     * @param oracaoContent Conteúdo da oração
+     * @param idioma Idioma (es, pt, en)
+     * @return Prompt otimizado para geração de prompt de imagem
+     */
     public static String buildImagePromptPrompt(String title, String oracaoContent, String idioma) {
         log.debug("Construindo prompt para imagem: titulo={}, tamanho da oração={} caracteres, idioma={}",
                 title, oracaoContent.length(), idioma);
@@ -265,5 +312,93 @@ public class PromptBuilder {
         prompt.append("Responda APENAS com o prompt para geração de imagem, sem comentários adicionais.");
 
         return prompt.toString();
+    }
+
+    /**
+     * Constrói prompt para rotinas de oração personalizadas
+     *
+     * @param religiousTradition Tradição religiosa
+     * @param denomination Denominação
+     * @param durationMinutes Duração em minutos
+     * @param timeOfDay Momento do dia
+     * @param intentions Intenções específicas
+     * @param idioma Idioma (es, pt, en)
+     * @return Prompt otimizado para geração de rotina de oração
+     */
+    public static String buildPrayerRoutinePrompt(
+            String religiousTradition,
+            String denomination,
+            Integer durationMinutes,
+            String timeOfDay,
+            String intentions,
+            String idioma) {
+
+        log.debug("Construindo prompt para rotina de oração: tradição={}, duração={}, idioma={}",
+                religiousTradition, durationMinutes, idioma);
+
+        StringBuilder promptBuilder = new StringBuilder();
+
+        // Selecionar idioma para o prompt
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            promptBuilder.append("Crie uma rotina de oração personalizada em português com base nos seguintes parâmetros:\n\n");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            promptBuilder.append("Create a personalized prayer routine in English based on the following parameters:\n\n");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            promptBuilder.append("Crea una rutina de oración personalizada en español latino/mexicano con base en los siguientes parámetros:\n\n");
+            promptBuilder.append("Utiliza expresiones, palabras y giros típicos del español de México y Latinoamérica.\n\n");
+        } else {
+            // Default: Spanish
+            promptBuilder.append("Crea una rutina de oración personalizada en español con base en los siguientes parámetros:\n\n");
+        }
+
+        // Add basic information
+        promptBuilder.append("TRADICIÓN RELIGIOSA: ")
+                .append(religiousTradition != null ? religiousTradition : "Cristiana");
+
+        promptBuilder.append("\nDENOMINACIÓN: ")
+                .append(denomination != null && !denomination.isEmpty() ? denomination : "No especificada");
+
+        // Add duration
+        int duration = (durationMinutes != null && durationMinutes > 0)
+                ? durationMinutes
+                : 15;
+        promptBuilder.append("\nDURACIÓN: ").append(duration).append(" minutos");
+
+        // Add time of day
+        if (timeOfDay != null && !timeOfDay.isEmpty()) {
+            promptBuilder.append("\nMOMENTO DEL DÍA: ").append(timeOfDay);
+        }
+
+        // Add specific intentions
+        if (intentions != null && !intentions.isEmpty()) {
+            promptBuilder.append("\nINTENCIONES ESPECÍFICAS: ").append(intentions);
+        }
+
+        // Final instructions to the AI based on language
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            promptBuilder.append("\n\nPor favor, forneça uma rotina de oração estruturada que inclua:");
+            promptBuilder.append("\n- Abertura/preparação");
+            promptBuilder.append("\n- Elementos principais de oração com alocações aproximadas de tempo");
+            promptBuilder.append("\n- Textos específicos de oração ou leituras de escrituras quando apropriado");
+            promptBuilder.append("\n- Encerramento/reflexão");
+            promptBuilder.append("\n- Quaisquer recomendações para melhorar a experiência de oração");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            promptBuilder.append("\n\nPlease provide a structured prayer routine that includes:");
+            promptBuilder.append("\n- Opening/preparation");
+            promptBuilder.append("\n- Main prayer elements with approximate time allocations");
+            promptBuilder.append("\n- Specific prayer texts or scripture readings where appropriate");
+            promptBuilder.append("\n- Closing/reflection");
+            promptBuilder.append("\n- Any recommendations for enhancing the prayer experience");
+        } else {
+            // Default: Spanish
+            promptBuilder.append("\n\nPor favor, proporciona una rutina de oración estructurada que incluya:");
+            promptBuilder.append("\n- Apertura/preparación");
+            promptBuilder.append("\n- Elementos principales de oración con asignaciones aproximadas de tiempo");
+            promptBuilder.append("\n- Textos específicos de oración o lecturas de escrituras cuando sea apropiado");
+            promptBuilder.append("\n- Cierre/reflexión");
+            promptBuilder.append("\n- Cualquier recomendación para mejorar la experiencia de oración");
+        }
+
+        return promptBuilder.toString();
     }
 }

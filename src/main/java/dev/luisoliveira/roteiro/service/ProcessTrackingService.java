@@ -26,6 +26,8 @@ public class ProcessTrackingService {
         private String duracao;
         private String tipoOracao;
         private String idioma;
+        private String titulo;
+        private String observacoes;
 
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
@@ -41,6 +43,12 @@ public class ProcessTrackingService {
 
         public String getIdioma() { return idioma; }
         public void setIdioma(String idioma) { this.idioma = idioma; }
+
+        public String getTitulo() { return titulo; }
+        public void setTitulo(String titulo) { this.titulo = titulo; }
+
+        public String getObservacoes() { return observacoes; }
+        public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
     }
 
     public void initializeProcess(String processId) {
@@ -58,7 +66,8 @@ public class ProcessTrackingService {
     }
 
     public void setProcessInfo(String processId, String tema, String estiloOracao,
-                               String duracao, String tipoOracao, String idioma) {
+                               String duracao, String tipoOracao, String idioma,
+                               String titulo, String observacoes) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
             info.setTema(tema);
@@ -66,7 +75,10 @@ public class ProcessTrackingService {
             info.setDuracao(duracao);
             info.setTipoOracao(tipoOracao);
             info.setIdioma(idioma != null ? idioma : "es"); // Padrão para espanhol se não especificado
-            log.debug("Informações do processo configuradas: processId={}, idioma={}", processId, idioma);
+            info.setTitulo(titulo);
+            info.setObservacoes(observacoes);
+            log.debug("Informações do processo configuradas: processId={}, idioma={}, titulo={}",
+                    processId, idioma, titulo != null ? "fornecido" : "não fornecido");
         }
     }
 
@@ -93,6 +105,21 @@ public class ProcessTrackingService {
     public String getIdioma(String processId) {
         ProcessInfo info = processInfos.get(processId);
         return info != null ? info.getIdioma() : "es"; // Padrão para espanhol
+    }
+
+    public String getTitulo(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getTitulo() : null;
+    }
+
+    public String getObservacoes(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getObservacoes() : null;
+    }
+
+    public boolean hasTitulo(String processId) {
+        String titulo = getTitulo(processId);
+        return titulo != null && !titulo.trim().isEmpty();
     }
 
     public void updateStatus(String processId, String currentStage, int progressPercentage) {

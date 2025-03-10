@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/content")
+@RequestMapping("/api/content")
 @RequiredArgsConstructor
 @Slf4j
 public class ContentGenerationController {
@@ -35,8 +35,10 @@ public class ContentGenerationController {
     @PostMapping("/generate")
     public ResponseEntity<GenerationResponse> startGeneration(@RequestBody GenerationRequest request) {
         String processId = UUID.randomUUID().toString();
-        log.info("Iniciando processo de geração com ID: {} (idioma: {})",
-                processId, request.getIdioma() != null ? request.getIdioma() : "es (padrão)");
+        log.info("Iniciando processo de geração com ID: {} (idioma: {}, título: {})",
+                processId,
+                request.getIdioma() != null ? request.getIdioma() : "es (padrão)",
+                request.getTitulo() != null ? "fornecido" : "não fornecido");
 
         // Inicializar status
         processTrackingService.initializeProcess(processId);
@@ -55,7 +57,9 @@ public class ContentGenerationController {
                 request.getEstiloOracao(),
                 request.getDuracao(),
                 request.getTipoOracao(),
-                request.getIdioma()
+                request.getIdioma(),
+                request.getTitulo(),
+                request.getObservacoes()
         );
 
         // Publicar evento inicial
@@ -65,11 +69,20 @@ public class ContentGenerationController {
                 request.getEstiloOracao(),
                 request.getDuracao(),
                 request.getTipoOracao(),
-                request.getIdioma()
+                request.getIdioma(),
+                request.getTitulo(),
+                request.getObservacoes()
         ));
 
+        String message;
+        if (request.getTitulo() != null && !request.getTitulo().isEmpty()) {
+            message = "Processo iniciado com sucesso usando o título fornecido: " + request.getTitulo();
+        } else {
+            message = "Processo iniciado com sucesso. Um título será gerado automaticamente.";
+        }
+
         return ResponseEntity.accepted()
-                .body(new GenerationResponse(processId, "Processo iniciado com sucesso"));
+                .body(new GenerationResponse(processId, message));
     }
 
     @GetMapping("/titles/{processId}")

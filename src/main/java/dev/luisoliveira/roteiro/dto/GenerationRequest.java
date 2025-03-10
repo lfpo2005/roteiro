@@ -9,4 +9,6 @@ public class GenerationRequest {
     private String duracao;
     private String tipoOracao;
     private String idioma = "es";
+    private String titulo;
+    private String observacoes;
 }

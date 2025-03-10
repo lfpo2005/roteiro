@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,36 @@ public class TitleGenerationService {
             String processId = event.getProcessId();
             String idioma = event.getIdioma();
 
+            // Verificar se um título já foi fornecido
+            if (event.hasTitulo()) {
+                String titulo = event.getTitulo();
+                log.info("Título fornecido diretamente para o processo {}: {}", processId, titulo);
+
+                // Armazenar o título fornecido (como único título)
+                List<String> titles = new ArrayList<>();
+                titles.add(titulo);
+                processTrackingService.storeTitles(processId, titles);
+
+                // Atualizar status
+                processTrackingService.updateStatus(
+                        processId,
+                        "Usando título fornecido: " + titulo,
+                        40
+                );
+
+                // Pular a geração de títulos e ir direto para o próximo passo
+                log.info("Pulando geração de títulos e usando título fornecido: {}", titulo);
+
+                // Publicar evento de título selecionado diretamente
+                eventBusService.publish(new TitleSelectedEvent(
+                        processId,
+                        titulo
+                ));
+
+                return; // Sair do método, pois não precisamos gerar títulos
+            }
+
+            // Se não tem título, continua o fluxo normal
             // Atualizar status
             processTrackingService.updateStatus(
                     processId,
@@ -34,11 +65,16 @@ public class TitleGenerationService {
 
             log.info("Gerando títulos para o processo {} no idioma {}", processId, idioma);
 
+            // Obter observações se houver
+            String observacoes = event.getObservacoes();
+            boolean hasObservacoes = event.hasObservacoes();
+
             // Construir prompt otimizado com suporte ao idioma
             String prompt = PromptBuilder.buildTitlePrompt(
                     event.getTema(),
                     event.getEstiloOracao(),
-                    idioma
+                    idioma,
+                    hasObservacoes ? observacoes : null
             );
 
             // Chamar OpenAI API
@@ -75,10 +111,10 @@ public class TitleGenerationService {
             ));
         } catch (Exception e) {
             // Lidar com erros
-            log.error("Erro ao gerar títulos: {}", e.getMessage(), e);
+            log.error("Erro ao processar títulos: {}", e.getMessage(), e);
             processTrackingService.updateStatus(
                     event.getProcessId(),
-                    "Erro ao gerar títulos: " + e.getMessage(),
+                    "Erro ao processar títulos: " + e.getMessage(),
                     0
             );
         }
@@ -97,7 +133,7 @@ public class TitleGenerationService {
         }
 
         // Por padrão, seleciona o primeiro título
-        // Em uma implementação mais avançada, você pode adicionar aqui 
+        // Em uma implementação mais avançada, você pode adicionar aqui
         // critérios para analisar e escolher o melhor título
 
         // Exemplo de critérios que podem ser implementados:
