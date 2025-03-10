@@ -12,7 +12,6 @@ flowchart TB
         OracaoGeneration[OracaoGenerationService]
         ShortGeneration[ShortGenerationService]
         DescriptionGeneration[DescriptionGenerationService]
-        ImagePromptGeneration[ImagePromptGenerationService]
         ContentCompilation[ContentCompilationService]
         OpenAI[OpenAIService]
         FileStorage[FileStorageService]
@@ -20,12 +19,10 @@ flowchart TB
 
     subgraph Events
         ContentInitiated[ContentInitiatedEvent]
-        TitlesGenerated[TitlesGeneratedEvent]
         TitleSelected[TitleSelectedEvent]
         OracaoGenerated[OracaoGeneratedEvent]
         ShortGenerated[ShortGeneratedEvent]
         DescriptionGenerated[DescriptionGeneratedEvent]
-        ImagePromptGenerated[ImagePromptGeneratedEvent]
         ContentCompleted[ContentCompletedEvent]
     end
 
@@ -39,10 +36,7 @@ flowchart TB
     EventBus --> ContentInitiated
     ContentInitiated --> TitleGeneration
 
-    TitleGeneration --> TitlesGenerated
-    TitlesGenerated --> ProcessTracking
-
-    ContentController --> TitleSelected
+    TitleGeneration --> TitleSelected
     TitleSelected --> OracaoGeneration
 
     OracaoGeneration --> OracaoGenerated
@@ -52,10 +46,7 @@ flowchart TB
     ShortGenerated --> DescriptionGeneration
 
     DescriptionGeneration --> DescriptionGenerated
-    DescriptionGenerated --> ImagePromptGeneration
     DescriptionGenerated --> ContentCompilation
-
-    ImagePromptGeneration --> ImagePromptGenerated
 
     ContentCompilation --> ContentCompleted
     ContentCompleted --> ProcessTracking
@@ -64,7 +55,6 @@ flowchart TB
     OracaoGeneration --> OpenAI
     ShortGeneration --> OpenAI
     DescriptionGeneration --> OpenAI
-    ImagePromptGeneration --> OpenAI
 
     OpenAI --> OpenAIAPI
 

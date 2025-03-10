@@ -5,10 +5,11 @@ import dev.luisoliveira.roteiro.event.DescriptionGeneratedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ContentCompilationService {
 
     private final FileStorageService fileStorageService;
@@ -27,13 +28,20 @@ public class ContentCompilationService {
                     95
             );
 
+            log.info("Compilando conteúdo final para processo: {}", processId);
+
+            // Obter a lista de títulos alternativos (todos os títulos gerados)
+            // O título selecionado já está no evento
+            java.util.List<String> allTitles = processTrackingService.getTitles(processId);
+
             // Salvar o conteúdo compilado em um arquivo
             String filePath = fileStorageService.saveOracaoFile(
                     processId,
                     event.getTitle(),
                     event.getOracaoContent(),
                     event.getShortContent(),
-                    event.getDescriptionContent()
+                    event.getDescriptionContent(),
+                    allTitles // Passando todos os títulos para referência
             );
 
             // Armazenar o caminho do resultado
@@ -45,6 +53,8 @@ public class ContentCompilationService {
                     "Processo concluído com sucesso! Arquivo gerado: " + filePath,
                     100
             );
+
+            log.info("Conteúdo compilado com sucesso. Arquivo gerado: {}", filePath);
 
             // Publicar evento de conclusão
             eventBusService.publish(new ContentCompletedEvent(
@@ -59,6 +69,7 @@ public class ContentCompilationService {
                     "Erro ao compilar conteúdo: " + e.getMessage(),
                     0
             );
+            log.error("Erro ao compilar conteúdo", e);
         }
     }
 }
