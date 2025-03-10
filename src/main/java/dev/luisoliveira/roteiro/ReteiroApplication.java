@@ -1,0 +1,13 @@
+package dev.luisoliveira.roteiro;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ReteiroApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ReteiroApplication.class, args);
+	}
+
+}
