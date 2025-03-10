@@ -31,45 +31,44 @@ public class ContentCompilationService {
             log.info("Compilando conteúdo final para processo: {}", processId);
 
             // Obter a lista de títulos alternativos (todos os títulos gerados)
-            // O título selecionado já está no evento
             java.util.List<String> allTitles = processTrackingService.getTitles(processId);
 
-            // Salvar o conteúdo compilado em um arquivo
-            String filePath = fileStorageService.saveOracaoFile(
+            // Salvar o conteúdo compilado em arquivos (txt e srt)
+            String outputPath = fileStorageService.saveOracaoFile(
                     processId,
                     event.getTitle(),
                     event.getOracaoContent(),
                     event.getShortContent(),
                     event.getDescriptionContent(),
-                    allTitles // Passando todos os títulos para referência
+                    allTitles
             );
 
             // Armazenar o caminho do resultado
-            processTrackingService.storeResult(processId, filePath);
+            processTrackingService.storeResult(processId, outputPath);
 
             // Atualizar status final
             processTrackingService.updateStatus(
                     processId,
-                    "Processo concluído com sucesso! Arquivo gerado: " + filePath,
+                    "Processo concluído com sucesso! Arquivos gerados em: " + outputPath,
                     100
             );
 
-            log.info("Conteúdo compilado com sucesso. Arquivo gerado: {}", filePath);
+            log.info("Conteúdo compilado com sucesso. Arquivos gerados em: {}", outputPath);
 
             // Publicar evento de conclusão
             eventBusService.publish(new ContentCompletedEvent(
                     processId,
                     event.getTitle(),
-                    filePath
+                    outputPath
             ));
         } catch (Exception e) {
             // Lidar com erros
+            log.error("Erro ao compilar conteúdo: {}", e.getMessage(), e);
             processTrackingService.updateStatus(
                     event.getProcessId(),
                     "Erro ao compilar conteúdo: " + e.getMessage(),
                     0
             );
-            log.error("Erro ao compilar conteúdo", e);
         }
     }
 }

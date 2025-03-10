@@ -8,4 +8,5 @@ public class GenerationRequest {
     private String estiloOracao;
     private String duracao;
     private String tipoOracao;
+    private String idioma = "es";
 }

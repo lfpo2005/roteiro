@@ -23,6 +23,7 @@ public class TitleGenerationService {
     public void handleContentInitiatedEvent(ContentInitiatedEvent event) {
         try {
             String processId = event.getProcessId();
+            String idioma = event.getIdioma();
 
             // Atualizar status
             processTrackingService.updateStatus(
@@ -31,24 +32,29 @@ public class TitleGenerationService {
                     20
             );
 
-            // Construir prompt otimizado
+            log.info("Gerando títulos para o processo {} no idioma {}", processId, idioma);
+
+            // Construir prompt otimizado com suporte ao idioma
             String prompt = PromptBuilder.buildTitlePrompt(
                     event.getTema(),
-                    event.getEstiloOracao()
+                    event.getEstiloOracao(),
+                    idioma
             );
 
             // Chamar OpenAI API
             List<String> titles = openAIService.generateTitles(prompt);
 
-            // Armazenar todos os títulos (para referência futura)
+            // Armazenar títulos
             processTrackingService.storeTitles(processId, titles);
 
             // Atualizar status
             processTrackingService.updateStatus(
                     processId,
-                    "Títulos gerados com sucesso. Selecionando o melhor título...",
-                    30
+                    "Títulos gerados com sucesso",
+                    40
             );
+
+            log.info("Gerados {} títulos com sucesso para o processo {}", titles.size(), processId);
 
             // Selecionar automaticamente o melhor título
             String selectedTitle = selectBestTitle(titles, event.getTema(), event.getEstiloOracao());
@@ -59,7 +65,7 @@ public class TitleGenerationService {
             processTrackingService.updateStatus(
                     processId,
                     "Título selecionado: " + selectedTitle,
-                    40
+                    45
             );
 
             // Publicar evento com o título selecionado
@@ -69,12 +75,12 @@ public class TitleGenerationService {
             ));
         } catch (Exception e) {
             // Lidar com erros
+            log.error("Erro ao gerar títulos: {}", e.getMessage(), e);
             processTrackingService.updateStatus(
                     event.getProcessId(),
-                    "Erro ao gerar/selecionar títulos: " + e.getMessage(),
+                    "Erro ao gerar títulos: " + e.getMessage(),
                     0
             );
-            log.error("Erro no processo de geração/seleção de títulos", e);
         }
     }
 
@@ -91,7 +97,7 @@ public class TitleGenerationService {
         }
 
         // Por padrão, seleciona o primeiro título
-        // Em uma implementação mais avançada, você pode adicionar aqui
+        // Em uma implementação mais avançada, você pode adicionar aqui 
         // critérios para analisar e escolher o melhor título
 
         // Exemplo de critérios que podem ser implementados:

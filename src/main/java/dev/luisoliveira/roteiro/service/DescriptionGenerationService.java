@@ -6,10 +6,11 @@ import dev.luisoliveira.roteiro.util.PromptBuilder;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DescriptionGenerationService {
 
     private final OpenAIService openAIService;
@@ -19,7 +20,7 @@ public class DescriptionGenerationService {
     @EventListener
     public void handleShortGeneratedEvent(ShortGeneratedEvent event) {
         try {
-            String processId = event.getProcessId(); // Correção aqui
+            String processId = event.getProcessId();
 
             // Atualizar status
             processTrackingService.updateStatus(
@@ -28,14 +29,21 @@ public class DescriptionGenerationService {
                     85
             );
 
+            // Obter o idioma do processo
+            String idioma = processTrackingService.getIdioma(processId);
+            log.info("Gerando descrição para YouTube e TikTok no idioma: {}", idioma);
+
             // Construir prompt otimizado para descrição
             String prompt = PromptBuilder.buildDescriptionPrompt(
                     event.getTitle(),
-                    event.getOracaoContent()
+                    event.getOracaoContent(),
+                    idioma
             );
 
             // Chamar OpenAI API
+            log.info("Iniciando geração da descrição no idioma: {}", idioma);
             String descriptionContent = openAIService.generateDescription(prompt);
+            log.info("Descrição gerada com sucesso: {} caracteres", descriptionContent.length());
 
             // Atualizar status
             processTrackingService.updateStatus(
@@ -54,6 +62,7 @@ public class DescriptionGenerationService {
             ));
         } catch (Exception e) {
             // Lidar com erros
+            log.error("Erro ao gerar descrição: {}", e.getMessage(), e);
             processTrackingService.updateStatus(
                     event.getProcessId(),
                     "Erro ao gerar descrição: " + e.getMessage(),

@@ -2,6 +2,7 @@ package dev.luisoliveira.roteiro.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileWriter;
@@ -13,7 +14,10 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FileStorageService {
+
+    private final SrtConverterService srtConverterService;
 
     @Value("${file.output.path:./gerados}")
     private String outputPath;
@@ -44,44 +48,65 @@ public class FileStorageService {
                 Files.createDirectories(processDir);
             }
 
-            // Caminho do arquivo
-            String fileName = safeTitle + ".docx";
-            Path filePath = processDir.resolve(fileName);
+            // Salvar arquivo de metadados em txt
+            String txtFileName = safeTitle + "_meta.txt";
+            Path txtFilePath = processDir.resolve(txtFileName);
 
-            // Criar conteúdo do arquivo
-            StringBuilder fileContent = new StringBuilder();
-            fileContent.append("**Título: ").append(titulo).append("**\n\n");
+            // Criar conteúdo do arquivo de metadados
+            StringBuilder txtContent = new StringBuilder();
+            txtContent.append("**Título: ").append(titulo).append("**\n\n");
 
             // Adicionar outros títulos gerados para referência
             if (allTitles != null && !allTitles.isEmpty()) {
-                fileContent.append("**Outros títulos possíveis:**\n");
+                txtContent.append("**Outros títulos possíveis:**\n");
                 for (String altTitle : allTitles) {
                     if (!altTitle.equals(titulo)) { // Não repetir o título principal
-                        fileContent.append("- ").append(altTitle).append("\n");
+                        txtContent.append("- ").append(altTitle).append("\n");
                     }
                 }
-                fileContent.append("\n");
+                txtContent.append("\n");
             }
 
-            fileContent.append("**Oração Completa:**\n\n");
-            fileContent.append(oracaoContent).append("\n\n");
+            txtContent.append("**Oração Completa:**\n\n");
+            txtContent.append(oracaoContent).append("\n\n");
 
-            fileContent.append("**Short (30-60 segundos)**\n\n");
-            fileContent.append(shortContent).append("\n\n");
+            txtContent.append("**Short (30-60 segundos)**\n\n");
+            txtContent.append(shortContent).append("\n\n");
 
-            fileContent.append("**Descrição para YouTube e TikTok**\n\n");
-            fileContent.append(description);
+            txtContent.append("**Descrição para YouTube e TikTok**\n\n");
+            txtContent.append(description);
 
-            // Escrever no arquivo
-            try (FileWriter writer = new FileWriter(filePath.toFile())) {
-                writer.write(fileContent.toString());
+            // Escrever no arquivo de metadados
+            try (FileWriter writer = new FileWriter(txtFilePath.toFile())) {
+                writer.write(txtContent.toString());
             }
+            log.info("Arquivo de metadados salvo com sucesso: {}", txtFilePath);
 
-            log.info("Arquivo salvo com sucesso: {}", filePath);
-            return filePath.toString();
+            // Converter oração para SRT e salvar
+            String srtFileName = safeTitle + ".srt";
+            Path srtFilePath = processDir.resolve(srtFileName);
+            String srtContent = srtConverterService.converterParaSRT(oracaoContent);
+
+            try (FileWriter writer = new FileWriter(srtFilePath.toFile())) {
+                writer.write(srtContent);
+            }
+            log.info("Arquivo SRT salvo com sucesso: {}", srtFilePath);
+
+            // Converter versão curta para SRT e salvar
+            String shortSrtFileName = safeTitle + "_short.srt";
+            Path shortSrtFilePath = processDir.resolve(shortSrtFileName);
+            String shortSrtContent = srtConverterService.converterParaSRT(shortContent);
+
+            try (FileWriter writer = new FileWriter(shortSrtFilePath.toFile())) {
+                writer.write(shortSrtContent);
+            }
+            log.info("Arquivo SRT da versão curta salvo com sucesso: {}", shortSrtFilePath);
+
+            // Retornar o caminho do diretório que contém todos os arquivos
+            return processDir.toString();
         } catch (IOException e) {
-            log.error("Falha ao salvar o arquivo de oração", e);
-            throw new RuntimeException("Falha ao salvar o arquivo de oração", e);
+            log.error("Falha ao salvar arquivos", e);
+            throw new RuntimeException("Falha ao salvar arquivos", e);
         }
     }
 }

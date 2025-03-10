@@ -1,6 +1,8 @@
 package dev.luisoliveira.roteiro.util;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PromptBuilder {
 
     // Constantes com dados da análise
@@ -12,14 +14,39 @@ public class PromptBuilder {
             "protección familiar", "mensajes diarios", "renovación financiera", "transformación personal"
     };
 
-    public static String buildTitlePrompt(String tema, String estilo) {
+    public static String buildTitlePrompt(String tema, String estilo, String idioma) {
+        log.debug("Construindo prompt para títulos: tema={}, estilo={}, idioma={}", tema, estilo, idioma);
+
         StringBuilder prompt = new StringBuilder();
 
-        prompt.append("Crie 5 títulos em espanhol para uma oração sobre \"")
-                .append(tema)
-                .append("\" no estilo \"")
-                .append(estilo)
-                .append("\".\n\n");
+        // Selecionar idioma para o prompt
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            prompt.append("Crie 5 títulos em português para uma oração sobre \"")
+                    .append(tema)
+                    .append("\" no estilo \"")
+                    .append(estilo)
+                    .append("\".\n\n");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            prompt.append("Create 5 titles in English for a prayer about \"")
+                    .append(tema)
+                    .append("\" in the style \"")
+                    .append(estilo)
+                    .append("\".\n\n");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            prompt.append("Crea 5 títulos en español latino/mexicano para una oración sobre \"")
+                    .append(tema)
+                    .append("\" en el estilo \"")
+                    .append(estilo)
+                    .append("\".\n\n")
+                    .append("Utiliza expresiones, palabras y giros típicos del español de México y Latinoamérica.\n\n");
+        } else {
+            // Padrão: espanhol
+            prompt.append("Crea 5 títulos en español para una oración sobre \"")
+                    .append(tema)
+                    .append("\" en el estilo \"")
+                    .append(estilo)
+                    .append("\".\n\n");
+        }
 
         prompt.append("Use esta fórmula de título que tem o melhor CTR (5,75%):\n");
         prompt.append("[PODEROSA ORACIÓN] para [tema específico] [benefício específico] #oración #hashtag\n\n");
@@ -41,10 +68,31 @@ public class PromptBuilder {
         return prompt.toString();
     }
 
-    public static String buildOracaoPrompt(String tema, String estilo, String duracao, String titulo) {
+    public static String buildOracaoPrompt(String tema, String estilo, String duracao, String titulo, String idioma) {
+        // Verificar parâmetros de entrada
+        if (tema == null || estilo == null || duracao == null || titulo == null) {
+            log.error("Parâmetros inválidos para buildOracaoPrompt: tema={}, estilo={}, duracao={}, titulo={}",
+                    tema, estilo, duracao, titulo);
+            throw new IllegalArgumentException("Todos os parâmetros são obrigatórios para construir o prompt da oração");
+        }
+
+        log.debug("Construindo prompt para oração: tema={}, estilo={}, duracao={}, titulo={}, idioma={}",
+                tema, estilo, duracao, titulo, idioma);
+
         StringBuilder prompt = new StringBuilder();
 
-        prompt.append("Crie uma oração em espanhol com o título: \"").append(titulo).append("\"\n\n");
+        // Selecionar idioma para o prompt
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            prompt.append("Crie uma oração em português com o título: \"").append(titulo).append("\"\n\n");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            prompt.append("Create a prayer in English with the title: \"").append(titulo).append("\"\n\n");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            prompt.append("Crea una oración en español latino/mexicano con el título: \"").append(titulo).append("\"\n\n");
+            prompt.append("Utiliza expresiones, palabras y giros típicos del español de México y Latinoamérica. Evita términos o expresiones propias del español de España.\n\n");
+        } else {
+            // Padrão: espanhol
+            prompt.append("Crea una oración en español con el título: \"").append(titulo).append("\"\n\n");
+        }
 
         prompt.append("Tema: ").append(tema).append("\n");
         prompt.append("Estilo: ").append(estilo).append("\n");
@@ -85,13 +133,30 @@ public class PromptBuilder {
             prompt.append("Tamanho total: 5.000-6.000 caracteres (15-30 minutos)");
         }
 
-        return prompt.toString();
+        String promptStr = prompt.toString();
+        log.debug("Prompt construído com sucesso (tamanho: {} caracteres)", promptStr.length());
+        return promptStr;
     }
 
-    public static String buildShortPrompt(String oracaoContent, String titulo) {
+    public static String buildShortPrompt(String oracaoContent, String titulo, String idioma) {
+        log.debug("Construindo prompt para versão short: titulo={}, tamanho da oração={} caracteres, idioma={}",
+                titulo, oracaoContent.length(), idioma);
+
         StringBuilder prompt = new StringBuilder();
 
-        prompt.append("Crie uma versão curta (30-60 segundos) da seguinte oração em espanhol:\n\n");
+        // Selecionar idioma para o prompt
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            prompt.append("Crie uma versão curta (30-60 segundos) em português da seguinte oração:\n\n");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            prompt.append("Create a short version (30-60 seconds) in English of the following prayer:\n\n");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            prompt.append("Crea una versión corta (30-60 segundos) en español latino/mexicano de la siguiente oración:\n\n");
+            prompt.append("Utiliza expresiones, palabras y giros típicos del español de México y Latinoamérica. Evita términos o expresiones propias del español de España.\n\n");
+        } else {
+            // Padrão: espanhol
+            prompt.append("Crea una versión corta (30-60 segundos) en español de la siguiente oración:\n\n");
+        }
+
         prompt.append("Título original: \"").append(titulo).append("\"\n\n");
         prompt.append("Oração original:\n").append(oracaoContent).append("\n\n");
 
@@ -103,15 +168,42 @@ public class PromptBuilder {
         prompt.append("5. Usar linguagem direta e impactante\n");
         prompt.append("6. Terminar com \"En el nombre de Jesús, Amén\"\n\n");
 
+        prompt.append("IMPORTANTE: A versão curta deve estar no mesmo idioma da oração original (");
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            prompt.append("português");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            prompt.append("inglês");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            prompt.append("español latino/mexicano");
+        } else {
+            prompt.append("español");
+        }
+        prompt.append(").\n\n");
+
         prompt.append("Responda APENAS com o texto da oração curta, sem comentários adicionais.");
 
         return prompt.toString();
     }
 
-    public static String buildDescriptionPrompt(String title, String oracaoContent) {
+    public static String buildDescriptionPrompt(String title, String oracaoContent, String idioma) {
+        log.debug("Construindo prompt para descrição: titulo={}, tamanho da oração={} caracteres, idioma={}",
+                title, oracaoContent.length(), idioma);
+
         StringBuilder prompt = new StringBuilder();
 
-        prompt.append("Crie uma descrição otimizada para YouTube e TikTok para o seguinte vídeo de oração:\n\n");
+        // Selecionar idioma para o prompt
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            prompt.append("Crie uma descrição otimizada para YouTube e TikTok em português para o seguinte vídeo de oração:\n\n");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            prompt.append("Create an optimized description for YouTube and TikTok in English for the following prayer video:\n\n");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            prompt.append("Crea una descripción optimizada para YouTube y TikTok en español latino/mexicano para el siguiente video de oración:\n\n");
+            prompt.append("Utiliza expresiones, palabras y giros típicos del español de México y Latinoamérica. Evita términos o expresiones propias del español de España.\n\n");
+        } else {
+            // Padrão: espanhol
+            prompt.append("Crea una descripción optimizada para YouTube y TikTok en español para el siguiente video de oración:\n\n");
+        }
+
         prompt.append("Título: \"").append(title).append("\"\n\n");
         prompt.append("Conteúdo da oração:\n").append(oracaoContent).append("\n\n");
 
@@ -124,15 +216,41 @@ public class PromptBuilder {
         prompt.append("6. Inclua 2-3 emojis estrategicamente colocados\n");
         prompt.append("7. Mencione os benefícios de ouvir esta oração\n\n");
 
+        prompt.append("IMPORTANTE: A descrição deve estar no mesmo idioma da oração (");
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            prompt.append("português");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            prompt.append("inglês");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            prompt.append("español latino/mexicano");
+        } else {
+            prompt.append("español");
+        }
+        prompt.append(").\n\n");
+
         prompt.append("Responda APENAS com o texto da descrição, sem comentários adicionais.");
 
         return prompt.toString();
     }
 
-    public static String buildImagePromptPrompt(String title, String oracaoContent) {
+    public static String buildImagePromptPrompt(String title, String oracaoContent, String idioma) {
+        log.debug("Construindo prompt para imagem: titulo={}, tamanho da oração={} caracteres, idioma={}",
+                title, oracaoContent.length(), idioma);
+
         StringBuilder prompt = new StringBuilder();
 
-        prompt.append("Crie um prompt para geração de imagem para a miniatura deste vídeo de oração:\n\n");
+        // Selecionar idioma para o prompt
+        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
+            prompt.append("Crie um prompt para geração de imagem em português para a miniatura deste vídeo de oração:\n\n");
+        } else if ("en".equalsIgnoreCase(idioma)) {
+            prompt.append("Create an image generation prompt in English for the thumbnail of this prayer video:\n\n");
+        } else if ("es-MX".equalsIgnoreCase(idioma)) {
+            prompt.append("Crea un prompt para generación de imagen en español latino/mexicano para la miniatura de este video de oración:\n\n");
+        } else {
+            // Padrão: espanhol
+            prompt.append("Crea un prompt para generación de imagen en español para la miniatura de este video de oración:\n\n");
+        }
+
         prompt.append("Título: \"").append(title).append("\"\n\n");
         prompt.append("Conteúdo da oração:\n").append(oracaoContent).append("\n\n");
 

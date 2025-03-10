@@ -1,240 +1,73 @@
-2025-03-10 16:58:33 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 44008 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
-2025-03-10 16:58:33 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
-2025-03-10 16:58:33 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
-2025-03-10 16:58:34 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
-2025-03-10 16:58:34 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
-2025-03-10 16:58:34 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-03-10 16:58:34 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-03-10 16:58:34 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
-2025-03-10 16:58:34 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
-2025-03-10 16:58:34 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1333 ms
-2025-03-10 16:58:35 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-2025-03-10 16:58:35 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2025-03-10 16:58:35 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+2025-03-10 17:40:13 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-10 17:40:13 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-10 17:40:13 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-10 17:40:13 [http-nio-8080-exec-1] INFO  d.l.r.c.ContentGenerationController - Iniciando processo de geração com ID: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:13 [http-nio-8080-exec-1] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ContentInitiatedEvent para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:13 [http-nio-8080-exec-1] INFO  d.l.roteiro.service.EventBusService - Evento ContentInitiatedEvent publicado com sucesso para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:13 [SimpleAsyncTaskExecutor-12] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para títulos: tema= pelos filhos, estilo=Reflexiva
+2025-03-10 17:40:13 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-12] INFO  d.l.r.service.TitleGenerationService - Título selecionado automaticamente: PODEROSA ORACIÓN POR MIS HIJOS POR SU PROTECCIÓN #oración #bendiciones 🙏
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.EventBusService - Publicando evento: TitleSelectedEvent para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.EventBusService - Evento TitleSelectedEvent publicado com sucesso para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Recebido evento TitleSelectedEvent para processId: 8378064e-b77f-4d2e-bc62-f253af471f06 com título: PODEROSA ORACIÓN POR MIS HIJOS POR SU PROTECCIÓN #oración #bendiciones 🙏
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Gerando oração...' (50%)
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Recuperadas informações do processo: tema= pelos filhos, estilo=Reflexiva, duracao=Padrão, tipo=Matinal
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Construindo prompt para oração...
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para oração: tema= pelos filhos, estilo=Reflexiva, duracao=Padrão, titulo=PODEROSA ORACIÓN POR MIS HIJOS POR SU PROTECCIÓN #oración #bendiciones 🙏
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] DEBUG d.l.roteiro.util.PromptBuilder - Prompt construído com sucesso (tamanho: 744 caracteres)
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.s.OracaoGenerationService - Prompt construído: Crie uma oração em espanhol com o título: "PODEROSA ORACIÓN POR MIS HIJOS POR SU PROTECCIÓN #oración #bendiciones 🙏"
 
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2025-03-10 16:58:35 [main] ERROR o.s.boot.SpringApplication - Application run failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
-	at dev.luisoliveira.roteiro.RoteiroApplication.main(RoteiroApplication.java:10)
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:199)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
-	... 21 common frames omitted
-Caused by: java.lang.NoClassDefFoundError: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.httpComponents(ClientHttpRequestFactoryBuilder.java:97)
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.detect(ClientHttpRequestFactoryBuilder.java:200)
-	at org.springframework.boot.autoconfigure.http.client.HttpClientAutoConfiguration.clientHttpRequestFactoryBuilder(HttpClientAutoConfiguration.java:53)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
-	... 24 common frames omitted
-Caused by: java.lang.ClassNotFoundException: org.apache.hc.client5.http.ssl.TlsSocketStrategy
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:520)
-	... 32 common frames omitted
-2025-03-10 17:00:32 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 46908 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
-2025-03-10 17:00:32 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
-2025-03-10 17:00:32 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
-2025-03-10 17:00:33 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
-2025-03-10 17:00:33 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
-2025-03-10 17:00:34 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-03-10 17:00:34 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-03-10 17:00:34 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
-2025-03-10 17:00:34 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
-2025-03-10 17:00:34 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1540 ms
-2025-03-10 17:00:34 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-2025-03-10 17:00:34 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2025-03-10 17:00:34 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+Tema:  pelos filhos
+Estilo: Reflexiva
+Duração: Padrão
 
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2025-03-10 17:00:34 [main] ERROR o.s.boot.SpringApplication - Application run failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
-	at dev.luisoliveira.roteiro.RoteiroApplication.main(RoteiroApplication.java:10)
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:199)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
-	... 21 common frames omitted
-Caused by: java.lang.NoClassDefFoundError: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.httpComponents(ClientHttpRequestFactoryBuilder.java:97)
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.detect(ClientHttpRequestFactoryBuilder.java:200)
-	at org.springframework.boot.autoconfigure.http.client.HttpClientAutoConfiguration.clientHttpRequestFactoryBuilder(HttpClientAutoConfiguration.java:53)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
-	... 24 common frames omitted
-Caused by: java.lang.ClassNotFoundException: org.apache.hc.client5.http.ssl.TlsSocketStrategy
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:520)
-	... 32 common frames omitted
-2025-03-10 17:01:08 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 41904 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
-2025-03-10 17:01:08 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
-2025-03-10 17:01:08 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
-2025-03-10 17:01:09 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
-2025-03-10 17:01:09 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
-2025-03-10 17:01:10 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-03-10 17:01:10 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-03-10 17:01:10 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
-2025-03-10 17:01:10 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
-2025-03-10 17:01:10 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1606 ms
-2025-03-10 17:01:11 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-2025-03-10 17:01:11 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2025-03-10 17:01:11 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+A oração deve seguir esta estrutura:
+1. Versículo inicial relevante ("Versículo del día:")
+2. Introdução com saudação e relevância do tema (6-8 linhas)
+3. Reflexão bíblica com passagem relevante (6-8 linhas)
+4. Oração principal com:
+   - Invocação inicial
+   - Desenvolvimento do tema
+   - Aplicação prática
+   - Pedidos específicos
+   - Declaração de fé
+5. Encerramento com:
+   - Recapitulação
+   - Versículo final (diferente do inicial)
+   - Bênção final
+   - Convite para inscrição
+   - "En el nombre de Jesús, Amén"
 
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2025-03-10 17:01:11 [main] ERROR o.s.boot.SpringApplication - Application run failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
-	at dev.luisoliveira.roteiro.RoteiroApplication.main(RoteiroApplication.java:10)
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:199)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
-	... 21 common frames omitted
-Caused by: java.lang.NoClassDefFoundError: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.httpComponents(ClientHttpRequestFactoryBuilder.java:97)
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.detect(ClientHttpRequestFactoryBuilder.java:200)
-	at org.springframework.boot.autoconfigure.http.client.HttpClientAutoConfiguration.clientHttpRequestFactoryBuilder(HttpClientAutoConfiguration.java:53)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
-	... 24 common frames omitted
-Caused by: java.lang.ClassNotFoundException: org.apache.hc.client5.http.ssl.TlsSocketStrategy
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:520)
-	... 32 common frames omitted
-2025-03-10 17:03:08 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 49116 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
-2025-03-10 17:03:08 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
-2025-03-10 17:03:08 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
-2025-03-10 17:03:09 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
-2025-03-10 17:03:09 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
-2025-03-10 17:03:10 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2025-03-10 17:03:10 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2025-03-10 17:03:10 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
-2025-03-10 17:03:10 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
-2025-03-10 17:03:10 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1533 ms
-2025-03-10 17:03:10 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-2025-03-10 17:03:10 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2025-03-10 17:03:10 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2025-03-10 17:03:10 [main] ERROR o.s.boot.SpringApplication - Application run failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'clientHttpRequestFactoryBuilder' defined in class path resource [org/springframework/boot/autoconfigure/http/client/HttpClientAutoConfiguration.class]: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:657)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:645)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
-	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
-	at dev.luisoliveira.roteiro.RoteiroApplication.main(RoteiroApplication.java:10)
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder]: Factory method 'clientHttpRequestFactoryBuilder' threw exception with message: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:199)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiateWithFactoryMethod(SimpleInstantiationStrategy.java:88)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:168)
-	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
-	... 21 common frames omitted
-Caused by: java.lang.NoClassDefFoundError: org/apache/hc/client5/http/ssl/TlsSocketStrategy
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.httpComponents(ClientHttpRequestFactoryBuilder.java:97)
-	at org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder.detect(ClientHttpRequestFactoryBuilder.java:200)
-	at org.springframework.boot.autoconfigure.http.client.HttpClientAutoConfiguration.clientHttpRequestFactoryBuilder(HttpClientAutoConfiguration.java:53)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
-	... 24 common frames omitted
-Caused by: java.lang.ClassNotFoundException: org.apache.hc.client5.http.ssl.TlsSocketStrategy
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:520)
-	... 32 common frames omitted
+Tamanho total: 1.800-2.200 caracteres (5 minutos)
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Iniciando chamada à API OpenAI para gerar oração...
+2025-03-10 17:40:16 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Oração gerada com sucesso (tamanho: 3080 caracteres)
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Oração gerada com sucesso' (70%)
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Publicando evento OracaoGeneratedEvent...
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.EventBusService - Publicando evento: OracaoGeneratedEvent para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.EventBusService - Evento OracaoGeneratedEvent publicado com sucesso para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Evento OracaoGeneratedEvent publicado com sucesso
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-14] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para versão short: titulo=PODEROSA ORACIÓN POR MIS HIJOS POR SU PROTECCIÓN #oración #bendiciones 🙏, tamanho da oração=3080 caracteres
+2025-03-10 17:40:25 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 17:40:27 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 17:40:27 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ShortGeneratedEvent para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:27 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.EventBusService - Evento ShortGeneratedEvent publicado com sucesso para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:27 [SimpleAsyncTaskExecutor-15] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para descrição: titulo=PODEROSA ORACIÓN POR MIS HIJOS POR SU PROTECCIÓN #oración #bendiciones 🙏, tamanho da oração=3080 caracteres
+2025-03-10 17:40:27 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.EventBusService - Publicando evento: DescriptionGeneratedEvent para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.EventBusService - Evento DescriptionGeneratedEvent publicado com sucesso para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.s.ContentCompilationService - Compilando conteúdo final para processo: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.service.FileStorageService - Arquivo de metadados salvo com sucesso: .\gerados\8378064e-b77f-4d2e-bc62-f253af471f06\PODEROSA_ORACI_N_POR_MIS_HIJOS_POR_SU_PROTECCI_N_oraci_n_bendiciones__meta.txt
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.service.FileStorageService - Arquivo SRT salvo com sucesso: .\gerados\8378064e-b77f-4d2e-bc62-f253af471f06\PODEROSA_ORACI_N_POR_MIS_HIJOS_POR_SU_PROTECCI_N_oraci_n_bendiciones_.srt
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.service.FileStorageService - Arquivo SRT da versão curta salvo com sucesso: .\gerados\8378064e-b77f-4d2e-bc62-f253af471f06\PODEROSA_ORACI_N_POR_MIS_HIJOS_POR_SU_PROTECCI_N_oraci_n_bendiciones__short.srt
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-16] INFO  d.l.r.s.ContentCompilationService - Conteúdo compilado com sucesso. Arquivos gerados em: .\gerados\8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-16] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ContentCompletedEvent para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 17:40:29 [SimpleAsyncTaskExecutor-16] INFO  d.l.roteiro.service.EventBusService - Evento ContentCompletedEvent publicado com sucesso para o processId: 8378064e-b77f-4d2e-bc62-f253af471f06
+2025-03-10 18:25:04 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-10 18:25:04 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-10 18:25:04 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-10 18:25:04 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-10 18:25:04 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'

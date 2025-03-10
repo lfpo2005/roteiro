@@ -8,17 +8,25 @@ import dev.luisoliveira.roteiro.event.ContentInitiatedEvent;
 import dev.luisoliveira.roteiro.event.TitleSelectedEvent;
 import dev.luisoliveira.roteiro.service.EventBusService;
 import dev.luisoliveira.roteiro.service.ProcessTrackingService;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/content")
+@RequestMapping("/content")
 @RequiredArgsConstructor
+@Slf4j
 public class ContentGenerationController {
 
     private final EventBusService eventBusService;
@@ -27,9 +35,18 @@ public class ContentGenerationController {
     @PostMapping("/generate")
     public ResponseEntity<GenerationResponse> startGeneration(@RequestBody GenerationRequest request) {
         String processId = UUID.randomUUID().toString();
+        log.info("Iniciando processo de geração com ID: {} (idioma: {})",
+                processId, request.getIdioma() != null ? request.getIdioma() : "es (padrão)");
 
         // Inicializar status
         processTrackingService.initializeProcess(processId);
+
+        // Verificar e configurar idioma padrão se necessário
+        String idioma = request.getIdioma();
+        if (idioma == null || idioma.isBlank()) {
+            idioma = "es"; // Padrão: espanhol
+            request.setIdioma(idioma);
+        }
 
         // Armazenar informações do processo
         processTrackingService.setProcessInfo(
@@ -37,7 +54,8 @@ public class ContentGenerationController {
                 request.getTema(),
                 request.getEstiloOracao(),
                 request.getDuracao(),
-                request.getTipoOracao()
+                request.getTipoOracao(),
+                request.getIdioma()
         );
 
         // Publicar evento inicial
@@ -46,7 +64,8 @@ public class ContentGenerationController {
                 request.getTema(),
                 request.getEstiloOracao(),
                 request.getDuracao(),
-                request.getTipoOracao()
+                request.getTipoOracao(),
+                request.getIdioma()
         ));
 
         return ResponseEntity.accepted()
@@ -99,5 +118,59 @@ public class ContentGenerationController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/download/{processId}/{filename:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String processId, @PathVariable String filename) {
+        String resultPath = processTrackingService.getResult(processId);
+
+        if (resultPath == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Path filePath = Paths.get(resultPath, filename);
+        File file = filePath.toFile();
+
+        if (!file.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource resource = new FileSystemResource(file);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+
+        MediaType mediaType;
+        if (filename.endsWith(".srt")) {
+            mediaType = MediaType.parseMediaType("application/x-subrip");
+        } else if (filename.endsWith(".txt")) {
+            mediaType = MediaType.TEXT_PLAIN;
+        } else {
+            mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        }
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(mediaType)
+                .body(resource);
+    }
+
+    @GetMapping("/files/{processId}")
+    public ResponseEntity<List<String>> getFiles(@PathVariable String processId) {
+        String resultPath = processTrackingService.getResult(processId);
+
+        if (resultPath == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        File directory = new File(resultPath);
+        if (!directory.exists() || !directory.isDirectory()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<String> fileList = List.of(directory.list());
+
+        return ResponseEntity.ok(fileList);
     }
 }

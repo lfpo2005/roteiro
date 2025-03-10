@@ -2,6 +2,8 @@ package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.dto.ProcessStatus;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Service
+@Slf4j
 public class ProcessTrackingService {
 
     private final Map<String, ProcessStatus> processes = new ConcurrentHashMap<>();
@@ -22,6 +25,7 @@ public class ProcessTrackingService {
         private String estiloOracao;
         private String duracao;
         private String tipoOracao;
+        private String idioma;
 
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
@@ -34,6 +38,9 @@ public class ProcessTrackingService {
 
         public String getTipoOracao() { return tipoOracao; }
         public void setTipoOracao(String tipoOracao) { this.tipoOracao = tipoOracao; }
+
+        public String getIdioma() { return idioma; }
+        public void setIdioma(String idioma) { this.idioma = idioma; }
     }
 
     public void initializeProcess(String processId) {
@@ -47,15 +54,19 @@ public class ProcessTrackingService {
 
         processes.put(processId, status);
         processInfos.put(processId, new ProcessInfo());
+        log.debug("Processo inicializado: {}", processId);
     }
 
-    public void setProcessInfo(String processId, String tema, String estiloOracao, String duracao, String tipoOracao) {
+    public void setProcessInfo(String processId, String tema, String estiloOracao,
+                               String duracao, String tipoOracao, String idioma) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
             info.setTema(tema);
             info.setEstiloOracao(estiloOracao);
             info.setDuracao(duracao);
             info.setTipoOracao(tipoOracao);
+            info.setIdioma(idioma != null ? idioma : "es"); // Padrão para espanhol se não especificado
+            log.debug("Informações do processo configuradas: processId={}, idioma={}", processId, idioma);
         }
     }
 
@@ -79,17 +90,25 @@ public class ProcessTrackingService {
         return info != null ? info.getTipoOracao() : null;
     }
 
+    public String getIdioma(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getIdioma() : "es"; // Padrão para espanhol
+    }
+
     public void updateStatus(String processId, String currentStage, int progressPercentage) {
         if (processes.containsKey(processId)) {
             ProcessStatus status = processes.get(processId);
             status.setCurrentStage(currentStage);
             status.setProgressPercentage(progressPercentage);
             status.setLastUpdated(LocalDateTime.now());
+            log.debug("Status atualizado: processId={}, stage={}, progress={}%",
+                    processId, currentStage, progressPercentage);
         }
     }
 
     public void storeTitles(String processId, List<String> titles) {
         processTitles.put(processId, titles);
+        log.debug("Títulos armazenados: processId={}, quantidade={}", processId, titles.size());
     }
 
     public List<String> getTitles(String processId) {
@@ -105,6 +124,7 @@ public class ProcessTrackingService {
             status.setCurrentStage("Concluído");
             status.setResultPath(filePath);
             status.setLastUpdated(LocalDateTime.now());
+            log.info("Processo concluído: processId={}, resultPath={}", processId, filePath);
         }
     }
 
