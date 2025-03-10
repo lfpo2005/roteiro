@@ -1,25 +1,23 @@
 package dev.luisoliveira.roteiro.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
 public class OpenAIService {
+
+    private final RestTemplate restTemplate;
 
     @Value("${openai.api.key}")
     private String OPENAI_API_KEY;
@@ -28,6 +26,10 @@ public class OpenAIService {
     private String MODEL;
 
     private static final String COMPLETIONS_URL = "https://api.openai.com/v1/chat/completions";
+
+    public OpenAIService() {
+        this.restTemplate = new RestTemplate();
+    }
 
     public List<String> generateTitles(String prompt) {
         String response = callGpt(prompt);
@@ -44,44 +46,40 @@ public class OpenAIService {
 
     private String callGpt(String prompt) {
         log.info("Iniciando requisição ao OpenAI...");
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            HttpPost post = new HttpPost(COMPLETIONS_URL);
+        try {
+            // Configurar headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
 
-            // Configura os headers
-            post.setHeader("Authorization", "Bearer " + OPENAI_API_KEY);
-            post.setHeader("Content-Type", "application/json");
-
-            // Configura o corpo da requisição
-            JSONObject json = new JSONObject();
-            json.put("model", MODEL);
-
-            // Adiciona mensagem do sistema
-            JSONArray messages = new JSONArray();
-            JSONObject systemMessage = new JSONObject();
+            // Criar objeto para corpo da requisição
+            Map<String, Object> systemMessage = new HashMap<>();
             systemMessage.put("role", "system");
             systemMessage.put("content", "Você é um assistente especializado em criar conteúdo religioso para YouTube.");
-            messages.put(systemMessage);
 
-            // Adiciona mensagem do usuário
-            JSONObject userMessage = new JSONObject();
+            Map<String, Object> userMessage = new HashMap<>();
             userMessage.put("role", "user");
             userMessage.put("content", prompt);
-            messages.put(userMessage);
 
-            json.put("messages", messages);
-            json.put("temperature", 0.7);
+            List<Map<String, Object>> messages = new ArrayList<>();
+            messages.add(systemMessage);
+            messages.add(userMessage);
 
-            post.setEntity(new StringEntity(json.toString(), ContentType.APPLICATION_JSON));
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("model", MODEL);
+            requestBody.put("messages", messages);
+            requestBody.put("temperature", 0.7);
 
-            try (CloseableHttpResponse response = client.execute(post)) {
-                int statusCode = response.getCode();
-                if (statusCode != 200) {
-                    log.error("Erro na requisição: Status code {}", statusCode);
-                    throw new RuntimeException("Erro na API do OpenAI: " + statusCode);
-                }
+            // Criar entidade HTTP
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-                String result = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
-                JSONObject responseJson = new JSONObject(result);
+            // Fazer a requisição
+            ResponseEntity<String> response = restTemplate.postForEntity(COMPLETIONS_URL, entity, String.class);
+
+            log.info("Resposta da API OpenAI: status code {}", response.getStatusCode());
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                JSONObject responseJson = new JSONObject(response.getBody());
 
                 String content = responseJson.getJSONArray("choices")
                         .getJSONObject(0)
@@ -89,10 +87,12 @@ public class OpenAIService {
                         .getString("content");
 
                 log.info("Requisição concluída com sucesso");
-
                 return content;
+            } else {
+                log.error("Erro na requisição: Status code {}", response.getStatusCode());
+                throw new RuntimeException("Erro na API do OpenAI: " + response.getStatusCode());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Erro ao processar a requisição", e);
             throw new RuntimeException("Erro ao processar a requisição para OpenAI", e);
         }
