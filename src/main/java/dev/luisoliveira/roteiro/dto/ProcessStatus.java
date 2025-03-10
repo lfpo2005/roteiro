@@ -12,4 +12,8 @@ public class ProcessStatus {
     private LocalDateTime lastUpdated;
     private boolean completed;
     private String resultPath;
+    private String tema;
+    private String estiloOracao;
+    private String duracao;
+    private String tipoOracao;
 }
