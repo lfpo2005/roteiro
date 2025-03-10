@@ -1,7 +1,7 @@
 package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.event.ContentInitiatedEvent;
-import dev.luisoliveira.roteiro.event.TitleSelectedEvent;
+import dev.luisoliveira.roteiro.event.TitlesGeneratedEvent;
 import dev.luisoliveira.roteiro.util.PromptBuilder;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class TitleGenerationService {
             );
 
             // Publicar evento com resultados
-            eventBusService.publish(new TitleSelectedEvent(
+            eventBusService.publish(new TitlesGeneratedEvent(
                     event.getProcessId(),
                     titles,
                     event.getTema(),

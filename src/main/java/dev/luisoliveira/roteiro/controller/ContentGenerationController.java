@@ -5,7 +5,7 @@ import dev.luisoliveira.roteiro.dto.GenerationResponse;
 import dev.luisoliveira.roteiro.dto.ProcessStatus;
 import dev.luisoliveira.roteiro.dto.TitleSelectionRequest;
 import dev.luisoliveira.roteiro.event.ContentInitiatedEvent;
-import dev.luisoliveira.roteiro.event.TitleSelectedEvent;
+import dev.luisoliveira.roteiro.event.TitlesGeneratedEvent;
 import dev.luisoliveira.roteiro.service.EventBusService;
 import dev.luisoliveira.roteiro.service.ProcessTrackingService;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +70,7 @@ public class ContentGenerationController {
             @RequestBody TitleSelectionRequest request) {
 
         // Publicar evento de título selecionado
-        eventBusService.publish(new TitleSelectedEvent(
+        eventBusService.publish(new TitlesGeneratedEvent(
                 processId,
                 request.getSelectedTitle()
         ));
