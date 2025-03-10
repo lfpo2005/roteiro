@@ -2,7 +2,7 @@ package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.dto.ProcessStatus;
 import dev.luisoliveira.roteiro.event.OracaoGeneratedEvent;
-import dev.luisoliveira.roteiro.event.TitlesGeneratedEvent;
+import dev.luisoliveira.roteiro.event.TitleSelectedEvent;
 import dev.luisoliveira.roteiro.util.PromptBuilder;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class OracaoGenerationService {
     private final ProcessTrackingService processTrackingService;
 
     @EventListener
-    public void handleTitleSelectedEvent(TitlesGeneratedEvent event) {
+    public void handleTitleSelectedEvent(TitleSelectedEvent event) {
         try {
             String processId = event.getProcessId();
             String selectedTitle = event.getSelectedTitle();
