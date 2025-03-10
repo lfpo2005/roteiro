@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ReteiroApplication {
+public class RoteiroApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ReteiroApplication.class, args);
+		SpringApplication.run(RoteiroApplication.class, args);
 	}
 
 }

@@ -1,23 +1,13 @@
 package dev.luisoliveira.roteiro.event;
 
 import lombok.Getter;
-import java.util.List;
 
 @Getter
-public class TitlesGeneratedEvent extends ContentEvent {
-    private final List<String> titles;
-    private final String tema;
-    private final String estiloOracao;
-    private final String duracao;
-    private final String tipoOracao;
+public class TitleSelectedEvent extends ContentEvent {
+    private final String selectedTitle;
 
-    public TitlesGeneratedEvent(String processId, List<String> titles, String tema,
-                                String estiloOracao, String duracao, String tipoOracao) {
+    public TitleSelectedEvent(String processId, String selectedTitle) {
         super(processId);
-        this.titles = titles;
-        this.tema = tema;
-        this.estiloOracao = estiloOracao;
-        this.duracao = duracao;
-        this.tipoOracao = tipoOracao;
+        this.selectedTitle = selectedTitle;
     }
 }

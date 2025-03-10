@@ -1,0 +1,71 @@
+flowchart TB
+    Client(Cliente) --> ContentController
+
+    subgraph Controllers
+        ContentController[ContentGenerationController]
+    end
+
+    subgraph Services
+        EventBus[EventBusService]
+        ProcessTracking[ProcessTrackingService]
+        TitleGeneration[TitleGenerationService]
+        OracaoGeneration[OracaoGenerationService]
+        ShortGeneration[ShortGenerationService]
+        DescriptionGeneration[DescriptionGenerationService]
+        ImagePromptGeneration[ImagePromptGenerationService]
+        ContentCompilation[ContentCompilationService]
+        OpenAI[OpenAIService]
+        FileStorage[FileStorageService]
+    end
+
+    subgraph Events
+        ContentInitiated[ContentInitiatedEvent]
+        TitlesGenerated[TitlesGeneratedEvent]
+        TitleSelected[TitleSelectedEvent]
+        OracaoGenerated[OracaoGeneratedEvent]
+        ShortGenerated[ShortGeneratedEvent]
+        DescriptionGenerated[DescriptionGeneratedEvent]
+        ImagePromptGenerated[ImagePromptGeneratedEvent]
+        ContentCompleted[ContentCompletedEvent]
+    end
+
+    subgraph External
+        OpenAIAPI[OpenAI API]
+    end
+
+    ContentController --> EventBus
+    ContentController --> ProcessTracking
+
+    EventBus --> ContentInitiated
+    ContentInitiated --> TitleGeneration
+
+    TitleGeneration --> TitlesGenerated
+    TitlesGenerated --> ProcessTracking
+
+    ContentController --> TitleSelected
+    TitleSelected --> OracaoGeneration
+
+    OracaoGeneration --> OracaoGenerated
+    OracaoGenerated --> ShortGeneration
+
+    ShortGeneration --> ShortGenerated
+    ShortGenerated --> DescriptionGeneration
+
+    DescriptionGeneration --> DescriptionGenerated
+    DescriptionGenerated --> ImagePromptGeneration
+    DescriptionGenerated --> ContentCompilation
+
+    ImagePromptGeneration --> ImagePromptGenerated
+
+    ContentCompilation --> ContentCompleted
+    ContentCompleted --> ProcessTracking
+
+    TitleGeneration --> OpenAI
+    OracaoGeneration --> OpenAI
+    ShortGeneration --> OpenAI
+    DescriptionGeneration --> OpenAI
+    ImagePromptGeneration --> OpenAI
+
+    OpenAI --> OpenAIAPI
+
+    ContentCompilation --> FileStorage

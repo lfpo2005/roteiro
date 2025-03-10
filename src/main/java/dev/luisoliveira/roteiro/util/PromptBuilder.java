@@ -88,5 +88,64 @@ public class PromptBuilder {
         return prompt.toString();
     }
 
-    // Métodos adicionais para outros tipos de prompts...
+    public static String buildShortPrompt(String oracaoContent, String titulo) {
+        StringBuilder prompt = new StringBuilder();
+
+        prompt.append("Crie uma versão curta (30-60 segundos) da seguinte oração em espanhol:\n\n");
+        prompt.append("Título original: \"").append(titulo).append("\"\n\n");
+        prompt.append("Oração original:\n").append(oracaoContent).append("\n\n");
+
+        prompt.append("Diretrizes para a versão short:\n");
+        prompt.append("1. Manter entre 300-500 caracteres (ideal para vídeos de 30-60 segundos)\n");
+        prompt.append("2. Preservar a essência e mensagem principal\n");
+        prompt.append("3. Incluir uma invocação breve, mensagem central e encerramento\n");
+        prompt.append("4. Manter pelo menos um versículo bíblico relevante\n");
+        prompt.append("5. Usar linguagem direta e impactante\n");
+        prompt.append("6. Terminar com \"En el nombre de Jesús, Amén\"\n\n");
+
+        prompt.append("Responda APENAS com o texto da oração curta, sem comentários adicionais.");
+
+        return prompt.toString();
+    }
+
+    public static String buildDescriptionPrompt(String title, String oracaoContent) {
+        StringBuilder prompt = new StringBuilder();
+
+        prompt.append("Crie uma descrição otimizada para YouTube e TikTok para o seguinte vídeo de oração:\n\n");
+        prompt.append("Título: \"").append(title).append("\"\n\n");
+        prompt.append("Conteúdo da oração:\n").append(oracaoContent).append("\n\n");
+
+        prompt.append("Diretrizes para a descrição:\n");
+        prompt.append("1. Escreva entre 500-1000 caracteres\n");
+        prompt.append("2. Inclua 5-7 hashtags relevantes ao final\n");
+        prompt.append("3. Adicione 3-5 frases inspiradoras relacionadas ao tema\n");
+        prompt.append("4. Inclua um versículo bíblico principal\n");
+        prompt.append("5. Adicione um call-to-action para inscrição/compartilhamento\n");
+        prompt.append("6. Inclua 2-3 emojis estrategicamente colocados\n");
+        prompt.append("7. Mencione os benefícios de ouvir esta oração\n\n");
+
+        prompt.append("Responda APENAS com o texto da descrição, sem comentários adicionais.");
+
+        return prompt.toString();
+    }
+
+    public static String buildImagePromptPrompt(String title, String oracaoContent) {
+        StringBuilder prompt = new StringBuilder();
+
+        prompt.append("Crie um prompt para geração de imagem para a miniatura deste vídeo de oração:\n\n");
+        prompt.append("Título: \"").append(title).append("\"\n\n");
+        prompt.append("Conteúdo da oração:\n").append(oracaoContent).append("\n\n");
+
+        prompt.append("Diretrizes para o prompt de imagem:\n");
+        prompt.append("1. Descreva uma cena inspiradora relacionada ao tema da oração\n");
+        prompt.append("2. Foque em elementos visuais como luz, céu, natureza, mãos em oração, etc.\n");
+        prompt.append("3. Sugira elementos que transmitam paz, esperança, fé ou o tema específico\n");
+        prompt.append("4. Inclua referências a cores que combinam com o tema emocional\n");
+        prompt.append("5. Evite mencionar texto na imagem - será adicionado depois\n");
+        prompt.append("6. Formate como um prompt para Midjourney ou DALL-E\n\n");
+
+        prompt.append("Responda APENAS com o prompt para geração de imagem, sem comentários adicionais.");
+
+        return prompt.toString();
+    }
 }

@@ -2,6 +2,7 @@ package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.event.DescriptionGeneratedEvent;
 import dev.luisoliveira.roteiro.event.ShortGeneratedEvent;
+import dev.luisoliveira.roteiro.util.PromptBuilder;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class DescriptionGenerationService {
     @EventListener
     public void handleShortGeneratedEvent(ShortGeneratedEvent event) {
         try {
-            String processId = event.getProc.essId();
+            String processId = event.getProcessId(); // Correção aqui
 
             // Atualizar status
             processTrackingService.updateStatus(
