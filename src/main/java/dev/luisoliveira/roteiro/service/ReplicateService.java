@@ -31,7 +31,9 @@ public class ReplicateService {
 //    @Value("${replicate.model:stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b}")
 //    private String MODEL;
 
-    private static final String PREDICTIONS_URL = "https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions";
+    private static final String API_BASE_URL = "https://api.replicate.com/v1";
+    private static final String MODEL_NAME = "black-forest-labs/flux-schnell";
+    private static final String PREDICTIONS_URL = API_BASE_URL + "/models/" + MODEL_NAME + "/predictions";
     private static final int MAX_RETRIES = 30;
     private static final int RETRY_DELAY_MS = 2000;
 
@@ -91,12 +93,12 @@ public class ReplicateService {
             // Configurar os inputs para o modelo flux-schnell
             JSONObject input = new JSONObject();
             input.put("prompt", prompt);
-            input.put("go_fast", true);  // Ativar modo rápido
+            input.put("go_fast", false);  // Ativar modo rápido
             input.put("megapixels", "1");  // Resolução
             input.put("num_outputs", 1);  // Uma imagem por geração
             input.put("aspect_ratio", "16:9");  // Proporção ideal para capas
             input.put("output_format", "jpg");  // Formato de saída
-            input.put("output_quality", 80);  // Qualidade boa, mas econômica
+            input.put("output_quality", 50);  // Qualidade boa, mas econômica
             input.put("num_inference_steps", 4);  // Mínimo de passos para economizar
 
             requestBody.put("input", input);
@@ -158,7 +160,8 @@ public class ReplicateService {
      * @throws IOException Em caso de erro na comunicação com a API
      */
     private String waitForPredictionCompletion(String predictionId) throws IOException {
-        String predictionUrl = PREDICTIONS_URL + "/" + predictionId;
+        // A URL para verificar o status deve ser baseada na API base e no ID
+        String predictionUrl = API_BASE_URL + "/predictions/" + predictionId;
 
         for (int attempt = 0; attempt < MAX_RETRIES; attempt++) {
             HttpURLConnection connection = null;
@@ -166,13 +169,27 @@ public class ReplicateService {
                 // Configuração da conexão
                 URL url = new URL(predictionUrl);
                 connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
+                connection.setRequestMethod("GET");
                 connection.setRequestProperty("Authorization", "Bearer " + REPLICATE_API_KEY);
 
                 // Verificar o código de resposta
                 int responseCode = connection.getResponseCode();
                 if (responseCode != HttpURLConnection.HTTP_OK) { // 200
                     log.error("Erro ao verificar status da predição: Status code {}", responseCode);
+
+                    // Log adicional para depuração
+                    if (connection.getErrorStream() != null) {
+                        StringBuilder errorResponse = new StringBuilder();
+                        try (BufferedReader br = new BufferedReader(
+                                new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
+                            String responseLine;
+                            while ((responseLine = br.readLine()) != null) {
+                                errorResponse.append(responseLine.trim());
+                            }
+                        }
+                        log.error("Detalhes do erro: {}", errorResponse.toString());
+                    }
+
                     throw new IOException("Erro ao verificar status da predição: " + responseCode);
                 }
 
@@ -202,8 +219,10 @@ public class ReplicateService {
                     throw new IOException("A predição falhou ou foi cancelada: " + error);
                 }
 
-                // A predição ainda está em andamento, aguardar e tentar novamente
-                log.debug("Predição em andamento, tentando novamente em {}ms...", RETRY_DELAY_MS);
+                // Se o status for "processing" ou outro status não final,
+                // aguarde e tente novamente
+                log.debug("Predição em andamento (status: {}), tentando novamente em {}ms...",
+                        status, RETRY_DELAY_MS);
                 Thread.sleep(RETRY_DELAY_MS);
 
             } catch (InterruptedException e) {
