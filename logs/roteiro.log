@@ -2061,3 +2061,132 @@ Tamanho total: 1.800-2.200 caracteres (5 minutos)
 2025-03-10 22:43:16 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
 2025-03-10 22:43:16 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
 2025-03-10 22:43:16 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-10 22:43:19 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 41712 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-10 22:43:19 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-10 22:43:19 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-10 22:43:20 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-10 22:43:20 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-10 22:43:20 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-10 22:43:20 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-10 22:43:20 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-10 22:43:20 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-10 22:43:20 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1623 ms
+2025-03-10 22:43:21 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-10 22:43:21 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-10 22:43:21 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-10 22:43:21 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-10 22:43:21 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.199 seconds (process running for 4.027)
+2025-03-10 22:43:27 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-10 22:43:27 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-10 22:43:27 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-10 22:43:28 [http-nio-8080-exec-2] INFO  d.l.r.c.ContentGenerationController - Iniciando processo de geração com ID: 0c3f0c18-e382-44ff-9395-0ee20b032b46 (idioma: es-MX, título: fornecido)
+2025-03-10 22:43:28 [http-nio-8080-exec-2] DEBUG d.l.r.service.ProcessTrackingService - Processo inicializado: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:28 [http-nio-8080-exec-2] DEBUG d.l.r.service.ProcessTrackingService - Informações do processo configuradas: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, idioma=es-MX, titulo=fornecido
+2025-03-10 22:43:28 [http-nio-8080-exec-2] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ContentInitiatedEvent para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:28 [http-nio-8080-exec-2] INFO  d.l.roteiro.service.EventBusService - Evento ContentInitiatedEvent publicado com sucesso para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-12] INFO  d.l.r.service.TitleGenerationService - Título fornecido diretamente para o processo 0c3f0c18-e382-44ff-9395-0ee20b032b46: ¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-12] DEBUG d.l.r.service.ProcessTrackingService - Títulos armazenados: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, quantidade=1
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-12] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Usando título fornecido: ¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS, progress=40%
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-12] INFO  d.l.r.service.TitleGenerationService - Pulando geração de títulos e usando título fornecido: ¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.EventBusService - Publicando evento: TitleSelectedEvent para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-12] INFO  d.l.roteiro.service.EventBusService - Evento TitleSelectedEvent publicado com sucesso para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Recebido evento TitleSelectedEvent para processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46 com título: ¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Gerando oração para o título selecionado..., progress=50%
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Gerando oração...' (50%)
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Recuperadas informações do processo: tema=protección de protecion, estilo=Reflexiva, duracao=Padrão, idioma=es-MX
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Construindo prompt para oração no idioma: es-MX
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para oração: tema=protección de protecion, estilo=Reflexiva, duracao=Padrão, titulo=¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS, idioma=es-MX
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] DEBUG d.l.roteiro.util.PromptBuilder - Prompt construído com sucesso (tamanho: 938 caracteres)
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.s.OracaoGenerationService - Prompt construído: Crea una oración en español latino/mexicano con el título: "¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS"
+
+Utiliza expresiones, palabras y giros típicos del español de México y Latinoamérica. Evita términos o expresiones propias del español de España.
+
+Tema: protección de protecion
+Estilo: Reflexiva
+Duração: Padrão
+
+A oração deve seguir esta estrutura:
+1. Versículo inicial relevante ("Versículo del día:")
+2. Introdução com saudação e relevância do tema (6-8 linhas)
+3. Reflexão bíblica com passagem relevante (6-8 linhas)
+4. Oração principal com:
+   - Invocação inicial
+   - Desenvolvimento do tema
+   - Aplicação prática
+   - Pedidos específicos
+   - Declaração de fé
+5. Encerramento com:
+   - Recapitulação
+   - Versículo final (diferente do inicial)
+   - Bênção final
+   - Convite para inscrição
+   - "En el nombre de Jesús, Amén"
+
+Tamanho total: 1.800-2.200 caracteres (5 minutos)
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Iniciando chamada à API OpenAI para gerar oração...
+2025-03-10 22:43:28 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.service.ProcessTrackingService - Conteúdo da oração armazenado para processo: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Oração gerada com sucesso (tamanho: 1846 caracteres)
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Oração gerada com sucesso, progress=70%
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Oração gerada com sucesso' (70%)
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Publicando evento OracaoGeneratedEvent...
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.EventBusService - Publicando evento: OracaoGeneratedEvent para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] INFO  d.l.roteiro.service.EventBusService - Evento OracaoGeneratedEvent publicado com sucesso para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-13] INFO  d.l.r.s.OracaoGenerationService - Evento OracaoGeneratedEvent publicado com sucesso
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-14] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Gerando versão short da oração..., progress=75%
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-14] INFO  d.l.r.service.ShortGenerationService - Gerando versão short da oração no idioma: es-MX
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-14] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para versão short: titulo=¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS, tamanho da oração=1846 caracteres, idioma=es-MX
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-14] INFO  d.l.r.service.ShortGenerationService - Iniciando geração da versão short no idioma: es-MX
+2025-03-10 22:43:33 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-14] DEBUG d.l.r.service.ProcessTrackingService - Conteúdo short armazenado para processo: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-14] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Versão short gerada com sucesso, progress=80%
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-14] INFO  d.l.r.service.ShortGenerationService - Versão short gerada com sucesso: 440 caracteres
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ShortGeneratedEvent para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-14] INFO  d.l.roteiro.service.EventBusService - Evento ShortGeneratedEvent publicado com sucesso para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-15] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Gerando descrição para YouTube e TikTok..., progress=85%
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-15] INFO  d.l.r.s.DescriptionGenerationService - Gerando descrição para YouTube e TikTok no idioma: es-MX
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-15] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para descrição: titulo=¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS, tamanho da oração=1846 caracteres, idioma=es-MX
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-15] INFO  d.l.r.s.DescriptionGenerationService - Iniciando geração da descrição no idioma: es-MX
+2025-03-10 22:43:35 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-15] DEBUG d.l.r.service.ProcessTrackingService - Conteúdo da descrição armazenado para processo: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-15] INFO  d.l.r.s.DescriptionGenerationService - Descrição gerada com sucesso: 468 caracteres
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-15] DEBUG d.l.r.service.ProcessTrackingService - Status de processamento de imagem atualizado para 0c3f0c18-e382-44ff-9395-0ee20b032b46: em processamento
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-15] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Descrição gerada com sucesso, progress=90%
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.EventBusService - Publicando evento: DescriptionGeneratedEvent para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-15] INFO  d.l.roteiro.service.EventBusService - Evento DescriptionGeneratedEvent publicado com sucesso para o processId: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-16] DEBUG d.l.r.s.ContentCompilationService - Imagem sendo processada para 0c3f0c18-e382-44ff-9395-0ee20b032b46, pulando compilação direta
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-17] DEBUG d.l.r.service.ProcessTrackingService - Status de processamento de imagem atualizado para 0c3f0c18-e382-44ff-9395-0ee20b032b46: em processamento
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-17] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Gerando capa para a oração..., progress=92%
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-17] INFO  d.l.r.s.ImagePromptGenerationService - Gerando prompt para imagem de capa no idioma: es-MX
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-17] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para imagem: titulo=¡ANTES DE SALIR DE CASA! ORACIÓN MILAGROSA para PROTECCIÓN DIVINA y ÉXITO en TODO lo que HAGAS, tamanho da oração=1846 caracteres, idioma=es-MX
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-17] INFO  d.l.r.s.ImagePromptGenerationService - Gerando prompt para capa via OpenAI...
+2025-03-10 22:43:37 [SimpleAsyncTaskExecutor-17] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-10 22:43:39 [SimpleAsyncTaskExecutor-17] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-10 22:43:39 [SimpleAsyncTaskExecutor-17] INFO  d.l.r.s.ImagePromptGenerationService - Prompt de imagem gerado com sucesso: 493 caracteres
+2025-03-10 22:43:39 [SimpleAsyncTaskExecutor-17] INFO  d.l.r.s.ImagePromptGenerationService - Gerando imagem via Replicate...
+2025-03-10 22:43:39 [SimpleAsyncTaskExecutor-17] INFO  d.l.roteiro.service.ReplicateService - Iniciando geração de imagem para o processo: 0c3f0c18-e382-44ff-9395-0ee20b032b46
+2025-03-10 22:43:39 [SimpleAsyncTaskExecutor-17] DEBUG d.l.roteiro.service.ReplicateService - Prompt para imagem: Una imagen inspiradora que muestra rayos de luz divina descendiendo del cielo mientras una persona está orando, representando protección divina y éxito, ambiente protector, colores brillantes, prayer, divine light, holy text, professional photography, inspirational, spiritual, sacred, high quality, detailed
+2025-03-10 22:43:39 [SimpleAsyncTaskExecutor-17] DEBUG d.l.roteiro.service.ReplicateService - Corpo da requisição: {"input":{"aspect_ratio":"16:9","num_outputs":1,"output_format":"jpg","go_fast":true,"megapixels":"1","prompt":"Una imagen inspiradora que muestra rayos de luz divina descendiendo del cielo mientras una persona está orando, representando protección divina y éxito, ambiente protector, colores brillantes, prayer, divine light, holy text, professional photography, inspirational, spiritual, sacred, high quality, detailed","output_quality":80,"num_inference_steps":4}}
+2025-03-10 22:43:39 [SimpleAsyncTaskExecutor-17] INFO  d.l.roteiro.service.ReplicateService - Prediction criada com ID: v429qqsm79rm80cngbftv8xyb8
+2025-03-10 22:43:40 [SimpleAsyncTaskExecutor-17] ERROR d.l.roteiro.service.ReplicateService - Erro ao verificar status da predição: Status code 404
+2025-03-10 22:43:40 [SimpleAsyncTaskExecutor-17] ERROR d.l.r.s.ImagePromptGenerationService - Erro ao gerar capa: Erro ao verificar status da predição: 404
+java.io.IOException: Erro ao verificar status da predição: 404
+	at dev.luisoliveira.roteiro.service.ReplicateService.waitForPredictionCompletion(ReplicateService.java:176)
+	at dev.luisoliveira.roteiro.service.ReplicateService.generateImage(ReplicateService.java:57)
+	at dev.luisoliveira.roteiro.service.ImagePromptGenerationService.handleDescriptionGeneratedEvent(ImagePromptGenerationService.java:69)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.doInvoke(ApplicationListenerMethodAdapter.java:382)
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.processEvent(ApplicationListenerMethodAdapter.java:254)
+	at org.springframework.context.event.ApplicationListenerMethodAdapter.onApplicationEvent(ApplicationListenerMethodAdapter.java:173)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.lambda$multicastEvent$0(SimpleApplicationEventMulticaster.java:148)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+2025-03-10 22:43:40 [SimpleAsyncTaskExecutor-17] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=0c3f0c18-e382-44ff-9395-0ee20b032b46, stage=Aviso: Não foi possível gerar a capa: Erro ao verificar status da predição: 404, progress=93%
+2025-03-10 22:43:40 [SimpleAsyncTaskExecutor-17] DEBUG d.l.r.service.ProcessTrackingService - Status de processamento de imagem atualizado para 0c3f0c18-e382-44ff-9395-0ee20b032b46: concluído
