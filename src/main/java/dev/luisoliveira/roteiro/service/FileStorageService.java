@@ -49,15 +49,29 @@ public class FileStorageService {
             String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
                     .replaceAll("_+", "_");
 
-            // Criar o diretório do processo se não existir
-            Path processDir = Paths.get(outputPath, titulo); // alterado para salvar em diretório com o título
-            if (!Files.exists(processDir)) {
-                Files.createDirectories(processDir);
+            // Criar a pasta principal com o título
+            Path mainDir = Paths.get(outputPath, safeTitle);
+            if (!Files.exists(mainDir)) {
+                Files.createDirectories(mainDir);
             }
 
-            // Salvar arquivo de metadados em txt
+            // Criar subpastas para texto e áudio
+            Path textoDir = mainDir.resolve("texto");
+            Path audioDir = mainDir.resolve("audio");
+
+            if (!Files.exists(textoDir)) {
+                Files.createDirectories(textoDir);
+            }
+
+            if (!Files.exists(audioDir)) {
+                Files.createDirectories(audioDir);
+            }
+
+            log.info("Estrutura de diretórios criada: {}", mainDir);
+
+            // Salvar arquivo de metadados em txt na pasta de texto
             String txtFileName = safeTitle + "_meta.txt";
-            Path txtFilePath = processDir.resolve(txtFileName);
+            Path txtFilePath = textoDir.resolve(txtFileName);
 
             // Criar conteúdo do arquivo de metadados
             StringBuilder txtContent = new StringBuilder();
@@ -87,17 +101,53 @@ public class FileStorageService {
             if (imagePath != null) {
                 txtContent.append("\n\n**Imagem de Capa**\n\n");
                 txtContent.append("Uma imagem de capa foi gerada em: ").append(imagePath);
+
+                // Copiar a imagem para o diretório principal, se existir
+                try {
+                    Path sourceImagePath = Paths.get(imagePath);
+                    if (Files.exists(sourceImagePath)) {
+                        Path targetImagePath = mainDir.resolve(sourceImagePath.getFileName());
+                        Files.copy(sourceImagePath, targetImagePath);
+                        log.info("Imagem copiada para o diretório principal: {}", targetImagePath);
+                    }
+                } catch (IOException e) {
+                    log.warn("Não foi possível copiar a imagem para o diretório principal: {}", e.getMessage());
+                }
             }
 
             // Adicionar informação sobre os áudios gerados, se disponíveis
             if (oracaoAudioPath != null) {
                 txtContent.append("\n\n**Áudio da Oração Completa**\n\n");
-                txtContent.append("Um áudio da oração completa foi gerado em: ").append(oracaoAudioPath);
+                txtContent.append("Um áudio da oração completa foi gerado em: ./audio/").append(Paths.get(oracaoAudioPath).getFileName());
+
+                // Mover/copiar o áudio para a pasta de áudio, se existir
+                try {
+                    Path sourceAudioPath = Paths.get(oracaoAudioPath);
+                    if (Files.exists(sourceAudioPath)) {
+                        Path targetAudioPath = audioDir.resolve(sourceAudioPath.getFileName());
+                        Files.copy(sourceAudioPath, targetAudioPath);
+                        log.info("Áudio da oração completa copiado para: {}", targetAudioPath);
+                    }
+                } catch (IOException e) {
+                    log.warn("Não foi possível copiar o áudio da oração completa: {}", e.getMessage());
+                }
             }
 
             if (shortAudioPath != null) {
                 txtContent.append("\n\n**Áudio da Versão Curta**\n\n");
-                txtContent.append("Um áudio da versão curta foi gerado em: ").append(shortAudioPath);
+                txtContent.append("Um áudio da versão curta foi gerado em: ./audio/").append(Paths.get(shortAudioPath).getFileName());
+
+                // Mover/copiar o áudio da versão curta para a pasta de áudio, se existir
+                try {
+                    Path sourceShortAudioPath = Paths.get(shortAudioPath);
+                    if (Files.exists(sourceShortAudioPath)) {
+                        Path targetShortAudioPath = audioDir.resolve(sourceShortAudioPath.getFileName());
+                        Files.copy(sourceShortAudioPath, targetShortAudioPath);
+                        log.info("Áudio da versão curta copiado para: {}", targetShortAudioPath);
+                    }
+                } catch (IOException e) {
+                    log.warn("Não foi possível copiar o áudio da versão curta: {}", e.getMessage());
+                }
             }
 
             // Escrever no arquivo de metadados
@@ -106,9 +156,9 @@ public class FileStorageService {
             }
             log.info("Arquivo de metadados salvo com sucesso: {}", txtFilePath);
 
-            // Converter oração para SRT e salvar
+            // Converter oração para SRT e salvar na pasta de texto
             String srtFileName = safeTitle + ".srt";
-            Path srtFilePath = processDir.resolve(srtFileName);
+            Path srtFilePath = textoDir.resolve(srtFileName);
             String srtContent = srtConverterService.converterParaSRT(oracaoContent);
 
             try (FileWriter writer = new FileWriter(srtFilePath.toFile())) {
@@ -116,9 +166,9 @@ public class FileStorageService {
             }
             log.info("Arquivo SRT salvo com sucesso: {}", srtFilePath);
 
-            // Converter versão curta para SRT e salvar
+            // Converter versão curta para SRT e salvar na pasta de texto
             String shortSrtFileName = safeTitle + "_short.srt";
-            Path shortSrtFilePath = processDir.resolve(shortSrtFileName);
+            Path shortSrtFilePath = textoDir.resolve(shortSrtFileName);
             String shortSrtContent = srtConverterService.converterParaSRT(shortContent);
 
             try (FileWriter writer = new FileWriter(shortSrtFilePath.toFile())) {
@@ -126,8 +176,8 @@ public class FileStorageService {
             }
             log.info("Arquivo SRT da versão curta salvo com sucesso: {}", shortSrtFilePath);
 
-            // Retornar o caminho do diretório que contém todos os arquivos
-            return processDir.toString();
+            // Retornar o caminho do diretório principal que contém todas as subpastas
+            return mainDir.toString();
         } catch (IOException e) {
             log.error("Falha ao salvar arquivos", e);
             throw new RuntimeException("Falha ao salvar arquivos", e);

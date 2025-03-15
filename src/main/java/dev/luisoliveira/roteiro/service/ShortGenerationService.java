@@ -22,6 +22,37 @@ public class ShortGenerationService {
         try {
             String processId = event.getProcessId();
 
+            // Obter a duração selecionada
+            String duracao = processTrackingService.getDuracao(processId);
+
+            // Verificar se deve gerar a versão short com base na duração e na flag
+            if (!shouldGenerateShortVersion(processId, duracao)) {
+                log.info("Pulando geração de versão short para o processo {}", processId);
+
+                // Pular a geração de short e passar direto para a descrição
+                // Vamos criar um "short content" igual ao original para manter a compatibilidade
+                String shortContent = event.getOracaoContent();
+                processTrackingService.storeShortContent(processId, shortContent);
+
+                // Atualizar status
+                processTrackingService.updateStatus(
+                        processId,
+                        "Versão short não necessária, prosseguindo...",
+                        80
+                );
+
+                // Publicar evento com o mesmo conteúdo (sem gerar short)
+                eventBusService.publish(new ShortGeneratedEvent(
+                        processId,
+                        event.getTitle(),
+                        event.getOracaoContent(),
+                        shortContent
+                ));
+
+                return;
+            }
+
+            // Se chegou aqui, deve gerar a versão short normalmente
             // Atualizar status
             processTrackingService.updateStatus(
                     processId,
@@ -94,6 +125,36 @@ public class ShortGenerationService {
                     0
             );
         }
+    }
+
+    /**
+     * Verifica se deve gerar a versão short com base na duração e na flag fornecida pelo usuário
+     *
+     * @param processId ID do processo
+     * @param duracao Duração selecionada
+     * @return true se deve gerar versão short, false caso contrário
+     */
+    private boolean shouldGenerateShortVersion(String processId, String duracao) {
+        // Se for uma duração curta, não gera short
+        if (duracao != null) {
+            if (duracao.toLowerCase().contains("muito curta") ||
+                    duracao.toLowerCase().contains("curta") ||
+                    duracao.toLowerCase().contains("mini")) {
+                log.info("Duração {} é curta, não é necessário gerar versão short", duracao);
+                return false;
+            }
+        }
+
+        // Para durações Padrão, Completa ou Expandida, verificar se o usuário deseja gerar short
+        Boolean gerarVersaoShort = processTrackingService.getGerarVersaoShort(processId);
+
+        // Se a flag for null, assume-se como true (comportamento padrão antigo)
+        if (gerarVersaoShort == null) {
+            return true;
+        }
+
+        // Retorna o valor da flag
+        return gerarVersaoShort;
     }
 
     /**

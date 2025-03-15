@@ -27,6 +27,7 @@ import java.util.UUID;
 @RequestMapping("/content")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ContentGenerationController {
 
     private final EventBusService eventBusService;
@@ -35,10 +36,11 @@ public class ContentGenerationController {
     @PostMapping("/generate")
     public ResponseEntity<GenerationResponse> startGeneration(@RequestBody GenerationRequest request) {
         String processId = UUID.randomUUID().toString();
-        log.info("Iniciando processo de geração com ID: {} (idioma: {}, título: {})",
+        log.info("Iniciando processo de geração com ID: {} (idioma: {}, título: {}, gerarVersaoShort: {})",
                 processId,
                 request.getIdioma() != null ? request.getIdioma() : "es (padrão)",
-                request.getTitulo() != null ? "fornecido" : "não fornecido");
+                request.getTitulo() != null ? "fornecido" : "não fornecido",
+                request.getGerarVersaoShort());
 
         // Inicializar status
         processTrackingService.initializeProcess(processId);
@@ -50,18 +52,18 @@ public class ContentGenerationController {
             request.setIdioma(idioma);
         }
 
-        // Obter flag de geração de imagem, definindo como false se não fornecido
-        Boolean gerarImagem = request.getGerarImagem();
-        if (gerarImagem == null) {
-            gerarImagem = false;
-            request.setGerarImagem(false);
-        }
+        // Verificar duração para decidir se deve mostrar a opção de gerar short
+        String duracao = request.getDuracao();
+        Boolean gerarVersaoShort = request.getGerarVersaoShort();
 
-        // Obter flag de geração de áudio, definindo como false se não fornecido
-        Boolean gerarAudio = request.getGerarAudio();
-        if (gerarAudio == null) {
-            gerarAudio = false;
-            request.setGerarAudio(false);
+        // Se for uma duração curta, definir gerarVersaoShort como false
+        if (duracao != null && (
+                duracao.toLowerCase().contains("muito curta") ||
+                        duracao.toLowerCase().contains("curta") ||
+                        duracao.toLowerCase().contains("mini"))) {
+            // Para durações curtas, não oferecemos a opção de gerar short
+            gerarVersaoShort = false;
+            request.setGerarVersaoShort(false);
         }
 
         // Armazenar informações do processo
@@ -74,8 +76,7 @@ public class ContentGenerationController {
                 request.getIdioma(),
                 request.getTitulo(),
                 request.getObservacoes(),
-                gerarImagem,
-                gerarAudio
+                gerarVersaoShort  // Nova flag
         );
 
         // Publicar evento inicial
@@ -88,8 +89,8 @@ public class ContentGenerationController {
                 request.getIdioma(),
                 request.getTitulo(),
                 request.getObservacoes(),
-                gerarImagem,
-                gerarAudio
+                request.getGerarImagem(),
+                request.getGerarAudio()
         ));
 
         String message;
@@ -97,6 +98,20 @@ public class ContentGenerationController {
             message = "Processo iniciado com sucesso usando o título fornecido: " + request.getTitulo();
         } else {
             message = "Processo iniciado com sucesso. Um título será gerado automaticamente.";
+        }
+
+        // Adicionar informação sobre a versão short
+        if (duracao != null && (
+                duracao.toLowerCase().contains("muito curta") ||
+                        duracao.toLowerCase().contains("curta") ||
+                        duracao.toLowerCase().contains("mini"))) {
+            message += " Para orações de curta duração, não será gerada uma versão short.";
+        } else if (gerarVersaoShort != null) {
+            if (gerarVersaoShort) {
+                message += " Será gerada uma versão short da oração.";
+            } else {
+                message += " Não será gerada uma versão short da oração.";
+            }
         }
 
         return ResponseEntity.accepted()
@@ -127,6 +142,25 @@ public class ContentGenerationController {
 
         return ResponseEntity.accepted()
                 .body(new GenerationResponse(processId, "Título selecionado com sucesso"));
+    }
+
+    /**
+     * Endpoint para atualizar a flag de geração de versão short
+     */
+    @PostMapping("/update-short-flag/{processId}")
+    public ResponseEntity<GenerationResponse> updateShortFlag(
+            @PathVariable String processId,
+            @RequestParam Boolean gerarVersaoShort) {
+
+        // Atualizar a flag no serviço de tracking
+        processTrackingService.setGerarVersaoShort(processId, gerarVersaoShort);
+
+        String message = gerarVersaoShort ?
+                "Será gerada uma versão short da oração." :
+                "Não será gerada uma versão short da oração.";
+
+        return ResponseEntity.accepted()
+                .body(new GenerationResponse(processId, message));
     }
 
     @GetMapping("/status/{processId}")
