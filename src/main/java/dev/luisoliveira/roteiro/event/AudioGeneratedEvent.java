@@ -3,7 +3,7 @@ package dev.luisoliveira.roteiro.event;
 import lombok.Getter;
 
 /**
- * Evento disparado quando os arquivos de áudio são gerados com sucesso.
+ * Evento disparado quando os áudios são gerados
  */
 @Getter
 public class AudioGeneratedEvent extends ContentEvent {
@@ -16,9 +16,5 @@ public class AudioGeneratedEvent extends ContentEvent {
         this.title = title;
         this.fullAudioPath = fullAudioPath;
         this.shortAudioPath = shortAudioPath;
-    }
-
-    public String getOracaoAudioPath() {
-        return fullAudioPath;
     }
 }

@@ -31,8 +31,12 @@ public class ProcessTrackingService {
         private String oracaoContent;
         private String shortContent;
         private String descriptionContent;
-        private Boolean gerarVersaoShort = null; // Campo para controlar se deve gerar short
+        private Boolean gerarVersaoShort = null;
+        private Boolean gerarAudio = null;
+        private String fullAudioPath;  // Caminho do áudio da oração completa
+        private String shortAudioPath; // Caminho do áudio da versão curta
 
+        // Getters e setters existentes...
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
 
@@ -65,7 +69,59 @@ public class ProcessTrackingService {
 
         public Boolean getGerarVersaoShort() { return gerarVersaoShort; }
         public void setGerarVersaoShort(Boolean gerarVersaoShort) { this.gerarVersaoShort = gerarVersaoShort; }
+
+        public Boolean getGerarAudio() { return gerarAudio; }
+        public void setGerarAudio(Boolean gerarAudio) { this.gerarAudio = gerarAudio; }
+
+        // Novos getters e setters para caminhos de áudio
+        public String getFullAudioPath() { return fullAudioPath; }
+        public void setFullAudioPath(String fullAudioPath) { this.fullAudioPath = fullAudioPath; }
+
+        public String getShortAudioPath() { return shortAudioPath; }
+        public void setShortAudioPath(String shortAudioPath) { this.shortAudioPath = shortAudioPath; }
     }
+
+    // Métodos existentes e novos métodos...
+
+    /**
+     * Armazena os caminhos dos arquivos de áudio gerados
+     * @param processId ID do processo
+     * @param fullAudioPath Caminho do arquivo de áudio da oração completa
+     * @param shortAudioPath Caminho do arquivo de áudio da versão curta
+     */
+    public void storeAudioPaths(String processId, String fullAudioPath, String shortAudioPath) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setFullAudioPath(fullAudioPath);
+            info.setShortAudioPath(shortAudioPath);
+            log.info("Caminhos de áudio armazenados para o processo {}: full={}, short={}",
+                    processId, fullAudioPath, shortAudioPath);
+        } else {
+            log.warn("Tentativa de armazenar caminhos de áudio para processo inexistente: {}", processId);
+        }
+    }
+
+    /**
+     * Recupera o caminho do arquivo de áudio da oração completa
+     * @param processId ID do processo
+     * @return Caminho do arquivo de áudio ou null se não existir
+     */
+    public String getFullAudioPath(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getFullAudioPath() : null;
+    }
+
+    /**
+     * Recupera o caminho do arquivo de áudio da versão curta
+     * @param processId ID do processo
+     * @return Caminho do arquivo de áudio ou null se não existir
+     */
+    public String getShortAudioPath(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getShortAudioPath() : null;
+    }
+
+    // Outros métodos existentes...
 
     public void initializeProcess(String processId) {
         ProcessStatus status = new ProcessStatus();
@@ -84,6 +140,12 @@ public class ProcessTrackingService {
     public void setProcessInfo(String processId, String tema, String estiloOracao,
                                String duracao, String tipoOracao, String idioma,
                                String titulo, String observacoes, Boolean gerarVersaoShort) {
+        setProcessInfo(processId, tema, estiloOracao, duracao, tipoOracao, idioma, titulo, observacoes, gerarVersaoShort, null);
+    }
+
+    public void setProcessInfo(String processId, String tema, String estiloOracao,
+                               String duracao, String tipoOracao, String idioma,
+                               String titulo, String observacoes, Boolean gerarVersaoShort, Boolean gerarAudio) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
             info.setTema(tema);
@@ -93,9 +155,10 @@ public class ProcessTrackingService {
             info.setIdioma(idioma != null ? idioma : "es"); // Padrão para espanhol se não especificado
             info.setTitulo(titulo);
             info.setObservacoes(observacoes);
-            info.setGerarVersaoShort(gerarVersaoShort); // Nova flag
-            log.debug("Informações do processo configuradas: processId={}, idioma={}, titulo={}, gerarVersaoShort={}",
-                    processId, idioma, titulo != null ? "fornecido" : "não fornecido", gerarVersaoShort);
+            info.setGerarVersaoShort(gerarVersaoShort);
+            info.setGerarAudio(gerarAudio);
+            log.debug("Informações do processo configuradas: processId={}, idioma={}, titulo={}, gerarVersaoShort={}, gerarAudio={}",
+                    processId, idioma, titulo != null ? "fornecido" : "não fornecido", gerarVersaoShort, gerarAudio);
         }
     }
 
@@ -103,7 +166,41 @@ public class ProcessTrackingService {
     public void setProcessInfo(String processId, String tema, String estiloOracao,
                                String duracao, String tipoOracao, String idioma,
                                String titulo, String observacoes) {
-        setProcessInfo(processId, tema, estiloOracao, duracao, tipoOracao, idioma, titulo, observacoes, null);
+        setProcessInfo(processId, tema, estiloOracao, duracao, tipoOracao, idioma, titulo, observacoes, null, null);
+    }
+
+    /**
+     * Verifica se o áudio deve ser gerado para este processo
+     * @param processId ID do processo
+     * @return true se o áudio deve ser gerado, false caso contrário
+     */
+    public boolean deveGerarAudio(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info == null) {
+            log.warn("Processo não encontrado: {}, assumindo que não deve gerar áudio", processId);
+            return false;
+        }
+
+        // Se a flag estiver explicitamente definida, use esse valor
+        if (info.getGerarAudio() != null) {
+            return info.getGerarAudio();
+        }
+
+        // Por padrão, não gerar áudio (comportamento conservador)
+        return false;
+    }
+
+    /**
+     * Define se o áudio deve ser gerado para este processo
+     * @param processId ID do processo
+     * @param gerarAudio true se o áudio deve ser gerado, false caso contrário
+     */
+    public void setGerarAudio(String processId, Boolean gerarAudio) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setGerarAudio(gerarAudio);
+            log.debug("Flag gerarAudio atualizada para {}: {}", processId, gerarAudio);
+        }
     }
 
     public String getTema(String processId) {

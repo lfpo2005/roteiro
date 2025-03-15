@@ -11,8 +11,6 @@ public class GenerationRequest {
     private String idioma = "es";
     private String titulo;
     private String observacoes;
-    private Boolean gerarImagem = false;
-    private Boolean gerarAudio = false;
     private Boolean gerarVersaoShort = null;
-
+    private Boolean gerarAudio = null;
 }
