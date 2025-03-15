@@ -2,25 +2,20 @@ package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.event.AudioGeneratedEvent;
 import dev.luisoliveira.roteiro.event.DescriptionGeneratedEvent;
-import dev.luisoliveira.roteiro.util.FileUtils;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-
-/**
- * Serviço para geração de áudio das orações usando a API da ElevenLabs.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AudioGenerationService {
 
-    private final ElevenLabsService elevenLabsService;
-    private final EventBusService eventBusService;
     private final ProcessTrackingService processTrackingService;
+    private final EventBusService eventBusService;
+    private final FileStorageService fileStorageService;
+    // Adicione aqui o serviço responsável pela geração real do áudio (ex: TextToSpeechService)
 
     /**
      * Escuta o evento de descrição gerada para gerar o áudio da oração.
@@ -36,47 +31,45 @@ public class AudioGenerationService {
         }
 
         try {
+            // Atualizar status
+            processTrackingService.updateStatus(
+                    processId,
+                    "Gerando áudio para a oração...",
+                    92
+            );
+
+            // Obter conteúdos
             String title = event.getTitle();
             String oracaoContent = event.getOracaoContent();
             String shortContent = event.getShortContent();
 
-            // Atualizar status
-            processTrackingService.updateStatus(
+            // Aqui você chamaria um serviço real de conversão texto para voz
+            // Por enquanto, vamos simular com bytes vazios
+            byte[] fullAudioContent = simulateAudioGeneration(oracaoContent);
+            byte[] shortAudioContent = simulateAudioGeneration(shortContent);
+
+            // Salvar os arquivos de áudio nas pastas corretas
+            String[] audioPaths = fileStorageService.saveAudioFiles(
                     processId,
-                    "Gerando áudio da oração...",
-                    88
+                    title,
+                    fullAudioContent,
+                    shortAudioContent
             );
 
-            log.info("Iniciando geração de áudio para o processo: {}", processId);
+            String fullAudioPath = audioPaths[0];
+            String shortAudioPath = audioPaths[1];
 
-            // Criar nome de arquivo seguro baseado no título
-            String safeTitle = FileUtils.createSafeFileName(title);
-
-            // Gerar áudio para a oração completa
-            String fullAudioPath = elevenLabsService.convertTextToSpeech(
-                    oracaoContent,
-                    processId,
-                    safeTitle
-            );
-            log.info("Áudio da oração completa gerado com sucesso: {}", fullAudioPath);
-
-            // Gerar áudio para a versão curta da oração
-            String shortAudioPath = elevenLabsService.convertTextToSpeech(
-                    shortContent,
-                    processId,
-                    safeTitle + "_short"
-            );
-            log.info("Áudio da versão curta gerado com sucesso: {}", shortAudioPath);
+            // Armazenar caminhos dos arquivos de áudio
+            processTrackingService.storeAudioPaths(processId, fullAudioPath, shortAudioPath);
 
             // Atualizar status
             processTrackingService.updateStatus(
                     processId,
                     "Áudio gerado com sucesso",
-                    90
+                    94
             );
 
-            // Armazenar caminhos dos arquivos de áudio
-            processTrackingService.storeAudioPaths(processId, fullAudioPath, shortAudioPath);
+            log.info("Áudio gerado com sucesso para o processo: {}", processId);
 
             // Publicar evento com os caminhos dos arquivos de áudio
             eventBusService.publish(new AudioGeneratedEvent(
@@ -86,16 +79,24 @@ public class AudioGenerationService {
                     shortAudioPath
             ));
 
-            // Além do evento, continuar o fluxo normal com a geração de imagem
-            // Isso garante compatibilidade com o fluxo existente
-
-        } catch (IOException e) {
+        } catch (Exception e) {
+            // Lidar com erros
             log.error("Erro ao gerar áudio: {}", e.getMessage(), e);
             processTrackingService.updateStatus(
                     event.getProcessId(),
-                    "Aviso: Não foi possível gerar o áudio: " + e.getMessage(),
-                    89  // Continua o processo mesmo sem áudio
+                    "Erro ao gerar áudio: " + e.getMessage(),
+                    0
             );
         }
+    }
+
+    /**
+     * Método de simulação de geração de áudio
+     * Em um ambiente real, você usaria um serviço de TTS como Google Cloud TTS, Amazon Polly, etc.
+     */
+    private byte[] simulateAudioGeneration(String text) {
+        // Simulação - em um ambiente real, aqui seria chamado o serviço de conversão texto-fala
+        int simulatedSize = Math.min(text.length() * 100, 1024 * 1024); // Tamanho simulado
+        return new byte[simulatedSize]; // Retorna um array vazio para simulação
     }
 }

@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @Slf4j
@@ -18,6 +20,9 @@ import java.util.List;
 public class FileStorageService {
 
     private final SrtConverterService srtConverterService;
+
+    // Mapa para acompanhar os diretórios de cada processo
+    private final Map<String, String> processDirectories = new ConcurrentHashMap<>();
 
     @Value("${file.output.path:./gerados}")
     private String outputPath;
@@ -75,6 +80,9 @@ public class FileStorageService {
             }
 
             log.info("Estrutura de diretórios criada: {}", mainDir);
+
+            // Armazenar o diretório principal deste processo para uso posterior
+            processDirectories.put(processId, mainDir.toString());
 
             // Salvar arquivo de metadados em txt na pasta de texto
             String txtFileName = safeTitle + "_meta.txt";
@@ -170,6 +178,86 @@ public class FileStorageService {
         } catch (IOException e) {
             log.error("Falha ao salvar arquivos", e);
             throw new RuntimeException("Falha ao salvar arquivos", e);
+        }
+    }
+
+    /**
+     * Obtém o diretório principal para um processo específico
+     * @param processId ID do processo
+     * @return Caminho do diretório principal ou null se não encontrado
+     */
+    public String getProcessDirectory(String processId) {
+        return processDirectories.get(processId);
+    }
+
+    /**
+     * Salva arquivos de áudio para um processo em um local específico
+     *
+     * @param processId ID do processo
+     * @param titulo Título da oração
+     * @param fullAudioContent Conteúdo do áudio completo
+     * @param shortAudioContent Conteúdo do áudio curto (opcional)
+     * @return Array com os caminhos dos arquivos [fullAudioPath, shortAudioPath]
+     */
+    public String[] saveAudioFiles(String processId, String titulo, byte[] fullAudioContent, byte[] shortAudioContent) {
+        try {
+            // Buscar o diretório principal do processo
+            String dirPath = processDirectories.get(processId);
+
+            // Se não encontrar o diretório do processo, usar o título para criar uma nova estrutura
+            if (dirPath == null) {
+                String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
+                        .replaceAll("_+", "_");
+
+                Path mainDir = Paths.get(outputPath, safeTitle);
+                if (!Files.exists(mainDir)) {
+                    Files.createDirectories(mainDir);
+                }
+
+                dirPath = mainDir.toString();
+                processDirectories.put(processId, dirPath);
+                log.info("Criado novo diretório para áudios: {}", dirPath);
+            }
+
+            // Criar pasta de áudio dentro do diretório principal
+            Path audioDir = Paths.get(dirPath, "audio");
+            if (!Files.exists(audioDir)) {
+                Files.createDirectories(audioDir);
+            }
+
+            String[] result = new String[2];
+
+            // Salvar áudio completo
+            if (fullAudioContent != null) {
+                String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
+                        .replaceAll("_+", "_");
+
+                String fullAudioFileName = safeTitle + "_full.mp3";
+                Path fullAudioPath = audioDir.resolve(fullAudioFileName);
+
+                Files.write(fullAudioPath, fullAudioContent);
+                result[0] = fullAudioPath.toString();
+                log.info("Áudio completo salvo em: {}", fullAudioPath);
+            }
+
+            // Salvar áudio da versão curta
+            if (shortAudioContent != null) {
+                String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
+                        .replaceAll("_+", "_");
+
+                String shortAudioFileName = safeTitle + "_short.mp3";
+                Path shortAudioPath = audioDir.resolve(shortAudioFileName);
+
+                Files.write(shortAudioPath, shortAudioContent);
+                result[1] = shortAudioPath.toString();
+                log.info("Áudio da versão curta salvo em: {}", shortAudioPath);
+            }
+
+            return result;
+
+        } catch (IOException e) {
+            log.error("Falha ao salvar arquivos de áudio", e);
+            throw new RuntimeException("Falha ao salvar arquivos de áudio", e);
         }
     }
 }
