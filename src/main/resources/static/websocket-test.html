@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Teste de WebSocket</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        button {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .connected {
+            color: green;
+        }
+
+        .disconnected {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Teste de WebSocket</h1>
+
+        <div class="card">
+            <h2>Status da Conexão</h2>
+            <p>Status: <span id="status" class="status disconnected">Desconectado</span></p>
+            <button id="connect">Conectar</button>
+            <button id="disconnect" disabled>Desconectar</button>
+        </div>
+
+        <div class="card">
+            <h2>Enviar Notificação de Teste</h2>
+            <div class="form-group">
+                <label for="processId">ID do Processo:</label>
+                <input type="text" id="processId" value="test-process-123">
+            </div>
+            <button id="sendTest">Enviar Notificação de Teste</button>
+            <button id="sendDirectTest">Enviar Notificação Direta</button>
+        </div>
+
+        <div class="card">
+            <h2>Enviar Mensagem STOMP</h2>
+            <div class="form-group">
+                <label for="stompProcessId">ID do Processo:</label>
+                <input type="text" id="stompProcessId" value="test-process-123">
+            </div>
+            <div class="form-group">
+                <label for="stompMessage">Mensagem:</label>
+                <input type="text" id="stompMessage" value="Olá, WebSocket!">
+            </div>
+            <button id="sendStomp">Enviar Mensagem STOMP</button>
+        </div>
+
+        <div class="card">
+            <h2>Mensagens Recebidas</h2>
+            <div id="messages"></div>
+        </div>
+    </div>
+
+    <script>
+        let stompClient = null;
+
+        function connect() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function (frame) {
+                setConnected(true);
+                addMessage("Conectado: " + frame);
+
+                // Inscrever-se no tópico geral de notificações
+                stompClient.subscribe('/topic/notifications', function (message) {
+                    const notification = JSON.parse(message.body);
+                    addMessage("Recebida notificação geral: " + JSON.stringify(notification));
+                });
+
+                // Inscrever-se no tópico específico do processo
+                const processId = document.getElementById('processId').value;
+                stompClient.subscribe('/topic/notifications/' + processId, function (message) {
+                    const notification = JSON.parse(message.body);
+                    addMessage("Recebida notificação específica: " + JSON.stringify(notification));
+                });
+
+                // Inscrever-se no tópico de teste
+                stompClient.subscribe('/topic/test', function (message) {
+                    const response = JSON.parse(message.body);
+                    addMessage("Recebida resposta de teste: " + JSON.stringify(response));
+                });
+            }, function (error) {
+                addMessage("Erro na conexão: " + error);
+                setConnected(false);
+            });
+        }
+
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+                stompClient = null;
+                setConnected(false);
+                addMessage("Desconectado");
+            }
+        }
+
+        function setConnected(connected) {
+            document.getElementById('connect').disabled = connected;
+            document.getElementById('disconnect').disabled = !connected;
+            document.getElementById('status').textContent = connected ? "Conectado" : "Desconectado";
+            document.getElementById('status').className = connected ? "status connected" : "status disconnected";
+        }
+
+        function sendTestNotification() {
+            const processId = document.getElementById('processId').value;
+            fetch('/api/test/notification/' + processId)
+                .then(response => response.text())
+                .then(result => addMessage("Resultado do teste: " + result))
+                .catch(error => addMessage("Erro ao enviar teste: " + error));
+        }
+
+        function sendDirectTestNotification() {
+            const processId = document.getElementById('processId').value;
+            fetch('/api/test/direct-notification/' + processId)
+                .then(response => response.text())
+                .then(result => addMessage("Resultado do teste direto: " + result))
+                .catch(error => addMessage("Erro ao enviar teste direto: " + error));
+        }
+
+        function sendStompMessage() {
+            if (stompClient && stompClient.connected) {
+                const processId = document.getElementById('stompProcessId').value;
+                const message = document.getElementById('stompMessage').value;
+
+                const notification = {
+                    processId: processId,
+                    type: "TEST_MESSAGE",
+                    message: message,
+                    data: { timestamp: new Date().toISOString() }
+                };
+
+                stompClient.send("/app/test", {}, JSON.stringify(notification));
+                addMessage("Mensagem STOMP enviada: " + JSON.stringify(notification));
+            } else {
+                addMessage("Não conectado ao WebSocket. Conecte-se primeiro.");
+            }
+        }
+
+        function addMessage(message) {
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.textContent = new Date().toLocaleTimeString() + " - " + message;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Adicionar event listeners
+        document.getElementById('connect').addEventListener('click', connect);
+        document.getElementById('disconnect').addEventListener('click', disconnect);
+        document.getElementById('sendTest').addEventListener('click', sendTestNotification);
+        document.getElementById('sendDirectTest').addEventListener('click', sendDirectTestNotification);
+        document.getElementById('sendStomp').addEventListener('click', sendStompMessage);
+
+        // Atualizar inscrição quando o ID do processo mudar
+        document.getElementById('processId').addEventListener('change', function () {
+            if (stompClient && stompClient.connected) {
+                disconnect();
+                connect();
+            }
+        });
+    </script>
+</body>
+
+</html>

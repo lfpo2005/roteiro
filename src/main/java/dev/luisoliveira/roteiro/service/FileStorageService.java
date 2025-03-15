@@ -28,6 +28,17 @@ public class FileStorageService {
     @Value("${file.output.path:./gerados}")
     private String outputPath;
 
+    /**
+     * Atualiza o caminho de saída dos arquivos
+     * 
+     * @param newOutputPath Novo caminho de saída
+     */
+    public void updateOutputPath(String newOutputPath) {
+        this.outputPath = newOutputPath;
+        initialize(); // Reinicializar para criar o diretório se necessário
+        log.info("Caminho de saída atualizado para: {}", newOutputPath);
+    }
+
     public void initialize() {
         try {
             Path path = Paths.get(outputPath);
@@ -41,21 +52,23 @@ public class FileStorageService {
         }
     }
 
-//    // Método simplificado sem referência a imagem
-//    public String saveOracaoFile(String processId, String titulo, String oracaoContent,
-//                                 String shortContent, String description, List<String> allTitles) {
-//        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
-//    }
+    // // Método simplificado sem referência a imagem
+    // public String saveOracaoFile(String processId, String titulo, String
+    // oracaoContent,
+    // String shortContent, String description, List<String> allTitles) {
+    // return saveOracaoFile(processId, titulo, oracaoContent, shortContent,
+    // description, allTitles, null, null);
+    // }
 
     // Método simplificado sem referência a arquivos de áudio
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
-                                 String shortContent, String description, List<String> allTitles) {
+            String shortContent, String description, List<String> allTitles) {
         return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
     }
 
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
-                                 String shortContent, String description, List<String> allTitles,
-                                 String oracaoAudioPath, String shortAudioPath) {
+            String shortContent, String description, List<String> allTitles,
+            String oracaoAudioPath, String shortAudioPath) {
         try {
             // Criar nome de arquivo seguro baseado no título
             String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
@@ -115,7 +128,8 @@ public class FileStorageService {
             // Adicionar informação sobre os áudios gerados, se disponíveis
             if (oracaoAudioPath != null) {
                 txtContent.append("\n\n**Áudio da Oração Completa**\n\n");
-                txtContent.append("Um áudio da oração completa foi gerado em: ./audio/").append(Paths.get(oracaoAudioPath).getFileName());
+                txtContent.append("Um áudio da oração completa foi gerado em: ./audio/")
+                        .append(Paths.get(oracaoAudioPath).getFileName());
 
                 // Mover/copiar o áudio para a pasta de áudio, se existir
                 try {
@@ -132,7 +146,8 @@ public class FileStorageService {
 
             if (shortAudioPath != null) {
                 txtContent.append("\n\n**Áudio da Versão Curta**\n\n");
-                txtContent.append("Um áudio da versão curta foi gerado em: ./audio/").append(Paths.get(shortAudioPath).getFileName());
+                txtContent.append("Um áudio da versão curta foi gerado em: ./audio/")
+                        .append(Paths.get(shortAudioPath).getFileName());
 
                 // Mover/copiar o áudio da versão curta para a pasta de áudio, se existir
                 try {
@@ -183,6 +198,7 @@ public class FileStorageService {
 
     /**
      * Obtém o diretório principal para um processo específico
+     * 
      * @param processId ID do processo
      * @return Caminho do diretório principal ou null se não encontrado
      */
@@ -267,7 +283,8 @@ public class FileStorageService {
         String normalized = java.text.Normalizer.normalize(title, java.text.Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
 
-        // Remover emojis e caracteres especiais - mais restritivo, apenas letras, números e alguns símbolos básicos
+        // Remover emojis e caracteres especiais - mais restritivo, apenas letras,
+        // números e alguns símbolos básicos
         String safeTitle = normalized.replaceAll("[^a-zA-Z0-9 _\\-.]", "");
 
         // Remover palavras-chave como hashtags e menções
