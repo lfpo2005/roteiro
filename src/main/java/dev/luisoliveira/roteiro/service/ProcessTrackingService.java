@@ -33,6 +33,9 @@ public class ProcessTrackingService {
         private String descriptionContent;
         private boolean imageBeingProcessed = false;
         private boolean gerarImagem = false;
+        private boolean gerarAudio = false;
+        private String fullAudioPath;
+        private String shortAudioPath;
 
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
@@ -69,7 +72,17 @@ public class ProcessTrackingService {
 
         public boolean isGerarImagem() { return gerarImagem; }
         public void setGerarImagem(boolean gerarImagem) { this.gerarImagem = gerarImagem; }
+
+        public boolean isGerarAudio() { return gerarAudio; }
+        public void setGerarAudio(boolean gerarAudio) { this.gerarAudio = gerarAudio; }
+
+        public String getFullAudioPath() { return fullAudioPath; }
+        public void setFullAudioPath(String fullAudioPath) { this.fullAudioPath = fullAudioPath; }
+
+        public String getShortAudioPath() { return shortAudioPath; }
+        public void setShortAudioPath(String shortAudioPath) { this.shortAudioPath = shortAudioPath; }
     }
+
 
     public void initializeProcess(String processId) {
         ProcessStatus status = new ProcessStatus();
@@ -87,16 +100,19 @@ public class ProcessTrackingService {
 
     public void setProcessInfo(String processId, String tema, String estiloOracao,
                                String duracao, String tipoOracao, String idioma,
-                               String titulo, String observacoes) {
+                               String titulo, String observacoes, boolean gerarImagem, boolean gerarAudio) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
             info.setTema(tema);
             info.setEstiloOracao(estiloOracao);
             info.setDuracao(duracao);
             info.setTipoOracao(tipoOracao);
-            info.setIdioma(idioma != null ? idioma : "es"); // Padrão para espanhol se não especificado
+            info.setIdioma(idioma != null ? idioma : "es");
             info.setTitulo(titulo);
             info.setObservacoes(observacoes);
+            info.setGerarImagem(gerarImagem);
+            info.setGerarAudio(gerarAudio);
+
             log.debug("Informações do processo configuradas: processId={}, idioma={}, titulo={}",
                     processId, idioma, titulo != null ? "fornecido" : "não fornecido");
         }
@@ -172,6 +188,15 @@ public class ProcessTrackingService {
             status.setResultPath(filePath);
             status.setLastUpdated(LocalDateTime.now());
             log.info("Processo concluído: processId={}, resultPath={}", processId, filePath);
+        }
+    }
+
+    public void storeAudioPaths(String processId, String fullAudioPath, String shortAudioPath) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setFullAudioPath(fullAudioPath);
+            info.setShortAudioPath(shortAudioPath);
+            log.debug("Caminhos de áudio armazenados para o processo: {}", processId);
         }
     }
 
@@ -257,5 +282,19 @@ public class ProcessTrackingService {
         return info != null ? info.getDescriptionContent() : null;
     }
 
+    public boolean deveGerarImagem(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null && info.isGerarImagem();
+    }
+
+    public String getFullAudioPath(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getFullAudioPath() : null;
+    }
+
+    public boolean deveGerarAudio(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null && info.isGerarAudio();
+    }
 
 }

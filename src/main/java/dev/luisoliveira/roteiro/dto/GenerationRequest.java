@@ -12,4 +12,6 @@ public class GenerationRequest {
     private String titulo;
     private String observacoes;
     private Boolean gerarImagem = false;
+    private Boolean gerarAudio = false;
+
 }

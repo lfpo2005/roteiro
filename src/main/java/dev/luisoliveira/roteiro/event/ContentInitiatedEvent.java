@@ -9,13 +9,14 @@ public class ContentInitiatedEvent extends ContentEvent {
     private final String duracao;
     private final String tipoOracao;
     private final String idioma;
-    private final String titulo; // Título opcional
-    private final String observacoes; // Observações adicionais
-    private final boolean gerarImagem; // Flag para controlar geração de imagem
+    private final String titulo;
+    private final String observacoes;
+    private final boolean gerarImagem;
+    private final boolean gerarAudio;
 
     public ContentInitiatedEvent(String processId, String tema, String estiloOracao,
                                  String duracao, String tipoOracao, String idioma,
-                                 String titulo, String observacoes, boolean gerarImagem) {
+                                 String titulo, String observacoes, boolean gerarImagem, boolean gerarAudio) {
         super(processId);
         this.tema = tema;
         this.estiloOracao = estiloOracao;
@@ -25,6 +26,7 @@ public class ContentInitiatedEvent extends ContentEvent {
         this.titulo = titulo;
         this.observacoes = observacoes;
         this.gerarImagem = gerarImagem;
+        this.gerarAudio = gerarAudio;
     }
 
     // Verifica se um título foi fornecido

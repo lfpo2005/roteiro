@@ -50,6 +50,20 @@ public class ContentGenerationController {
             request.setIdioma(idioma);
         }
 
+        // Obter flag de geração de imagem, definindo como false se não fornecido
+        Boolean gerarImagem = request.getGerarImagem();
+        if (gerarImagem == null) {
+            gerarImagem = false;
+            request.setGerarImagem(false);
+        }
+
+        // Obter flag de geração de áudio, definindo como false se não fornecido
+        Boolean gerarAudio = request.getGerarAudio();
+        if (gerarAudio == null) {
+            gerarAudio = false;
+            request.setGerarAudio(false);
+        }
+
         // Armazenar informações do processo
         processTrackingService.setProcessInfo(
                 processId,
@@ -59,7 +73,9 @@ public class ContentGenerationController {
                 request.getTipoOracao(),
                 request.getIdioma(),
                 request.getTitulo(),
-                request.getObservacoes()
+                request.getObservacoes(),
+                gerarImagem,
+                gerarAudio
         );
 
         // Publicar evento inicial
@@ -71,7 +87,9 @@ public class ContentGenerationController {
                 request.getTipoOracao(),
                 request.getIdioma(),
                 request.getTitulo(),
-                request.getObservacoes()
+                request.getObservacoes(),
+                gerarImagem,
+                gerarAudio
         ));
 
         String message;

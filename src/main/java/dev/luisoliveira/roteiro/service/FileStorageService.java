@@ -38,6 +38,12 @@ public class FileStorageService {
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
                                  String shortContent, String description, List<String> allTitles,
                                  String imagePath) {
+        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, imagePath, null, null);
+    }
+
+    public String saveOracaoFile(String processId, String titulo, String oracaoContent,
+                                 String shortContent, String description, List<String> allTitles,
+                                 String imagePath, String fullAudioPath, String shortAudioPath) {
         try {
             // Criar nome de arquivo seguro baseado no título
             String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
@@ -81,6 +87,17 @@ public class FileStorageService {
             if (imagePath != null) {
                 txtContent.append("\n\n**Imagem de Capa**\n\n");
                 txtContent.append("Uma imagem de capa foi gerada em: ").append(imagePath);
+            }
+
+            // Adicionar informação sobre os áudios gerados, se disponíveis
+            if (fullAudioPath != null) {
+                txtContent.append("\n\n**Áudio da Oração Completa**\n\n");
+                txtContent.append("Um áudio da oração completa foi gerado em: ").append(fullAudioPath);
+            }
+
+            if (shortAudioPath != null) {
+                txtContent.append("\n\n**Áudio da Versão Curta**\n\n");
+                txtContent.append("Um áudio da versão curta foi gerado em: ").append(shortAudioPath);
             }
 
             // Escrever no arquivo de metadados

@@ -20,6 +20,16 @@ replicate:
   #model: stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b
   model: black-forest-labs/flux-schnell:latest
 
+# Configuração do Google Text-to-Speech
+google:
+  tts:
+    enabled: false
+    credentials: GOOGLE_APPLICATION_CREDENTIALS
+
+# Configuração de geração de áudio
+audio:
+  generation:
+    enabled: false
 
 # Diretório para armazenamento de arquivos gerados
 file:
