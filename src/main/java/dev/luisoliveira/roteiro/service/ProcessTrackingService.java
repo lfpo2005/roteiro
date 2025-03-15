@@ -31,8 +31,7 @@ public class ProcessTrackingService {
         private String oracaoContent;
         private String shortContent;
         private String descriptionContent;
-        private boolean imageBeingProcessed = false;
-        private Boolean gerarVersaoShort = null; // Novo campo para controlar se deve gerar short
+        private Boolean gerarVersaoShort = null; // Campo para controlar se deve gerar short
 
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
@@ -63,9 +62,6 @@ public class ProcessTrackingService {
 
         public String getDescriptionContent() { return descriptionContent; }
         public void setDescriptionContent(String descriptionContent) { this.descriptionContent = descriptionContent; }
-
-        public boolean isImageBeingProcessed() { return imageBeingProcessed; }
-        public void setImageBeingProcessed(boolean imageBeingProcessed) { this.imageBeingProcessed = imageBeingProcessed; }
 
         public Boolean getGerarVersaoShort() { return gerarVersaoShort; }
         public void setGerarVersaoShort(Boolean gerarVersaoShort) { this.gerarVersaoShort = gerarVersaoShort; }
@@ -232,26 +228,6 @@ public class ProcessTrackingService {
             info.setDescriptionContent(descriptionContent);
             log.debug("Conteúdo da descrição armazenado para processo: {}", processId);
         }
-    }
-
-    /**
-     * Marca que a imagem está sendo processada
-     */
-    public void setImageBeingProcessed(String processId, boolean isProcessing) {
-        ProcessInfo info = processInfos.get(processId);
-        if (info != null) {
-            info.setImageBeingProcessed(isProcessing);
-            log.debug("Status de processamento de imagem atualizado para {}: {}",
-                    processId, isProcessing ? "em processamento" : "concluído");
-        }
-    }
-
-    /**
-     * Verifica se a imagem está sendo processada
-     */
-    public boolean isImageBeingProcessed(String processId) {
-        ProcessInfo info = processInfos.get(processId);
-        return info != null && info.isImageBeingProcessed();
     }
 
     /**

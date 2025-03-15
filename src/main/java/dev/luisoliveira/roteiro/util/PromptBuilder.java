@@ -278,49 +278,6 @@ public class PromptBuilder {
     }
 
     /**
-     * Constrói prompt para geração de prompt de imagem
-     * (para usar com ferramentas de geração de imagem como DALL-E ou Midjourney)
-     *
-     * @param title Título da oração
-     * @param oracaoContent Conteúdo da oração
-     * @param idioma Idioma (es, pt, en)
-     * @return Prompt otimizado para geração de prompt de imagem
-     */
-    public static String buildImagePromptPrompt(String title, String oracaoContent, String idioma) {
-        log.debug("Construindo prompt para imagem: titulo={}, tamanho da oração={} caracteres, idioma={}",
-                title, oracaoContent.length(), idioma);
-
-        StringBuilder prompt = new StringBuilder();
-
-        // Selecionar idioma para o prompt
-        if ("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma)) {
-            prompt.append("Crie um prompt para geração de imagem em português para a miniatura deste vídeo de oração:\n\n");
-        } else if ("en".equalsIgnoreCase(idioma)) {
-            prompt.append("Create an image generation prompt in English for the thumbnail of this prayer video:\n\n");
-        } else if ("es-MX".equalsIgnoreCase(idioma)) {
-            prompt.append("Crea un prompt para generación de imagen en español latino/mexicano para la miniatura de este video de oración:\n\n");
-        } else {
-            // Padrão: espanhol
-            prompt.append("Crea un prompt para generación de imagen en español para la miniatura de este video de oración:\n\n");
-        }
-
-        prompt.append("Título: \"").append(title).append("\"\n\n");
-        prompt.append("Conteúdo da oração:\n").append(oracaoContent).append("\n\n");
-
-        prompt.append("Diretrizes para o prompt de imagem:\n");
-        prompt.append("1. Descreva uma cena inspiradora relacionada ao tema da oração\n");
-        prompt.append("2. Foque em elementos visuais como luz, céu, natureza, mãos em oração, etc.\n");
-        prompt.append("3. Sugira elementos que transmitam paz, esperança, fé ou o tema específico\n");
-        prompt.append("4. Inclua referências a cores que combinam com o tema emocional\n");
-        prompt.append("5. Evite mencionar texto na imagem - será adicionado depois\n");
-        prompt.append("6. Formate como um prompt para Midjourney ou DALL-E\n\n");
-
-        prompt.append("Responda APENAS com o prompt para geração de imagem, sem comentários adicionais.");
-
-        return prompt.toString();
-    }
-
-    /**
      * Constrói prompt para rotinas de oração personalizadas
      *
      * @param religiousTradition Tradição religiosa

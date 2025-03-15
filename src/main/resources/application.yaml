@@ -14,12 +14,6 @@ openai:
   #model: gpt-4
   model: gpt-3.5-turbo
 
-replicate:
-  api:
-    key: REPLICATE_API_KEY
-  #model: stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b
-  model: black-forest-labs/flux-schnell:latest
-
 # Configuração da ElevenLabs
 elevenlabs:
   api:

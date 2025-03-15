@@ -35,15 +35,22 @@ public class FileStorageService {
         }
     }
 
+    // Método simplificado sem referência a imagem
+    public String saveOracaoFile(String processId, String titulo, String oracaoContent,
+                                 String shortContent, String description, List<String> allTitles) {
+        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
+    }
+
+    // Método legado mantido para compatibilidade, mas ignorando o parâmetro imagePath
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
                                  String shortContent, String description, List<String> allTitles,
                                  String imagePath) {
-        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, imagePath, null, null);
+        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
     }
 
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
                                  String shortContent, String description, List<String> allTitles,
-                                 String imagePath, String oracaoAudioPath, String shortAudioPath) {
+                                 String oracaoAudioPath, String shortAudioPath) {
         try {
             // Criar nome de arquivo seguro baseado no título
             String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
@@ -96,24 +103,6 @@ public class FileStorageService {
 
             txtContent.append("**Descrição para YouTube e TikTok**\n\n");
             txtContent.append(description);
-
-            // Adicionar informação sobre a imagem gerada, se disponível
-            if (imagePath != null) {
-                txtContent.append("\n\n**Imagem de Capa**\n\n");
-                txtContent.append("Uma imagem de capa foi gerada em: ").append(imagePath);
-
-                // Copiar a imagem para o diretório principal, se existir
-                try {
-                    Path sourceImagePath = Paths.get(imagePath);
-                    if (Files.exists(sourceImagePath)) {
-                        Path targetImagePath = mainDir.resolve(sourceImagePath.getFileName());
-                        Files.copy(sourceImagePath, targetImagePath);
-                        log.info("Imagem copiada para o diretório principal: {}", targetImagePath);
-                    }
-                } catch (IOException e) {
-                    log.warn("Não foi possível copiar a imagem para o diretório principal: {}", e.getMessage());
-                }
-            }
 
             // Adicionar informação sobre os áudios gerados, se disponíveis
             if (oracaoAudioPath != null) {

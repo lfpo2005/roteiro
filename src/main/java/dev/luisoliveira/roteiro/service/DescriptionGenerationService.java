@@ -47,10 +47,6 @@ public class DescriptionGenerationService {
 
             log.info("Descrição gerada com sucesso: {} caracteres", descriptionContent.length());
 
-            processTrackingService.setImageBeingProcessed(
-                    processId,
-                    true);
-
             // Atualizar status
             processTrackingService.updateStatus(
                     processId,
@@ -58,7 +54,7 @@ public class DescriptionGenerationService {
                     90
             );
 
-            // Publicar evento com resultado
+            // Publicar evento com resultado - isso vai direto para a compilação final
             eventBusService.publish(new DescriptionGeneratedEvent(
                     processId,
                     event.getTitle(),
