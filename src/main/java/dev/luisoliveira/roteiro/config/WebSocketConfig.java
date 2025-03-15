@@ -5,6 +5,7 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
 /**
  * Configuração do WebSocket para notificações em tempo real
@@ -24,9 +25,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // Registra o endpoint WebSocket e habilita SockJS para clientes que não suportam WebSocket
+        // Registra o endpoint WebSocket e habilita SockJS para clientes que não
+        // suportam WebSocket
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("*") // Em produção, restringir para as origens permitidas
+                .setAllowedOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:8080")
                 .withSockJS();
+    }
+
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setMessageSizeLimit(65536) // 64KB
+                .setSendBufferSizeLimit(512 * 1024) // 512KB
+                .setSendTimeLimit(20000); // 20 segundos
     }
 }

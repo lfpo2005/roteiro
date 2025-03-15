@@ -1,4 +1,3 @@
-
 package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.dto.ProcessStatus;
@@ -37,51 +36,121 @@ public class ProcessTrackingService {
         private String descriptionContent;
         private Boolean gerarVersaoShort = null;
         private Boolean gerarAudio = null;
-        private String fullAudioPath;  // Caminho do áudio da oração completa
+        private String fullAudioPath; // Caminho do áudio da oração completa
         private String shortAudioPath; // Caminho do áudio da versão curta
 
         // Getters e setters existentes...
-        public String getTema() { return tema; }
-        public void setTema(String tema) { this.tema = tema; }
+        public String getTema() {
+            return tema;
+        }
 
-        public String getEstiloOracao() { return estiloOracao; }
-        public void setEstiloOracao(String estiloOracao) { this.estiloOracao = estiloOracao; }
+        public void setTema(String tema) {
+            this.tema = tema;
+        }
 
-        public String getDuracao() { return duracao; }
-        public void setDuracao(String duracao) { this.duracao = duracao; }
+        public String getEstiloOracao() {
+            return estiloOracao;
+        }
 
-        public String getTipoOracao() { return tipoOracao; }
-        public void setTipoOracao(String tipoOracao) { this.tipoOracao = tipoOracao; }
+        public void setEstiloOracao(String estiloOracao) {
+            this.estiloOracao = estiloOracao;
+        }
 
-        public String getIdioma() { return idioma; }
-        public void setIdioma(String idioma) { this.idioma = idioma; }
+        public String getDuracao() {
+            return duracao;
+        }
 
-        public String getTitulo() { return titulo; }
-        public void setTitulo(String titulo) { this.titulo = titulo; }
+        public void setDuracao(String duracao) {
+            this.duracao = duracao;
+        }
 
-        public String getObservacoes() { return observacoes; }
-        public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+        public String getTipoOracao() {
+            return tipoOracao;
+        }
 
-        public String getOracaoContent() { return oracaoContent; }
-        public void setOracaoContent(String oracaoContent) { this.oracaoContent = oracaoContent; }
+        public void setTipoOracao(String tipoOracao) {
+            this.tipoOracao = tipoOracao;
+        }
 
-        public String getShortContent() { return shortContent; }
-        public void setShortContent(String shortContent) { this.shortContent = shortContent; }
+        public String getIdioma() {
+            return idioma;
+        }
 
-        public String getDescriptionContent() { return descriptionContent; }
-        public void setDescriptionContent(String descriptionContent) { this.descriptionContent = descriptionContent; }
+        public void setIdioma(String idioma) {
+            this.idioma = idioma;
+        }
 
-        public Boolean getGerarVersaoShort() { return gerarVersaoShort; }
-        public void setGerarVersaoShort(Boolean gerarVersaoShort) { this.gerarVersaoShort = gerarVersaoShort; }
+        public String getTitulo() {
+            return titulo;
+        }
 
-        public Boolean getGerarAudio() { return gerarAudio; }
-        public void setGerarAudio(Boolean gerarAudio) { this.gerarAudio = gerarAudio; }
+        public void setTitulo(String titulo) {
+            this.titulo = titulo;
+        }
 
-        public String getFullAudioPath() { return fullAudioPath; }
-        public void setFullAudioPath(String fullAudioPath) { this.fullAudioPath = fullAudioPath; }
+        public String getObservacoes() {
+            return observacoes;
+        }
 
-        public String getShortAudioPath() { return shortAudioPath; }
-        public void setShortAudioPath(String shortAudioPath) { this.shortAudioPath = shortAudioPath; }
+        public void setObservacoes(String observacoes) {
+            this.observacoes = observacoes;
+        }
+
+        public String getOracaoContent() {
+            return oracaoContent;
+        }
+
+        public void setOracaoContent(String oracaoContent) {
+            this.oracaoContent = oracaoContent;
+        }
+
+        public String getShortContent() {
+            return shortContent;
+        }
+
+        public void setShortContent(String shortContent) {
+            this.shortContent = shortContent;
+        }
+
+        public String getDescriptionContent() {
+            return descriptionContent;
+        }
+
+        public void setDescriptionContent(String descriptionContent) {
+            this.descriptionContent = descriptionContent;
+        }
+
+        public Boolean getGerarVersaoShort() {
+            return gerarVersaoShort;
+        }
+
+        public void setGerarVersaoShort(Boolean gerarVersaoShort) {
+            this.gerarVersaoShort = gerarVersaoShort;
+        }
+
+        public Boolean getGerarAudio() {
+            return gerarAudio;
+        }
+
+        public void setGerarAudio(Boolean gerarAudio) {
+            this.gerarAudio = gerarAudio;
+        }
+
+        public String getFullAudioPath() {
+            return fullAudioPath;
+        }
+
+        public void setFullAudioPath(String fullAudioPath) {
+            this.fullAudioPath = fullAudioPath;
+        }
+
+        public String getShortAudioPath() {
+            return shortAudioPath;
+        }
+
+        public void setShortAudioPath(String shortAudioPath) {
+            this.shortAudioPath = shortAudioPath;
+        }
     }
 
     public void initializeProcess(String processId) {
@@ -96,14 +165,6 @@ public class ProcessTrackingService {
         processes.put(processId, status);
         processInfos.put(processId, new ProcessInfo());
         log.debug("Processo inicializado: {}", processId);
-
-        // Enviar notificação de inicialização
-        notificationService.sendNotification(
-                processId,
-                "PROCESS_INITIALIZED",
-                "Processo iniciado com sucesso",
-                0 // Progresso inicial
-        );
     }
 
     public void updateStatus(String processId, String currentStage, int progressPercentage) {
@@ -114,9 +175,6 @@ public class ProcessTrackingService {
             status.setLastUpdated(LocalDateTime.now());
             log.debug("Status atualizado: processId={}, stage={}, progress={}%",
                     processId, currentStage, progressPercentage);
-
-            // Enviar notificação de atualização de status
-            notificationService.sendProgressNotification(processId, progressPercentage, currentStage);
         }
     }
 
@@ -130,14 +188,6 @@ public class ProcessTrackingService {
             status.setResultPath(filePath);
             status.setLastUpdated(LocalDateTime.now());
             log.info("Processo concluído: processId={}, resultPath={}", processId, filePath);
-
-            // Enviar notificação de conclusão
-            notificationService.sendNotification(
-                    processId,
-                    "RESULT_STORED",
-                    "Arquivos gerados e armazenados com sucesso",
-                    filePath
-            );
         }
     }
 
@@ -155,6 +205,7 @@ public class ProcessTrackingService {
 
     /**
      * Recupera o caminho do arquivo de áudio da oração completa
+     * 
      * @param processId ID do processo
      * @return Caminho do arquivo de áudio ou null se não existir
      */
@@ -165,6 +216,7 @@ public class ProcessTrackingService {
 
     /**
      * Recupera o caminho do arquivo de áudio da versão curta
+     * 
      * @param processId ID do processo
      * @return Caminho do arquivo de áudio ou null se não existir
      */
@@ -173,16 +225,16 @@ public class ProcessTrackingService {
         return info != null ? info.getShortAudioPath() : null;
     }
 
-
     public void setProcessInfo(String processId, String tema, String estiloOracao,
-                               String duracao, String tipoOracao, String idioma,
-                               String titulo, String observacoes, Boolean gerarVersaoShort) {
-        setProcessInfo(processId, tema, estiloOracao, duracao, tipoOracao, idioma, titulo, observacoes, gerarVersaoShort, null);
+            String duracao, String tipoOracao, String idioma,
+            String titulo, String observacoes, Boolean gerarVersaoShort) {
+        setProcessInfo(processId, tema, estiloOracao, duracao, tipoOracao, idioma, titulo, observacoes,
+                gerarVersaoShort, null);
     }
 
     public void setProcessInfo(String processId, String tema, String estiloOracao,
-                               String duracao, String tipoOracao, String idioma,
-                               String titulo, String observacoes, Boolean gerarVersaoShort, Boolean gerarAudio) {
+            String duracao, String tipoOracao, String idioma,
+            String titulo, String observacoes, Boolean gerarVersaoShort, Boolean gerarAudio) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
             info.setTema(tema);
@@ -194,20 +246,22 @@ public class ProcessTrackingService {
             info.setObservacoes(observacoes);
             info.setGerarVersaoShort(gerarVersaoShort);
             info.setGerarAudio(gerarAudio);
-            log.debug("Informações do processo configuradas: processId={}, idioma={}, titulo={}, gerarVersaoShort={}, gerarAudio={}",
+            log.debug(
+                    "Informações do processo configuradas: processId={}, idioma={}, titulo={}, gerarVersaoShort={}, gerarAudio={}",
                     processId, idioma, titulo != null ? "fornecido" : "não fornecido", gerarVersaoShort, gerarAudio);
         }
     }
 
     // Sobrecarga do método para manter compatibilidade com código existente
     public void setProcessInfo(String processId, String tema, String estiloOracao,
-                               String duracao, String tipoOracao, String idioma,
-                               String titulo, String observacoes) {
+            String duracao, String tipoOracao, String idioma,
+            String titulo, String observacoes) {
         setProcessInfo(processId, tema, estiloOracao, duracao, tipoOracao, idioma, titulo, observacoes, null, null);
     }
 
     /**
      * Verifica se o áudio deve ser gerado para este processo
+     * 
      * @param processId ID do processo
      * @return true se o áudio deve ser gerado, false caso contrário
      */
@@ -229,7 +283,8 @@ public class ProcessTrackingService {
 
     /**
      * Define se o áudio deve ser gerado para este processo
-     * @param processId ID do processo
+     * 
+     * @param processId  ID do processo
      * @param gerarAudio true se o áudio deve ser gerado, false caso contrário
      */
     public void setGerarAudio(String processId, Boolean gerarAudio) {
@@ -292,7 +347,6 @@ public class ProcessTrackingService {
         String titulo = getTitulo(processId);
         return titulo != null && !titulo.trim().isEmpty();
     }
-
 
     public void storeTitles(String processId, List<String> titles) {
         processTitles.put(processId, titles);
