@@ -27,14 +27,17 @@ import org.json.JSONObject;
 @RequiredArgsConstructor
 public class ElevenLabsService {
 
+    private final FileStorageService fileStorageService;
+
     @Value("${elevenlabs.api.key}")
     private String ELEVENLABS_API_KEY;
 
     @Value("${elevenlabs.voice.id:21m00Tcm4TlvDq8ikWAM}")
     private String DEFAULT_VOICE_ID;
 
-    @Value("${elevenlabs.voice.david_trailer:TxGEqnHWrfWFTfGW9XjX}")
-    private String DAVID_TRAILER_VOICE_ID;// Rachel voice ID por padrão
+   // @Value("${elevenlabs.voice.david_trailer:TxGEqnHWrfWFTfGW9XjX}")
+    @Value("${elevenlabs.voice.david_trailer:ZQe5CZNOzWyzPSCn5a3c}")
+    private String DAVID_TRAILER_VOICE_ID;
 
     @Value("${file.output.path:./gerados}")
     private String outputPath;
@@ -52,6 +55,21 @@ public class ElevenLabsService {
      * @return Caminho do arquivo de áudio gerado
      * @throws IOException Em caso de erro na API ou ao salvar o arquivo
      */
+
+    /**
+     public ElevenLabsService(RestTemplate restTemplate, FileStorageService fileStorageService) {
+     this.restTemplate = restTemplate;
+     this.fileStorageService = fileStorageService;
+
+     // Inicializar mapeamento de idiomas para voces
+     idiomaParaVoz.put("es", "ZQe5CZNOzWyzPSCn5a3c"); // Antonio (masculino, espanhol)
+     idiomaParaVoz.put("es-MX", "ZQe5CZNOzWyzPSCn5a3c"); // Antonio (masculino, espanhol)
+     idiomaParaVoz.put("pt", "TxGEqnHWrfWFTfGW9XjX"); // Liam (masculino, português)
+     idiomaParaVoz.put("pt-BR", "TxGEqnHWrfWFTfGW9XjX"); // Liam (masculino, português)
+     idiomaParaVoz.put("en", "pNInz6obpgDQGcFmaJgB"); // Adam (masculino, inglês)
+     }
+     */
+
     public String convertTextToSpeech(String text, String processId, String fileName, String voiceId) throws IOException {
         if (voiceId == null || voiceId.trim().isEmpty()) {
             voiceId = DAVID_TRAILER_VOICE_ID;
@@ -202,17 +220,18 @@ public class ElevenLabsService {
      * Usa FFmpeg se disponível, ou uma solução alternativa.
      */
     private String combineAudioFiles(Path[] audioFiles, String processId, String fileName) throws IOException {
-        // Criar o diretório de saída se não existir
+        // Criar diretório temporário para o arquivo combinado
         Path processDir = Paths.get(outputPath, processId);
         if (!Files.exists(processDir)) {
             Files.createDirectories(processDir);
         }
 
-        // Caminho do arquivo de saída
-        String outputFileName = fileName + ".mp3";
-        Path outputPath = processDir.resolve(outputFileName);
+        // Caminho do arquivo temporário de saída
+        String outputFileName = fileName + "_combined_temp.mp3";
+        Path tempOutputPath = processDir.resolve(outputFileName);
 
         // Tentar usar FFmpeg se disponível
+        boolean ffmpegSuccess = false;
         try {
             // Criar uma lista de arquivos para o FFmpeg
             StringBuilder ffmpegCommand = new StringBuilder();
@@ -231,7 +250,7 @@ public class ElevenLabsService {
             ffmpegCommand.append("concat=n=").append(audioFiles.length).append(":v=0:a=1[out]\" -map \"[out]\" ");
 
             // Adicionar output file
-            ffmpegCommand.append(outputPath.toString());
+            ffmpegCommand.append(tempOutputPath.toString());
 
             // Executar o comando
             Process process = Runtime.getRuntime().exec(ffmpegCommand.toString());
@@ -239,32 +258,69 @@ public class ElevenLabsService {
 
             if (exitCode == 0) {
                 log.info("Arquivos de áudio combinados com sucesso usando FFmpeg");
-                return outputPath.toString();
+                ffmpegSuccess = true;
             } else {
                 log.warn("Falha ao combinar arquivos com FFmpeg (código {}), tentando método alternativo", exitCode);
-                // Continuar com método alternativo
             }
         } catch (Exception e) {
             log.warn("FFmpeg não disponível ou erro: {}", e.getMessage());
-            // Continuar com método alternativo
         }
 
-        // Metodo alternativo: concatenar os bytes diretamente
-        log.info("Usando método alternativo para combinar arquivos de áudio");
+        // Se o FFmpeg falhou, usar método alternativo
+        if (!ffmpegSuccess) {
+            log.info("Usando método alternativo para combinar arquivos de áudio");
 
-        try (OutputStream out = Files.newOutputStream(outputPath)) {
-            // Para MP3, precisamos manter os headers do primeiro arquivo
-            // e depois concatenar apenas os frames de áudio dos arquivos subsequentes
-            // Esta é uma simplificação e pode não funcionar perfeitamente para todos os casos
-
-            for (Path file : audioFiles) {
-                byte[] fileData = Files.readAllBytes(file);
-                out.write(fileData);
+            try (OutputStream out = Files.newOutputStream(tempOutputPath)) {
+                for (Path file : audioFiles) {
+                    byte[] fileData = Files.readAllBytes(file);
+                    out.write(fileData);
+                }
             }
+            log.info("Arquivos de áudio combinados com sucesso usando método alternativo");
         }
 
-        log.info("Arquivos de áudio combinados com sucesso usando método alternativo");
-        return outputPath.toString();
+        // Ler o arquivo combinado em bytes
+        byte[] combinedAudioData = Files.readAllBytes(tempOutputPath);
+
+        // Determinar se é um arquivo short ou full baseado no nome
+        boolean isShortAudio = fileName.contains("_short");
+
+        // Remover o sufixo "_short" para ter o título base (se existir)
+        String baseFileName = isShortAudio ?
+                fileName.replace("_short", "") : fileName;
+
+        // Usar o FileStorageService para salvar o arquivo final
+        String[] paths;
+        String finalPath;
+
+        if (isShortAudio) {
+            // Para áudio curto
+            paths = fileStorageService.saveAudioFiles(
+                    processId,
+                    baseFileName,
+                    null, // full audio (null para short)
+                    combinedAudioData // short audio
+            );
+            finalPath = paths[1]; // Caminho do áudio curto
+        } else {
+            // Para áudio completo
+            paths = fileStorageService.saveAudioFiles(
+                    processId,
+                    baseFileName,
+                    combinedAudioData, // full audio
+                    null // short audio (null para full)
+            );
+            finalPath = paths[0]; // Caminho do áudio completo
+        }
+
+        // Remover o arquivo temporário após salvar com o FileStorageService
+        try {
+            Files.deleteIfExists(tempOutputPath);
+        } catch (IOException e) {
+            log.warn("Não foi possível excluir o arquivo temporário combinado: {}", e.getMessage());
+        }
+
+        return finalPath;
     }
 
     /**
@@ -287,39 +343,39 @@ public class ElevenLabsService {
         }
     }
 
-    /**
-     * Salva os dados de áudio em um arquivo.
-     *
-     * @param audioData Dados de áudio em bytes
-     * @param processId ID do processo
-     * @param fileName Nome do arquivo sem extensão
-     * @return Caminho do arquivo salvo
-     * @throws IOException Em caso de erro ao salvar o arquivo
-     */
+
     private String saveAudioToFile(byte[] audioData, String processId, String fileName) throws IOException {
-        // Criar o diretório se não existir
-        Path processDir = Paths.get(outputPath, processId);
-        if (!Files.exists(processDir)) {
-            Files.createDirectories(processDir);
+        // Determinar se é um arquivo short ou full baseado no nome
+        boolean isShortAudio = fileName.contains("_short");
+
+        // Remover o sufixo "_short" para ter o título base (se existir)
+        String baseFileName = isShortAudio ?
+                fileName.replace("_short", "") : fileName;
+
+        // Usar o FileStorageService para salvar o arquivo
+        String[] paths;
+        if (isShortAudio) {
+            // Para áudio curto
+            paths = fileStorageService.saveAudioFiles(
+                    processId,
+                    baseFileName,
+                    null, // full audio (null para short)
+                    audioData // short audio
+            );
+            return paths[1]; // Caminho do áudio curto
+        } else {
+            // Para áudio completo
+            paths = fileStorageService.saveAudioFiles(
+                    processId,
+                    baseFileName,
+                    audioData, // full audio
+                    null // short audio (null para full)
+            );
+            return paths[0]; // Caminho do áudio completo
         }
-
-        // Salvar o arquivo de áudio
-        String outputFileName = fileName + ".mp3";
-        Path filePath = processDir.resolve(outputFileName);
-        Files.write(filePath, audioData);
-
-        log.info("Áudio salvo com sucesso em: {}", filePath);
-        return filePath.toString();
     }
 
-    /**
-     * Divide o texto em pedaços menores para processamento.
-     * Tenta dividir nos pontos finais para manter a coerência.
-     *
-     * @param text Texto a ser dividido
-     * @param maxChunkSize Tamanho máximo de cada pedaço
-     * @return Array de strings com os pedaços de texto
-     */
+
     private String[] splitTextIntoChunks(String text, int maxChunkSize) {
         if (text.length() <= maxChunkSize) {
             return new String[] { text };

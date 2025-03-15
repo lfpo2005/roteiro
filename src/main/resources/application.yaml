@@ -19,7 +19,8 @@ elevenlabs:
   api:
     key: ELEVENLABS_API_KEY
   voice:
-    david_trailer: TxGEqnHWrfWFTfGW9XjX
+   # david_trailer: TxGEqnHWrfWFTfGW9XjX
+    david_trailer: ZQe5CZNOzWyzPSCn5a3c
 
 # Configuração de geração de áudio
 audio:
