@@ -36,6 +36,14 @@ public class ImagePromptGenerationService {
         try {
             String processId = event.getProcessId();
 
+            // Verificar se a geração de imagem está habilitada para este processo
+            if (!processTrackingService.deveGerarImagem(processId)) {
+                log.info("Geração de imagem desabilitada para o processo: {}", processId);
+                // Marcar como não processando imagem e sair do método
+                processTrackingService.setImageBeingProcessed(processId, false);
+                return;
+            }
+
             processTrackingService.setImageBeingProcessed(processId, true);
 
             // Atualizar status

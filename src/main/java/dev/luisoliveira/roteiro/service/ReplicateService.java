@@ -37,6 +37,7 @@ public class ReplicateService {
     private static final int MAX_RETRIES = 30;
     private static final int RETRY_DELAY_MS = 2000;
 
+
     /**
      * Gera uma imagem baseada no prompt fornecido
      *

@@ -32,6 +32,7 @@ public class ProcessTrackingService {
         private String shortContent;
         private String descriptionContent;
         private boolean imageBeingProcessed = false;
+        private boolean gerarImagem = false;
 
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
@@ -65,6 +66,9 @@ public class ProcessTrackingService {
 
         public boolean isImageBeingProcessed() { return imageBeingProcessed; }
         public void setImageBeingProcessed(boolean imageBeingProcessed) { this.imageBeingProcessed = imageBeingProcessed; }
+
+        public boolean isGerarImagem() { return gerarImagem; }
+        public void setGerarImagem(boolean gerarImagem) { this.gerarImagem = gerarImagem; }
     }
 
     public void initializeProcess(String processId) {
@@ -252,4 +256,6 @@ public class ProcessTrackingService {
         ProcessInfo info = processInfos.get(processId);
         return info != null ? info.getDescriptionContent() : null;
     }
+
+
 }

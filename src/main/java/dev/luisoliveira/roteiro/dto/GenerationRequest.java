@@ -11,4 +11,5 @@ public class GenerationRequest {
     private String idioma = "es";
     private String titulo;
     private String observacoes;
+    private Boolean gerarImagem = false;
 }
