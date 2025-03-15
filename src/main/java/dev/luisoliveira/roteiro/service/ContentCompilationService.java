@@ -193,6 +193,10 @@ public class ContentCompilationService {
             // Obter a lista de títulos alternativos (todos os títulos gerados)
             java.util.List<String> allTitles = processTrackingService.getTitles(processId);
 
+            // Obter caminho da imagem (se existir)
+            String imagePath = null;
+            // Código para obter o caminho da imagem se necessário
+
             // Salvar o conteúdo compilado em arquivos (txt e srt)
             String outputPath = fileStorageService.saveOracaoFile(
                     processId,
@@ -201,7 +205,7 @@ public class ContentCompilationService {
                     shortContent,
                     descriptionContent,
                     allTitles,
-                    null, // Não temos caminho de imagem neste fluxo
+                    imagePath,
                     event.getFullAudioPath(),
                     event.getShortAudioPath()
             );
@@ -226,10 +230,10 @@ public class ContentCompilationService {
             ));
         } catch (Exception e) {
             // Lidar com erros
-            log.error("Erro ao compilar conteúdo: {}", e.getMessage(), e);
+            log.error("Erro ao compilar conteúdo com áudios: {}", e.getMessage(), e);
             processTrackingService.updateStatus(
                     event.getProcessId(),
-                    "Erro ao compilar conteúdo: " + e.getMessage(),
+                    "Erro ao compilar conteúdo com áudios: " + e.getMessage(),
                     0
             );
         }

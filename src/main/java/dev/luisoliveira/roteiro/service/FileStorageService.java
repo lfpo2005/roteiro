@@ -43,14 +43,14 @@ public class FileStorageService {
 
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
                                  String shortContent, String description, List<String> allTitles,
-                                 String imagePath, String fullAudioPath, String shortAudioPath) {
+                                 String imagePath, String oracaoAudioPath, String shortAudioPath) {
         try {
             // Criar nome de arquivo seguro baseado no título
             String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
                     .replaceAll("_+", "_");
 
             // Criar o diretório do processo se não existir
-            Path processDir = Paths.get(outputPath, processId);
+            Path processDir = Paths.get(outputPath, titulo); // alterado para salvar em diretório com o título
             if (!Files.exists(processDir)) {
                 Files.createDirectories(processDir);
             }
@@ -90,9 +90,9 @@ public class FileStorageService {
             }
 
             // Adicionar informação sobre os áudios gerados, se disponíveis
-            if (fullAudioPath != null) {
+            if (oracaoAudioPath != null) {
                 txtContent.append("\n\n**Áudio da Oração Completa**\n\n");
-                txtContent.append("Um áudio da oração completa foi gerado em: ").append(fullAudioPath);
+                txtContent.append("Um áudio da oração completa foi gerado em: ").append(oracaoAudioPath);
             }
 
             if (shortAudioPath != null) {

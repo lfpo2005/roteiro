@@ -32,10 +32,10 @@ public class ProcessTrackingService {
         private String shortContent;
         private String descriptionContent;
         private boolean imageBeingProcessed = false;
-        private boolean gerarImagem = false;
-        private boolean gerarAudio = false;
-        private String fullAudioPath;
+        private String oracaoAudioPath;
         private String shortAudioPath;
+        private boolean gerarImagem = true; // Por padrão, gerar imagem
+        private boolean gerarAudio = true;  // Por padrão, gerar áudio
 
         public String getTema() { return tema; }
         public void setTema(String tema) { this.tema = tema; }
@@ -70,19 +70,18 @@ public class ProcessTrackingService {
         public boolean isImageBeingProcessed() { return imageBeingProcessed; }
         public void setImageBeingProcessed(boolean imageBeingProcessed) { this.imageBeingProcessed = imageBeingProcessed; }
 
+        public String getOracaoAudioPath() { return oracaoAudioPath; }
+        public void setOracaoAudioPath(String oracaoAudioPath) { this.oracaoAudioPath = oracaoAudioPath; }
+
+        public String getShortAudioPath() { return shortAudioPath; }
+        public void setShortAudioPath(String shortAudioPath) { this.shortAudioPath = shortAudioPath; }
+
         public boolean isGerarImagem() { return gerarImagem; }
         public void setGerarImagem(boolean gerarImagem) { this.gerarImagem = gerarImagem; }
 
         public boolean isGerarAudio() { return gerarAudio; }
         public void setGerarAudio(boolean gerarAudio) { this.gerarAudio = gerarAudio; }
-
-        public String getFullAudioPath() { return fullAudioPath; }
-        public void setFullAudioPath(String fullAudioPath) { this.fullAudioPath = fullAudioPath; }
-
-        public String getShortAudioPath() { return shortAudioPath; }
-        public void setShortAudioPath(String shortAudioPath) { this.shortAudioPath = shortAudioPath; }
     }
-
 
     public void initializeProcess(String processId) {
         ProcessStatus status = new ProcessStatus();
@@ -116,6 +115,13 @@ public class ProcessTrackingService {
             log.debug("Informações do processo configuradas: processId={}, idioma={}, titulo={}",
                     processId, idioma, titulo != null ? "fornecido" : "não fornecido");
         }
+    }
+
+    public void setProcessInfo(String processId, String tema, String estiloOracao,
+                               String duracao, String tipoOracao, String idioma,
+                               String titulo, String observacoes) {
+        // Versão sobrecarregada para manter compatibilidade
+        setProcessInfo(processId, tema, estiloOracao, duracao, tipoOracao, idioma, titulo, observacoes, true, true);
     }
 
     public String getTema(String processId) {
@@ -191,10 +197,10 @@ public class ProcessTrackingService {
         }
     }
 
-    public void storeAudioPaths(String processId, String fullAudioPath, String shortAudioPath) {
+    public void storeAudioPaths(String processId, String oracaoAudioPath, String shortAudioPath) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
-            info.setFullAudioPath(fullAudioPath);
+            info.setOracaoAudioPath(oracaoAudioPath);
             info.setShortAudioPath(shortAudioPath);
             log.debug("Caminhos de áudio armazenados para o processo: {}", processId);
         }
@@ -282,19 +288,43 @@ public class ProcessTrackingService {
         return info != null ? info.getDescriptionContent() : null;
     }
 
-    public boolean deveGerarImagem(String processId) {
-        ProcessInfo info = processInfos.get(processId);
-        return info != null && info.isGerarImagem();
-    }
-
-    public String getFullAudioPath(String processId) {
-        ProcessInfo info = processInfos.get(processId);
-        return info != null ? info.getFullAudioPath() : null;
-    }
-
+    /**
+     * Verifica se o áudio deve ser gerado para este processo
+     */
     public boolean deveGerarAudio(String processId) {
         ProcessInfo info = processInfos.get(processId);
         return info != null && info.isGerarAudio();
     }
 
+    /**
+     * Verifica se a imagem deve ser gerada para este processo
+     */
+    public boolean deveGerarImagem(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null && info.isGerarImagem();
+    }
+
+    /**
+     * Recupera o caminho do arquivo de áudio da oração completa
+     */
+    public String getOracaoAudioPath(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getOracaoAudioPath() : null;
+    }
+
+    /**
+     * Recupera o caminho do arquivo de áudio da versão curta
+     */
+    public String getShortAudioPath(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getShortAudioPath() : null;
+    }
+
+    /**
+     * Verifica se os arquivos de áudio foram gerados
+     */
+    public boolean hasAudioFiles(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null && info.getOracaoAudioPath() != null && info.getShortAudioPath() != null;
+    }
 }
