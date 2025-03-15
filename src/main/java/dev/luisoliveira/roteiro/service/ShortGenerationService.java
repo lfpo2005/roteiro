@@ -127,34 +127,41 @@ public class ShortGenerationService {
         }
     }
 
-    /**
-     * Verifica se deve gerar a versão short com base na duração e na flag fornecida pelo usuário
-     *
-     * @param processId ID do processo
-     * @param duracao Duração selecionada
-     * @return true se deve gerar versão short, false caso contrário
-     */
+
     private boolean shouldGenerateShortVersion(String processId, String duracao) {
-        // Se for uma duração curta, não gera short
-        if (duracao != null) {
-            if (duracao.toLowerCase().contains("muito curta") ||
-                    duracao.toLowerCase().contains("curta") ||
-                    duracao.toLowerCase().contains("mini")) {
-                log.info("Duração {} é curta, não é necessário gerar versão short", duracao);
-                return false;
-            }
+        // Se duracao for null, trata como caso padrão
+        if (duracao == null) {
+            log.warn("Duração é null para o processo {}, assumindo duração padrão", processId);
+            duracao = "Padrão";
         }
 
-        // Para durações Padrão, Completa ou Expandida, verificar se o usuário deseja gerar short
+        String duracaoLower = duracao.toLowerCase();
+
+        // 1. REGRA PRIORITÁRIA: Se for uma duração menor que padrão (Muito curta, Curta, Mini, Short),
+        // NUNCA gera short, independentemente da flag gerarVersaoShort
+        if (duracaoLower.contains("muito curta") ||
+                duracaoLower.contains("curta") ||
+                duracaoLower.contains("mini") ||
+                duracaoLower.contains("short")) {
+            log.info("Duração '{}' é menor que padrão (Short/Mini/Curta), NÃO será gerada versão short para o processo {}",
+                    duracao, processId);
+            return false;
+        }
+
+        // 2. Para durações Padrão, Completa ou Expandida, só gera short se gerarVersaoShort for EXPLICITAMENTE true
         Boolean gerarVersaoShort = processTrackingService.getGerarVersaoShort(processId);
 
-        // Se a flag for null, assume-se como true (comportamento padrão antigo)
-        if (gerarVersaoShort == null) {
+        // Se a flag for explicitamente true, gera a versão short
+        if (Boolean.TRUE.equals(gerarVersaoShort)) {
+            log.info("Duração '{}' é compatível e flag gerarVersaoShort é TRUE para o processo {}, gerando versão short",
+                    duracao, processId);
             return true;
         }
 
-        // Retorna o valor da flag
-        return gerarVersaoShort;
+        // Em todos os outros casos (flag null ou false), não gera short
+        log.info("Duração '{}' é compatível mas flag gerarVersaoShort não é true ({}) para o processo {}, NÃO será gerada versão short",
+                duracao, gerarVersaoShort, processId);
+        return false;
     }
 
     /**

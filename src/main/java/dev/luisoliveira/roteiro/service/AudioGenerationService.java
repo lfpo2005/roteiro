@@ -22,9 +22,6 @@ public class AudioGenerationService {
     private final EventBusService eventBusService;
     private final ProcessTrackingService processTrackingService;
 
-    /**
-     * Escuta o evento de descrição gerada para gerar o áudio da oração.
-     */
     @EventListener
     public void handleDescriptionGeneratedEvent(DescriptionGeneratedEvent event) {
         String processId = event.getProcessId();
@@ -60,13 +57,23 @@ public class AudioGenerationService {
             );
             log.info("Áudio da oração completa gerado com sucesso: {}", fullAudioPath);
 
-            // Gerar áudio para a versão curta da oração
-            String shortAudioPath = elevenLabsService.convertTextToSpeech(
-                    shortContent,
-                    processId,
-                    safeTitle + "_short"
-            );
-            log.info("Áudio da versão curta gerado com sucesso: {}", shortAudioPath);
+            // Verificar se o conteúdo short é realmente diferente do conteúdo original
+            // Se for igual, significa que não houve geração de versão short personalizada
+            boolean isShortDifferent = !shortContent.equals(oracaoContent);
+            String shortAudioPath = null;
+
+            // Somente gerar áudio da versão short se houve geração de short personalizado
+            if (isShortDifferent) {
+                log.info("Gerando áudio para versão short personalizada");
+                shortAudioPath = elevenLabsService.convertTextToSpeech(
+                        shortContent,
+                        processId,
+                        safeTitle + "_short"
+                );
+                log.info("Áudio da versão curta gerado com sucesso: {}", shortAudioPath);
+            } else {
+                log.info("Pulando geração de áudio short pois não houve geração de versão short personalizada");
+            }
 
             // Atualizar status
             processTrackingService.updateStatus(
@@ -85,9 +92,6 @@ public class AudioGenerationService {
                     fullAudioPath,
                     shortAudioPath
             ));
-
-            // Além do evento, continuar o fluxo normal com a geração de imagem
-            // Isso garante compatibilidade com o fluxo existente
 
         } catch (IOException e) {
             log.error("Erro ao gerar áudio: {}", e.getMessage(), e);
