@@ -5867,3 +5867,162 @@ Tamanho total: 300-500 caracteres (30-60 segundos)
 2025-03-15 19:36:19 [http-nio-8080-exec-3] INFO  o.s.w.s.m.SubProtocolWebSocketHandler - No messages received after 291191 ms. Closing WebSocketServerSockJsSession[id=xu0w3k3d].
 2025-03-15 19:38:30 [MessageBroker-7] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[3 current WS(3)-HttpStream(0)-HttpPoll(0), 26 total, 5 closed abnormally (5 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(18)-CONNECTED(18)-DISCONNECT(11)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 4, completed tasks = 488]
 2025-03-15 19:41:29 [http-nio-8080-exec-1] INFO  o.s.w.s.m.SubProtocolWebSocketHandler - No messages received after 60424 ms. Closing WebSocketServerSockJsSession[id=3uek0ejj].
+2025-03-15 19:53:40 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 19:53:40 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 19:53:40 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 19:53:40 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@36d582cb]]
+2025-03-15 19:53:40 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 19:53:40 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 19:53:40 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 19:53:40 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 19:53:46 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 6692 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 19:53:46 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 19:53:46 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 19:53:47 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 19:53:47 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 19:53:48 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 19:53:48 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 19:53:48 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 19:53:48 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 19:53:48 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1730 ms
+2025-03-15 19:53:48 [main] INFO  d.l.r.service.SystemConfigService - Diretório de configuração criado: .\config
+2025-03-15 19:53:48 [main] DEBUG d.l.r.service.SystemConfigService - Arquivo de configuração não encontrado, usando valores padrão
+2025-03-15 19:53:48 [main] DEBUG d.l.r.service.SystemConfigService - Configurações salvas em: ./config/system.properties
+2025-03-15 19:53:48 [main] INFO  d.l.r.service.SystemConfigService - Arquivo de configuração inicializado com valores padrão
+2025-03-15 19:53:49 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 19:53:49 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 19:53:49 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 19:53:49 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 19:53:49 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@256589a1]]
+2025-03-15 19:53:49 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 19:53:49 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 19:53:49 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.684 seconds (process running for 4.244)
+2025-03-15 19:54:08 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 19:54:08 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 19:54:08 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 19:54:11 [http-nio-8080-exec-9] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 19:54:11 [http-nio-8080-exec-10] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 19:54:17 [http-nio-8080-exec-2] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: C:\
+2025-03-15 19:54:23 [http-nio-8080-exec-3] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 19:54:23 [http-nio-8080-exec-1] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 19:54:29 [http-nio-8080-exec-5] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: C:\Users\lfpo2
+2025-03-15 19:54:49 [MessageBroker-7] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 2 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 3, completed tasks = 11]
+2025-03-15 19:55:48 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 19:55:48 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 19:55:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 19:55:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@256589a1]]
+2025-03-15 19:55:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 19:55:48 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 19:55:48 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 19:55:48 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 19:55:53 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 21072 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 19:55:53 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 19:55:53 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 19:55:54 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 19:55:54 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 19:55:55 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 19:55:55 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 19:55:55 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 19:55:55 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 19:55:55 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1615 ms
+2025-03-15 19:55:55 [main] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 19:55:56 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 19:55:56 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 19:55:56 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 19:55:56 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 19:55:56 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@9b367c8]]
+2025-03-15 19:55:56 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 19:55:56 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 19:55:56 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.382 seconds (process running for 3.861)
+2025-03-15 19:56:01 [http-nio-8080-exec-4] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 19:56:01 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 19:56:01 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 19:56:08 [http-nio-8080-exec-9] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 19:56:08 [http-nio-8080-exec-10] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 19:56:56 [MessageBroker-12] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 2 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 3, completed tasks = 15]
+2025-03-15 19:59:14 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 19:59:14 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 19:59:14 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 19:59:14 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@9b367c8]]
+2025-03-15 19:59:14 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 19:59:14 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 19:59:14 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 19:59:14 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 19:59:22 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 40608 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 19:59:22 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 19:59:22 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 19:59:23 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 19:59:23 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 19:59:24 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 19:59:24 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 19:59:24 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 19:59:24 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 19:59:24 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1693 ms
+2025-03-15 19:59:24 [main] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 19:59:25 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 19:59:25 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 19:59:25 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 19:59:25 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 19:59:25 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4c4c7d6c]]
+2025-03-15 19:59:25 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 19:59:25 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 19:59:25 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.652 seconds (process running for 4.095)
+2025-03-15 19:59:31 [http-nio-8080-exec-3] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 19:59:31 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 19:59:31 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 20:00:25 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-03-15 20:02:15 [http-nio-8080-exec-2] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:02:15 [http-nio-8080-exec-2] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:02:15 [http-nio-8080-exec-6] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:02:15 [http-nio-8080-exec-6] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:02:48 [http-nio-8080-exec-7] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:02:48 [http-nio-8080-exec-7] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:02:48 [http-nio-8080-exec-8] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:02:48 [http-nio-8080-exec-8] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:06:54 [http-nio-8080-exec-1] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:06:54 [http-nio-8080-exec-1] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:06:54 [http-nio-8080-exec-6] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:06:54 [http-nio-8080-exec-6] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:07:08 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 20:07:08 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 20:07:08 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 20:07:08 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@4c4c7d6c]]
+2025-03-15 20:07:08 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 20:07:08 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 20:07:08 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 20:07:08 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 20:07:10 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 42620 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 20:07:10 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 20:07:10 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 20:07:11 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 20:07:11 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 20:07:12 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 20:07:12 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 20:07:12 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 20:07:12 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 20:07:12 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1442 ms
+2025-03-15 20:07:12 [main] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:07:12 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 20:07:12 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 20:07:12 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 20:07:12 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 20:07:12 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@87f501f]]
+2025-03-15 20:07:12 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 20:07:12 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 20:07:12 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.023 seconds (process running for 3.464)
+2025-03-15 20:07:19 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 20:07:19 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 20:07:19 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-03-15 20:07:19 [http-nio-8080-exec-2] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:07:19 [http-nio-8080-exec-2] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:07:19 [http-nio-8080-exec-7] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:07:19 [http-nio-8080-exec-7] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:08:12 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-03-15 20:08:23 [http-nio-8080-exec-5] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:08:23 [http-nio-8080-exec-5] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:08:23 [http-nio-8080-exec-2] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:08:23 [http-nio-8080-exec-2] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:10:39 [http-nio-8080-exec-7] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:10:39 [http-nio-8080-exec-7] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:10:39 [http-nio-8080-exec-8] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 20:10:39 [http-nio-8080-exec-8] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties

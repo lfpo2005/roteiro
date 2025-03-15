@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+
 public class WebSocketTestController {
 
     private final SimpMessagingTemplate messagingTemplate;

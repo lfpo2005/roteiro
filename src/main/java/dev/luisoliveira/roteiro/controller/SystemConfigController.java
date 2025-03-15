@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping("/config")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class SystemConfigController {
 
     private final SystemConfigService systemConfigService;
