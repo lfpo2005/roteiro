@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,16 +41,15 @@ public class FileStorageService {
         }
     }
 
-    // Método simplificado sem referência a imagem
+//    // Método simplificado sem referência a imagem
+//    public String saveOracaoFile(String processId, String titulo, String oracaoContent,
+//                                 String shortContent, String description, List<String> allTitles) {
+//        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
+//    }
+
+    // Método simplificado sem referência a arquivos de áudio
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
                                  String shortContent, String description, List<String> allTitles) {
-        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
-    }
-
-    // Método legado mantido para compatibilidade, mas ignorando o parâmetro imagePath
-    public String saveOracaoFile(String processId, String titulo, String oracaoContent,
-                                 String shortContent, String description, List<String> allTitles,
-                                 String imagePath) {
         return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
     }
 
@@ -199,65 +199,133 @@ public class FileStorageService {
      * @param shortAudioContent Conteúdo do áudio curto (opcional)
      * @return Array com os caminhos dos arquivos [fullAudioPath, shortAudioPath]
      */
-    public String[] saveAudioFiles(String processId, String titulo, byte[] fullAudioContent, byte[] shortAudioContent) {
+    /**
+     * Salva arquivos de áudio com tratamento de caminho aprimorado
+     */
+    public String[] saveAudioFiles(String processId, String titulo, byte[] fullAudioData, byte[] shortAudioData) {
+        log.info("Salvando arquivos de áudio para processId={}, título='{}'", processId, titulo);
+
         try {
-            // Buscar o diretório principal do processo
-            String dirPath = processDirectories.get(processId);
+            // Criar nome de arquivo ainda mais seguro, removendo acentos e caracteres especiais
+            String safeTitle = createSafeFileName(titulo);
+            log.debug("Nome de arquivo seguro gerado para áudio: '{}'", safeTitle);
 
-            // Se não encontrar o diretório do processo, usar o título para criar uma nova estrutura
-            if (dirPath == null) {
-                String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
-                        .replaceAll("_+", "_");
+            // Normalizar o caminho base de saída
+            Path normalizedOutputPath = Paths.get(outputPath).normalize().toAbsolutePath();
+            log.debug("Caminho base normalizado: {}", normalizedOutputPath);
 
-                Path mainDir = Paths.get(outputPath, safeTitle);
-                if (!Files.exists(mainDir)) {
-                    Files.createDirectories(mainDir);
-                }
-
-                dirPath = mainDir.toString();
-                processDirectories.put(processId, dirPath);
-                log.info("Criado novo diretório para áudios: {}", dirPath);
+            // Usar apenas a estrutura por processId para garantir consistência
+            Path processDir = normalizedOutputPath.resolve(processId);
+            if (!Files.exists(processDir)) {
+                Files.createDirectories(processDir);
+                log.debug("Diretório do processo criado: {}", processDir);
             }
 
-            // Criar pasta de áudio dentro do diretório principal
-            Path audioDir = Paths.get(dirPath, "audio");
+            Path audioDir = processDir.resolve("audio");
             if (!Files.exists(audioDir)) {
                 Files.createDirectories(audioDir);
+                log.info("Diretório de áudio criado: {}", audioDir);
             }
 
-            String[] result = new String[2];
+            // Salvar áudio completo com nome simplificado
+            String fullAudioName = safeTitle + "_full.mp3";
+            Path fullAudioPath = audioDir.resolve(fullAudioName);
 
-            // Salvar áudio completo
-            if (fullAudioContent != null) {
-                String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
-                        .replaceAll("_+", "_");
-
-                String fullAudioFileName = safeTitle + "_full.mp3";
-                Path fullAudioPath = audioDir.resolve(fullAudioFileName);
-
-                Files.write(fullAudioPath, fullAudioContent);
-                result[0] = fullAudioPath.toString();
-                log.info("Áudio completo salvo em: {}", fullAudioPath);
+            // Verificar se o diretório pai existe
+            if (!Files.exists(fullAudioPath.getParent())) {
+                Files.createDirectories(fullAudioPath.getParent());
             }
 
-            // Salvar áudio da versão curta
-            if (shortAudioContent != null) {
-                String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
-                        .replaceAll("_+", "_");
+            // Garantir que o arquivo existe (ou criar um vazio)
+            if (!Files.exists(fullAudioPath)) {
+                Files.createFile(fullAudioPath);
+            }
 
-                String shortAudioFileName = safeTitle + "_short.mp3";
-                Path shortAudioPath = audioDir.resolve(shortAudioFileName);
+            // Escrever dados
+            Files.write(fullAudioPath, fullAudioData);
+            log.info("Áudio completo salvo em: {}", fullAudioPath);
 
-                Files.write(shortAudioPath, shortAudioContent);
-                result[1] = shortAudioPath.toString();
+            // Salvar áudio da versão curta, se existir
+            String shortAudioPathStr = null;
+            if (shortAudioData != null) {
+                String shortAudioName = safeTitle + "_short.mp3";
+                Path shortAudioPath = audioDir.resolve(shortAudioName);
+
+                // Verificar se o diretório pai existe
+                if (!Files.exists(shortAudioPath.getParent())) {
+                    Files.createDirectories(shortAudioPath.getParent());
+                }
+
+                // Garantir que o arquivo existe (ou criar um vazio)
+                if (!Files.exists(shortAudioPath)) {
+                    Files.createFile(shortAudioPath);
+                }
+
+                Files.write(shortAudioPath, shortAudioData);
+                shortAudioPathStr = shortAudioPath.toString();
                 log.info("Áudio da versão curta salvo em: {}", shortAudioPath);
             }
 
-            return result;
+            // Retornar caminhos relativos ao diretório de trabalho
+            Path workingDir = Paths.get("").toAbsolutePath();
+            String relativeFullPath = workingDir.relativize(fullAudioPath).toString();
+            String relativeShortPath = shortAudioPathStr != null ?
+                    workingDir.relativize(Paths.get(shortAudioPathStr)).toString() :
+                    null;
 
+            log.debug("Caminho relativo do áudio completo: {}", relativeFullPath);
+            if (relativeShortPath != null) {
+                log.debug("Caminho relativo do áudio curto: {}", relativeShortPath);
+            }
+
+            // Garantir que o caminho usa a separação de diretórios adequada ao sistema
+            relativeFullPath = relativeFullPath.replace('\\', '/');
+            if (relativeShortPath != null) {
+                relativeShortPath = relativeShortPath.replace('\\', '/');
+            }
+
+            return new String[] { relativeFullPath, relativeShortPath };
         } catch (IOException e) {
-            log.error("Falha ao salvar arquivos de áudio", e);
-            throw new RuntimeException("Falha ao salvar arquivos de áudio", e);
+            log.error("Erro ao salvar arquivos de áudio para processId={}: {}", processId, e.getMessage(), e);
+            throw new RuntimeException("Erro ao salvar arquivos de áudio: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Versão melhorada do método para criar nomes de arquivos seguros,
+     * removendo também acentos e caracteres especiais
+     */
+    private String createSafeFileName(String title) {
+        if (title == null) {
+            return "unnamed";
+        }
+
+        // Remover acentos e normalizar
+        String normalized = java.text.Normalizer.normalize(title, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+        // Remover emojis e caracteres especiais - mais restritivo, apenas letras, números e alguns símbolos básicos
+        String safeTitle = normalized.replaceAll("[^a-zA-Z0-9 _\\-.]", "");
+
+        // Remover palavras-chave como hashtags e menções
+        safeTitle = safeTitle.replaceAll("#\\w+", "").replaceAll("@\\w+", "");
+
+        // Converter espaços em underscore e remover underscores duplicados
+        safeTitle = safeTitle.trim().replaceAll("\\s+", "_").replaceAll("_+", "_");
+
+        // Truncar se for muito longo
+        if (safeTitle.length() > 50) { // Reduzido para garantir compatibilidade
+            safeTitle = safeTitle.substring(0, 50);
+        }
+
+        // Remover underscores no início e fim
+        safeTitle = safeTitle.replaceAll("^_+|_+$", "");
+
+        // Verificar se não ficou vazio
+        if (StringUtils.isBlank(safeTitle)) {
+            safeTitle = "unnamed";
+        }
+
+        return safeTitle;
     }
 }

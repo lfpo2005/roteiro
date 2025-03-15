@@ -44,7 +44,9 @@ public class ContentCompilationService {
                     event.getShortContent(),
                     event.getDescriptionContent(),
                     allTitles,
-                    null  // Sem imagem
+                    null,
+                    null
+
             );
 
             // Armazenar o caminho do resultado
