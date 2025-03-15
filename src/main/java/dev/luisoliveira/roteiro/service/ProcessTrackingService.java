@@ -1,7 +1,9 @@
+
 package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.dto.ProcessStatus;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -11,9 +13,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class ProcessTrackingService {
 
+    private final NotificationService notificationService;
     private final Map<String, ProcessStatus> processes = new ConcurrentHashMap<>();
     private final Map<String, List<String>> processTitles = new ConcurrentHashMap<>();
     private final Map<String, String> processResults = new ConcurrentHashMap<>();
@@ -73,7 +77,6 @@ public class ProcessTrackingService {
         public Boolean getGerarAudio() { return gerarAudio; }
         public void setGerarAudio(Boolean gerarAudio) { this.gerarAudio = gerarAudio; }
 
-        // Novos getters e setters para caminhos de áudio
         public String getFullAudioPath() { return fullAudioPath; }
         public void setFullAudioPath(String fullAudioPath) { this.fullAudioPath = fullAudioPath; }
 
@@ -81,14 +84,63 @@ public class ProcessTrackingService {
         public void setShortAudioPath(String shortAudioPath) { this.shortAudioPath = shortAudioPath; }
     }
 
-    // Métodos existentes e novos métodos...
+    public void initializeProcess(String processId) {
+        ProcessStatus status = new ProcessStatus();
+        status.setProcessId(processId);
+        status.setCurrentStage("Iniciado");
+        status.setProgressPercentage(0);
+        status.setStartTime(LocalDateTime.now());
+        status.setLastUpdated(LocalDateTime.now());
+        status.setCompleted(false);
 
-    /**
-     * Armazena os caminhos dos arquivos de áudio gerados
-     * @param processId ID do processo
-     * @param fullAudioPath Caminho do arquivo de áudio da oração completa
-     * @param shortAudioPath Caminho do arquivo de áudio da versão curta
-     */
+        processes.put(processId, status);
+        processInfos.put(processId, new ProcessInfo());
+        log.debug("Processo inicializado: {}", processId);
+
+        // Enviar notificação de inicialização
+        notificationService.sendNotification(
+                processId,
+                "PROCESS_INITIALIZED",
+                "Processo iniciado com sucesso",
+                0 // Progresso inicial
+        );
+    }
+
+    public void updateStatus(String processId, String currentStage, int progressPercentage) {
+        if (processes.containsKey(processId)) {
+            ProcessStatus status = processes.get(processId);
+            status.setCurrentStage(currentStage);
+            status.setProgressPercentage(progressPercentage);
+            status.setLastUpdated(LocalDateTime.now());
+            log.debug("Status atualizado: processId={}, stage={}, progress={}%",
+                    processId, currentStage, progressPercentage);
+
+            // Enviar notificação de atualização de status
+            notificationService.sendProgressNotification(processId, progressPercentage, currentStage);
+        }
+    }
+
+    public void storeResult(String processId, String filePath) {
+        processResults.put(processId, filePath);
+        if (processes.containsKey(processId)) {
+            ProcessStatus status = processes.get(processId);
+            status.setCompleted(true);
+            status.setProgressPercentage(100);
+            status.setCurrentStage("Concluído");
+            status.setResultPath(filePath);
+            status.setLastUpdated(LocalDateTime.now());
+            log.info("Processo concluído: processId={}, resultPath={}", processId, filePath);
+
+            // Enviar notificação de conclusão
+            notificationService.sendNotification(
+                    processId,
+                    "RESULT_STORED",
+                    "Arquivos gerados e armazenados com sucesso",
+                    filePath
+            );
+        }
+    }
+
     public void storeAudioPaths(String processId, String fullAudioPath, String shortAudioPath) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
@@ -121,21 +173,6 @@ public class ProcessTrackingService {
         return info != null ? info.getShortAudioPath() : null;
     }
 
-    // Outros métodos existentes...
-
-    public void initializeProcess(String processId) {
-        ProcessStatus status = new ProcessStatus();
-        status.setProcessId(processId);
-        status.setCurrentStage("Iniciado");
-        status.setProgressPercentage(0);
-        status.setStartTime(LocalDateTime.now());
-        status.setLastUpdated(LocalDateTime.now());
-        status.setCompleted(false);
-
-        processes.put(processId, status);
-        processInfos.put(processId, new ProcessInfo());
-        log.debug("Processo inicializado: {}", processId);
-    }
 
     public void setProcessInfo(String processId, String tema, String estiloOracao,
                                String duracao, String tipoOracao, String idioma,
@@ -256,16 +293,6 @@ public class ProcessTrackingService {
         return titulo != null && !titulo.trim().isEmpty();
     }
 
-    public void updateStatus(String processId, String currentStage, int progressPercentage) {
-        if (processes.containsKey(processId)) {
-            ProcessStatus status = processes.get(processId);
-            status.setCurrentStage(currentStage);
-            status.setProgressPercentage(progressPercentage);
-            status.setLastUpdated(LocalDateTime.now());
-            log.debug("Status atualizado: processId={}, stage={}, progress={}%",
-                    processId, currentStage, progressPercentage);
-        }
-    }
 
     public void storeTitles(String processId, List<String> titles) {
         processTitles.put(processId, titles);
@@ -274,19 +301,6 @@ public class ProcessTrackingService {
 
     public List<String> getTitles(String processId) {
         return processTitles.getOrDefault(processId, new ArrayList<>());
-    }
-
-    public void storeResult(String processId, String filePath) {
-        processResults.put(processId, filePath);
-        if (processes.containsKey(processId)) {
-            ProcessStatus status = processes.get(processId);
-            status.setCompleted(true);
-            status.setProgressPercentage(100);
-            status.setCurrentStage("Concluído");
-            status.setResultPath(filePath);
-            status.setLastUpdated(LocalDateTime.now());
-            log.info("Processo concluído: processId={}, resultPath={}", processId, filePath);
-        }
     }
 
     public ProcessStatus getStatus(String processId) {
