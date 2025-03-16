@@ -6026,3 +6026,397 @@ Tamanho total: 300-500 caracteres (30-60 segundos)
 2025-03-15 20:10:39 [http-nio-8080-exec-7] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
 2025-03-15 20:10:39 [http-nio-8080-exec-8] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
 2025-03-15 20:10:39 [http-nio-8080-exec-8] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 20:18:02 [http-nio-8080-exec-4] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 20:18:02 [http-nio-8080-exec-5] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 20:18:06 [http-nio-8080-exec-1] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: D:\
+2025-03-15 20:18:22 [http-nio-8080-exec-6] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `boolean` from Object value (token `JsonToken.START_OBJECT`)]
+2025-03-15 20:38:12 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2025-03-15 21:06:37 [http-nio-8080-exec-3] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 21:06:37 [http-nio-8080-exec-3] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 21:06:51 [http-nio-8080-exec-1] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 21:06:51 [http-nio-8080-exec-6] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: null
+2025-03-15 21:06:59 [http-nio-8080-exec-7] INFO  d.l.r.c.SystemConfigController - Listando diretórios em: D:\
+2025-03-15 21:07:14 [http-nio-8080-exec-2] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `boolean` from Object value (token `JsonToken.START_OBJECT`)]
+2025-03-15 21:08:12 [MessageBroker-2] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2025-03-15 21:38:12 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]
+2025-03-15 21:47:45 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 21:47:45 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 21:47:45 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 21:47:45 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@87f501f]]
+2025-03-15 21:47:45 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 21:47:45 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 21:47:45 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 21:47:45 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 21:47:50 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 8000 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 21:47:50 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 21:47:50 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 21:47:51 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 21:47:51 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 21:47:52 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 21:47:52 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 21:47:52 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 21:47:52 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 21:47:52 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1713 ms
+2025-03-15 21:47:52 [main] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 21:47:53 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 21:47:53 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 21:47:53 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 21:47:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 21:47:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@251a90ce]]
+2025-03-15 21:47:53 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 21:47:53 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 21:47:53 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.634 seconds (process running for 4.206)
+2025-03-15 21:47:57 [http-nio-8080-exec-3] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 21:47:57 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 21:47:57 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 21:48:53 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-03-15 21:50:43 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 21:50:43 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 21:50:43 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 21:50:43 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@251a90ce]]
+2025-03-15 21:50:43 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 21:50:43 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 21:50:43 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 21:50:43 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 21:50:47 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 24468 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 21:50:47 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 21:50:47 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 21:50:48 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 21:50:48 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 21:50:48 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 21:50:48 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 21:50:48 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 21:50:48 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 21:50:48 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1504 ms
+2025-03-15 21:50:48 [main] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 21:50:49 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 21:50:49 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 21:50:49 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 21:50:49 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 21:50:49 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@447521e]]
+2025-03-15 21:50:49 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 21:50:49 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 21:50:49 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.155 seconds (process running for 3.628)
+2025-03-15 21:50:57 [http-nio-8080-exec-4] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 21:50:57 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 21:50:57 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 21:51:49 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-03-15 21:54:20 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 21:54:20 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 21:54:20 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 21:54:20 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@447521e]]
+2025-03-15 21:54:20 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 21:54:20 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 21:54:20 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 21:54:20 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 21:54:22 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 40552 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 21:54:22 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 21:54:22 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 21:54:23 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 21:54:23 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 21:54:23 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 21:54:23 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 21:54:23 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 21:54:23 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 21:54:23 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1500 ms
+2025-03-15 21:54:24 [main] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 21:54:24 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 21:54:24 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 21:54:24 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 21:54:24 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 21:54:24 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6cdee57]]
+2025-03-15 21:54:24 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 21:54:24 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 21:54:24 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.149 seconds (process running for 3.668)
+2025-03-15 21:54:31 [http-nio-8080-exec-4] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 21:54:31 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 21:54:31 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 21:55:24 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-03-15 22:09:16 [http-nio-8080-exec-3] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 22:09:16 [http-nio-8080-exec-3] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 22:09:16 [http-nio-8080-exec-5] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 22:09:16 [http-nio-8080-exec-5] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 22:10:47 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 22:10:48 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 22:10:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 22:10:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6cdee57]]
+2025-03-15 22:10:48 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 22:10:48 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 22:10:48 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 22:10:48 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 22:10:51 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 33028 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 22:10:51 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 22:10:51 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 22:10:52 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 22:10:52 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 22:10:53 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 22:10:53 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 22:10:53 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 22:10:53 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 22:10:53 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1537 ms
+2025-03-15 22:10:53 [main] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 22:10:54 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 22:10:54 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 22:10:54 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 22:10:54 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 22:10:54 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6cdee57]]
+2025-03-15 22:10:54 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 22:10:54 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 22:10:54 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.098 seconds (process running for 3.508)
+2025-03-15 22:11:11 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 22:11:11 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 22:11:11 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 22:11:11 [http-nio-8080-exec-1] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 22:11:11 [http-nio-8080-exec-1] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 22:11:11 [http-nio-8080-exec-3] INFO  d.l.r.c.SystemConfigController - Obtendo configurações do sistema
+2025-03-15 22:11:11 [http-nio-8080-exec-3] DEBUG d.l.r.service.SystemConfigService - Configurações carregadas de: ./config/system.properties
+2025-03-15 22:11:31 [http-nio-8080-exec-6] INFO  d.l.r.c.ContentGenerationController - Iniciando processo de geração com ID: 018f1a20-7efa-4c87-98ec-090e3effb3c2 (idioma: pt-BR, título: fornecido, gerarVersaoShort: false, gerarAudio: false)
+2025-03-15 22:11:31 [http-nio-8080-exec-6] DEBUG d.l.r.service.ProcessTrackingService - Processo inicializado: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:31 [http-nio-8080-exec-6] DEBUG d.l.r.service.ProcessTrackingService - Informações do processo configuradas: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, idioma=pt-BR, titulo=fornecido, gerarVersaoShort=false, gerarAudio=false
+2025-03-15 22:11:31 [http-nio-8080-exec-6] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ContentInitiatedEvent para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:31 [http-nio-8080-exec-6] INFO  d.l.roteiro.service.EventBusService - Evento ContentInitiatedEvent publicado com sucesso para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:31 [SimpleAsyncTaskExecutor-18] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Gerando títulos..., progress=20%
+2025-03-15 22:11:31 [SimpleAsyncTaskExecutor-18] INFO  d.l.r.service.TitleGenerationService - Gerando títulos para o processo 018f1a20-7efa-4c87-98ec-090e3effb3c2 no idioma pt-BR
+2025-03-15 22:11:31 [SimpleAsyncTaskExecutor-18] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para títulos: tema=Jesus é o Senhor, estilo=contemplativa, idioma=pt-BR, hasObservacoes=false
+2025-03-15 22:11:31 [SimpleAsyncTaskExecutor-18] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] DEBUG d.l.r.service.ProcessTrackingService - Títulos armazenados: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, quantidade=5
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Títulos gerados com sucesso, progress=40%
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] INFO  d.l.r.service.TitleGenerationService - Gerados 5 títulos com sucesso para o processo 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] INFO  d.l.r.service.TitleGenerationService - Título selecionado automaticamente: PODEROSA ORACIÓN para CONTEMPLAR JESUS, O SENHOR #oração #devoção 🙏
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Título selecionado: PODEROSA ORACIÓN para CONTEMPLAR JESUS, O SENHOR #oração #devoção 🙏, progress=45%
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] INFO  d.l.roteiro.service.EventBusService - Publicando evento: TitleSelectedEvent para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-18] INFO  d.l.roteiro.service.EventBusService - Evento TitleSelectedEvent publicado com sucesso para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Recebido evento TitleSelectedEvent para processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2 com título: PODEROSA ORACIÓN para CONTEMPLAR JESUS, O SENHOR #oração #devoção 🙏
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Gerando oração para o título selecionado..., progress=50%
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Gerando oração...' (50%)
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Recuperadas informações do processo: tema=Jesus é o Senhor, estilo=contemplativa, duracao=Short1, idioma=pt-BR
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Construindo prompt para oração no idioma: pt-BR
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para oração: tema=Jesus é o Senhor, estilo=contemplativa, duracao=Short1, titulo=PODEROSA ORACIÓN para CONTEMPLAR JESUS, O SENHOR #oração #devoção 🙏, idioma=pt-BR
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] DEBUG d.l.roteiro.util.PromptBuilder - Prompt construído com sucesso (tamanho: 748 caracteres)
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] DEBUG d.l.r.s.OracaoGenerationService - Prompt construído: Crie uma oração em português com o título: "PODEROSA ORACIÓN para CONTEMPLAR JESUS, O SENHOR #oração #devoção 🙏"
+
+Tema: Jesus é o Senhor
+Estilo: contemplativa
+Duração: Short1
+
+A oração deve seguir esta estrutura:
+1. Versículo inicial relevante ("Versículo del día:")
+2. Introdução com saudação e relevância do tema (6-8 linhas)
+3. Reflexão bíblica com passagem relevante (6-8 linhas)
+4. Oração principal com:
+   - Invocação inicial
+   - Desenvolvimento do tema
+   - Aplicação prática
+   - Pedidos específicos
+   - Declaração de fé
+5. Encerramento com:
+   - Recapitulação
+   - Versículo final (diferente do inicial)
+   - Bênção final
+   - Convite para inscrição
+   - "En el nombre de Jesús, Amén"
+
+Tamanho total: 300-500 caracteres (30-60 segundos)
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Iniciando chamada à API OpenAI para gerar oração...
+2025-03-15 22:11:34 [SimpleAsyncTaskExecutor-24] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] DEBUG d.l.r.service.ProcessTrackingService - Conteúdo da oração armazenado para processo: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Oração gerada com sucesso (tamanho: 1224 caracteres)
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Oração gerada com sucesso, progress=70%
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Status atualizado para 'Oração gerada com sucesso' (70%)
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Publicando evento OracaoGeneratedEvent...
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] INFO  d.l.roteiro.service.EventBusService - Publicando evento: OracaoGeneratedEvent para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] INFO  d.l.roteiro.service.EventBusService - Evento OracaoGeneratedEvent publicado com sucesso para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-24] INFO  d.l.r.s.OracaoGenerationService - Evento OracaoGeneratedEvent publicado com sucesso
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-25] INFO  d.l.r.service.ShortGenerationService - Duração 'Short1' é menor que padrão (Short/Mini/Curta), NÃO será gerada versão short para o processo 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-25] INFO  d.l.r.service.ShortGenerationService - Pulando geração de versão short para o processo 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-25] DEBUG d.l.r.service.ProcessTrackingService - Conteúdo short armazenado para processo: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-25] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Versão short não necessária, prosseguindo..., progress=80%
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-25] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ShortGeneratedEvent para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-25] INFO  d.l.roteiro.service.EventBusService - Evento ShortGeneratedEvent publicado com sucesso para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-26] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Gerando descrição para YouTube e TikTok..., progress=85%
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-26] INFO  d.l.r.s.DescriptionGenerationService - Gerando descrição para YouTube e TikTok no idioma: pt-BR
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-26] DEBUG d.l.roteiro.util.PromptBuilder - Construindo prompt para descrição: titulo=PODEROSA ORACIÓN para CONTEMPLAR JESUS, O SENHOR #oração #devoção 🙏, tamanho da oração=1224 caracteres, idioma=pt-BR
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-26] INFO  d.l.r.s.DescriptionGenerationService - Iniciando geração da descrição no idioma: pt-BR
+2025-03-15 22:11:37 [SimpleAsyncTaskExecutor-26] INFO  d.l.roteiro.service.OpenAIService - Iniciando requisição ao OpenAI...
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-26] INFO  d.l.roteiro.service.OpenAIService - Requisição concluída com sucesso
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-26] DEBUG d.l.r.service.ProcessTrackingService - Conteúdo da descrição armazenado para processo: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-26] INFO  d.l.r.s.DescriptionGenerationService - Descrição gerada com sucesso: 502 caracteres
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-26] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Descrição gerada com sucesso, progress=90%
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-26] INFO  d.l.roteiro.service.EventBusService - Publicando evento: DescriptionGeneratedEvent para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-27] INFO  d.l.r.service.AudioGenerationService - Geração de áudio desativada para o processo: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-26] INFO  d.l.roteiro.service.EventBusService - Evento DescriptionGeneratedEvent publicado com sucesso para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Compilando conteúdo final..., progress=95%
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.r.s.ContentCompilationService - Compilando conteúdo final para processo: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.r.service.FileStorageService - Estrutura de diretórios criada: .\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.r.service.FileStorageService - Arquivo de metadados salvo com sucesso: .\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_\texto\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o__meta.txt
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.r.service.FileStorageService - Arquivo SRT salvo com sucesso: .\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_\texto\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_.srt
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.r.service.FileStorageService - Arquivo SRT da versão curta salvo com sucesso: .\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_\texto\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o__short.srt
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.r.service.ProcessTrackingService - Processo concluído: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, resultPath=.\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] DEBUG d.l.r.service.ProcessTrackingService - Status atualizado: processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, stage=Processo concluído com sucesso! Arquivos gerados em: .\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_, progress=100%
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.r.s.ContentCompilationService - Conteúdo compilado com sucesso. Arquivos gerados em: .\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.roteiro.service.EventBusService - Publicando evento: ContentCompletedEvent para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-28] INFO  d.l.roteiro.service.EventBusService - Evento ContentCompletedEvent publicado com sucesso para o processId: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-29] INFO  d.l.r.service.NotificationService - Enviando notificação de conclusão para o processo: 018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-29] INFO  d.l.r.service.NotificationService - Enviando notificação para /topic/notifications/018f1a20-7efa-4c87-98ec-090e3effb3c2: NotificationMessage(processId=018f1a20-7efa-4c87-98ec-090e3effb3c2, type=PROCESS_COMPLETED, message=Processo concluído com sucesso!, data=.\gerados\PODEROSA_ORACI_N_para_CONTEMPLAR_JESUS_O_SENHOR_ora_o_devo_o_, timestamp=2025-03-15T22:11:38.741394)
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-29] DEBUG d.l.r.service.NotificationService - Notificação enviada com sucesso para /topic/notifications/018f1a20-7efa-4c87-98ec-090e3effb3c2
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-29] INFO  d.l.r.service.NotificationService - Enviando notificação para o tópico geral: /topic/notifications
+2025-03-15 22:11:38 [SimpleAsyncTaskExecutor-29] DEBUG d.l.r.service.NotificationService - Notificação enviada com sucesso para o tópico geral
+2025-03-15 22:11:54 [MessageBroker-4] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[4 current WS(4)-HttpStream(0)-HttpPoll(0), 7 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(5)-CONNECTED(5)-DISCONNECT(3)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 5, completed tasks = 12]
+2025-03-15 22:12:13 [http-nio-8080-exec-7] INFO  o.s.w.s.m.SubProtocolWebSocketHandler - No messages received after 61683 ms. Closing WebSocketServerSockJsSession[id=4pun2zbw].
+2025-03-15 22:12:13 [http-nio-8080-exec-7] INFO  o.s.w.s.m.SubProtocolWebSocketHandler - No messages received after 61668 ms. Closing WebSocketServerSockJsSession[id=t4qnbbtb].
+2025-03-15 22:41:54 [MessageBroker-9] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[2 current WS(2)-HttpStream(0)-HttpPoll(0), 11 total, 2 closed abnormally (2 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(9)-CONNECTED(9)-DISCONNECT(7)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 12, active threads = 1, queued tasks = 3, completed tasks = 519]
+2025-03-15 22:43:53 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-03-15 22:43:53 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-15 22:43:53 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopping...
+2025-03-15 22:43:53 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6cdee57]]
+2025-03-15 22:43:53 [SpringApplicationShutdownHook] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Stopped.
+2025-03-15 22:43:53 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - Removing {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 22:43:53 [SpringApplicationShutdownHook] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 0 subscriber(s).
+2025-03-15 22:43:53 [SpringApplicationShutdownHook] INFO  o.s.i.endpoint.EventDrivenConsumer - stopped bean '_org.springframework.integration.errorLogger'
+2025-03-15 22:48:46 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 19944 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 22:48:46 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 22:48:46 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 22:48:47 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-03-15 22:48:48 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 155 ms. Found 1 MongoDB repository interface.
+2025-03-15 22:48:48 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 22:48:48 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 22:48:48 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 22:48:48 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 22:48:48 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 22:48:48 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 22:48:48 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2012 ms
+2025-03-15 22:48:49 [main] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Windows", "name": "Windows 11", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/17.0.11+7-LTS-207"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2f0ccb34, com.mongodb.Jep395RecordCodecProvider@194012a2, com.mongodb.KotlinCodecProvider@55296b50]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-03-15 22:48:49 [cluster-ClusterId{value='67d62e01c0b2f533fe69742e', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=46435000, minRoundTripTimeNanos=0}
+2025-03-15 22:48:50 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'contentRetrievalController' defined in file [D:\WORKSPACE\roteiro\target\classes\dev\luisoliveira\roteiro\controller\ContentRetrievalController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'fileStorageService' defined in file [D:\WORKSPACE\roteiro\target\classes\dev\luisoliveira\roteiro\service\FileStorageService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'mongoStorageService' defined in file [D:\WORKSPACE\roteiro\target\classes\dev\luisoliveira\roteiro\service\MongoStorageService.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'com.mongodb.client.gridfs.GridFSBucket' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2025-03-15 22:48:50 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2025-03-15 22:48:50 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-03-15 22:48:50 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 1 of constructor in dev.luisoliveira.roteiro.service.MongoStorageService required a bean of type 'com.mongodb.client.gridfs.GridFSBucket' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.mongodb.client.gridfs.GridFSBucket' in your configuration.
+
+2025-03-15 22:50:13 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 43092 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 22:50:13 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 22:50:13 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 22:50:14 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-03-15 22:50:14 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 111 ms. Found 1 MongoDB repository interface.
+2025-03-15 22:50:14 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 22:50:14 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 22:50:15 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 22:50:15 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 22:50:15 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 22:50:15 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 22:50:15 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1994 ms
+2025-03-15 22:50:15 [main] INFO  d.l.roteiro.config.MongoDBConfig - Inicializando conexão com MongoDB: mongodb://localhost:27017
+2025-03-15 22:50:16 [main] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync", "version": "5.2.1"}, "os": {"type": "Windows", "name": "Windows 11", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/17.0.11+7-LTS-207"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@36478bce, com.mongodb.Jep395RecordCodecProvider@c48b543, com.mongodb.KotlinCodecProvider@75793f17]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=UNSPECIFIED, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-03-15 22:50:16 [cluster-ClusterId{value='67d62e57766116202ba0a3d4', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=31777500, minRoundTripTimeNanos=0}
+2025-03-15 22:50:16 [main] INFO  d.l.roteiro.config.MongoDBConfig - Configurando GridFS para armazenamento de arquivos grandes
+2025-03-15 22:50:16 [main] INFO  d.l.r.service.SystemConfigService - SystemConfigService inicializado com configurações padrão
+2025-03-15 22:50:16 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'audioGenerationService' defined in file [D:\WORKSPACE\roteiro\target\classes\dev\luisoliveira\roteiro\service\AudioGenerationService.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'elevenLabsService': Injection of autowired dependencies failed
+2025-03-15 22:50:16 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2025-03-15 22:50:16 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-03-15 22:50:16 [main] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'audioGenerationService' defined in file [D:\WORKSPACE\roteiro\target\classes\dev\luisoliveira\roteiro\service\AudioGenerationService.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'elevenLabsService': Injection of autowired dependencies failed
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1381)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1218)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at dev.luisoliveira.roteiro.RoteiroApplication.main(RoteiroApplication.java:10)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'elevenLabsService': Injection of autowired dependencies failed
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:515)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1445)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1606)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1552)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	... 21 common frames omitted
+Caused by: org.springframework.util.PlaceholderResolutionException: Could not resolve placeholder 'elevenlabs.voice.id' in value "${elevenlabs.voice.id}"
+	at org.springframework.util.PlaceholderResolutionException.withValue(PlaceholderResolutionException.java:81)
+	at org.springframework.util.PlaceholderParser$ParsedValue.resolve(PlaceholderParser.java:423)
+	at org.springframework.util.PlaceholderParser.replacePlaceholders(PlaceholderParser.java:128)
+	at org.springframework.util.PropertyPlaceholderHelper.parseStringValue(PropertyPlaceholderHelper.java:118)
+	at org.springframework.util.PropertyPlaceholderHelper.replacePlaceholders(PropertyPlaceholderHelper.java:114)
+	at org.springframework.core.env.AbstractPropertyResolver.doResolvePlaceholders(AbstractPropertyResolver.java:255)
+	at org.springframework.core.env.AbstractPropertyResolver.resolveRequiredPlaceholders(AbstractPropertyResolver.java:226)
+	at org.springframework.context.support.PropertySourcesPlaceholderConfigurer.lambda$processProperties$0(PropertySourcesPlaceholderConfigurer.java:201)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.resolveEmbeddedValue(AbstractBeanFactory.java:971)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1574)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1552)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	... 32 common frames omitted
+2025-03-15 22:54:18 [main] INFO  d.l.roteiro.RoteiroApplication - Starting RoteiroApplication using Java 17.0.11 with PID 34676 (D:\WORKSPACE\roteiro\target\classes started by lfpo2 in D:\WORKSPACE\roteiro)
+2025-03-15 22:54:18 [main] DEBUG d.l.roteiro.RoteiroApplication - Running with Spring Boot v3.4.3, Spring v6.2.3
+2025-03-15 22:54:18 [main] INFO  d.l.roteiro.RoteiroApplication - No active profile set, falling back to 1 default profile: "default"
+2025-03-15 22:54:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-03-15 22:54:18 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 110 ms. Found 1 MongoDB repository interface.
+2025-03-15 22:54:19 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2025-03-15 22:54:19 [main] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2025-03-15 22:54:19 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-03-15 22:54:19 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-03-15 22:54:19 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-03-15 22:54:19 [main] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-03-15 22:54:19 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1769 ms
+2025-03-15 22:54:20 [main] INFO  d.l.roteiro.config.MongoDBConfig - Inicializando conexão com MongoDB: mongodb://localhost:27017
+2025-03-15 22:54:20 [main] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync", "version": "5.2.1"}, "os": {"type": "Windows", "name": "Windows 11", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/17.0.11+7-LTS-207"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@cbf1997, com.mongodb.Jep395RecordCodecProvider@49232c6f, com.mongodb.KotlinCodecProvider@5faeeb56]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=UNSPECIFIED, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-03-15 22:54:20 [cluster-ClusterId{value='67d62f4ca8c29e7b75816ebb', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=32710900, minRoundTripTimeNanos=0}
+2025-03-15 22:54:20 [main] INFO  d.l.roteiro.config.MongoDBConfig - Configurando GridFS para armazenamento de arquivos grandes
+2025-03-15 22:54:20 [main] INFO  d.l.r.service.MongoStorageService - Inicializando MongoStorageService
+2025-03-15 22:54:20 [main] INFO  d.l.r.service.FileStorageService - Inicializando FileStorageService com MongoDB
+2025-03-15 22:54:20 [main] INFO  d.l.r.service.SystemConfigService - SystemConfigService inicializado com configurações padrão
+2025-03-15 22:54:20 [main] INFO  d.l.r.service.ElevenLabsService - ElevenLabsService inicializado
+2025-03-15 22:54:21 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2025-03-15 22:54:21 [main] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'roteiro.errorChannel' has 1 subscriber(s).
+2025-03-15 22:54:21 [main] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2025-03-15 22:54:21 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Starting...
+2025-03-15 22:54:21 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@47eae91d]]
+2025-03-15 22:54:21 [main] INFO  o.s.m.s.b.SimpleBrokerMessageHandler - Started.
+2025-03-15 22:54:21 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-03-15 22:54:21 [main] INFO  d.l.roteiro.RoteiroApplication - Started RoteiroApplication in 3.965 seconds (process running for 4.388)
+2025-03-15 22:55:14 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-15 22:55:14 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-03-15 22:55:14 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-03-15 22:55:21 [MessageBroker-1] INFO  o.s.w.s.c.WebSocketMessageBrokerStats - WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[unknown], outboundChannel[unknown], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-03-15 23:02:06 [http-nio-8080-exec-2] INFO  o.s.w.s.m.SubProtocolWebSocketHandler - No messages received after 89949 ms. Closing WebSocketServerSockJsSession[id=ecu4coxb].
+2025-03-15 23:02:06 [http-nio-8080-exec-2] INFO  o.s.w.s.m.SubProtocolWebSocketHandler - No messages received after 89951 ms. Closing WebSocketServerSockJsSession[id=gpf0klvq].
