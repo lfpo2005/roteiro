@@ -17,7 +17,7 @@ import java.util.Map;
  * Controller para gerenciar configurações do sistema
  */
 @RestController
-@RequestMapping("/api/config")
+@RequestMapping("/config")
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
