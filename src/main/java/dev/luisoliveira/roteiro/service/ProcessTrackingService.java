@@ -11,6 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Serviço para rastreamento de processos de geração de conteúdo (versão
+ * transitória para MongoDB)
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -36,10 +40,10 @@ public class ProcessTrackingService {
         private String descriptionContent;
         private Boolean gerarVersaoShort = null;
         private Boolean gerarAudio = null;
-        private String fullAudioPath; // Caminho do áudio da oração completa
-        private String shortAudioPath; // Caminho do áudio da versão curta
+        private String fullAudioId; // ID do áudio da oração completa
+        private String shortAudioId; // ID do áudio da versão curta
 
-        // Getters e setters existentes...
+        // Getters e setters
         public String getTema() {
             return tema;
         }
@@ -136,23 +140,28 @@ public class ProcessTrackingService {
             this.gerarAudio = gerarAudio;
         }
 
-        public String getFullAudioPath() {
-            return fullAudioPath;
+        public String getFullAudioId() {
+            return fullAudioId;
         }
 
-        public void setFullAudioPath(String fullAudioPath) {
-            this.fullAudioPath = fullAudioPath;
+        public void setFullAudioId(String fullAudioId) {
+            this.fullAudioId = fullAudioId;
         }
 
-        public String getShortAudioPath() {
-            return shortAudioPath;
+        public String getShortAudioId() {
+            return shortAudioId;
         }
 
-        public void setShortAudioPath(String shortAudioPath) {
-            this.shortAudioPath = shortAudioPath;
+        public void setShortAudioId(String shortAudioId) {
+            this.shortAudioId = shortAudioId;
         }
     }
 
+    /**
+     * Inicializa um novo processo
+     * 
+     * @param processId ID do processo
+     */
     public void initializeProcess(String processId) {
         ProcessStatus status = new ProcessStatus();
         status.setProcessId(processId);
@@ -167,6 +176,13 @@ public class ProcessTrackingService {
         log.debug("Processo inicializado: {}", processId);
     }
 
+    /**
+     * Atualiza o status de um processo
+     * 
+     * @param processId          ID do processo
+     * @param currentStage       Estágio atual
+     * @param progressPercentage Percentual de progresso
+     */
     public void updateStatus(String processId, String currentStage, int progressPercentage) {
         if (processes.containsKey(processId)) {
             ProcessStatus status = processes.get(processId);
@@ -178,53 +194,69 @@ public class ProcessTrackingService {
         }
     }
 
-    public void storeResult(String processId, String filePath) {
-        processResults.put(processId, filePath);
+    /**
+     * Armazena o resultado de um processo
+     * 
+     * @param processId ID do processo
+     * @param contentId ID do conteúdo gerado
+     */
+    public void storeResult(String processId, String contentId) {
+        processResults.put(processId, contentId);
         if (processes.containsKey(processId)) {
             ProcessStatus status = processes.get(processId);
             status.setCompleted(true);
             status.setProgressPercentage(100);
             status.setCurrentStage("Concluído");
-            status.setResultPath(filePath);
+            status.setResultPath(contentId); // Agora armazena o ID em vez do caminho
             status.setLastUpdated(LocalDateTime.now());
-            log.info("Processo concluído: processId={}, resultPath={}", processId, filePath);
+            log.info("Processo concluído: processId={}, contentId={}", processId, contentId);
         }
     }
 
-    public void storeAudioPaths(String processId, String fullAudioPath, String shortAudioPath) {
+    /**
+     * Armazena os IDs de áudio para um processo
+     * 
+     * @param processId    ID do processo
+     * @param fullAudioId  ID do áudio da oração completa
+     * @param shortAudioId ID do áudio da versão curta
+     */
+    public void storeAudioIds(String processId, String fullAudioId, String shortAudioId) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
-            info.setFullAudioPath(fullAudioPath);
-            info.setShortAudioPath(shortAudioPath);
-            log.info("Caminhos de áudio armazenados para o processo {}: full={}, short={}",
-                    processId, fullAudioPath, shortAudioPath);
+            info.setFullAudioId(fullAudioId);
+            info.setShortAudioId(shortAudioId);
+            log.info("IDs de áudio armazenados para o processo {}: full={}, short={}",
+                    processId, fullAudioId, shortAudioId);
         } else {
-            log.warn("Tentativa de armazenar caminhos de áudio para processo inexistente: {}", processId);
+            log.warn("Tentativa de armazenar IDs de áudio para processo inexistente: {}", processId);
         }
     }
 
     /**
-     * Recupera o caminho do arquivo de áudio da oração completa
+     * Recupera o ID do áudio da oração completa
      * 
      * @param processId ID do processo
-     * @return Caminho do arquivo de áudio ou null se não existir
+     * @return ID do áudio ou null se não existir
      */
-    public String getFullAudioPath(String processId) {
+    public String getFullAudioId(String processId) {
         ProcessInfo info = processInfos.get(processId);
-        return info != null ? info.getFullAudioPath() : null;
+        return info != null ? info.getFullAudioId() : null;
     }
 
     /**
-     * Recupera o caminho do arquivo de áudio da versão curta
+     * Recupera o ID do áudio da versão curta
      * 
      * @param processId ID do processo
-     * @return Caminho do arquivo de áudio ou null se não existir
+     * @return ID do áudio ou null se não existir
      */
-    public String getShortAudioPath(String processId) {
+    public String getShortAudioId(String processId) {
         ProcessInfo info = processInfos.get(processId);
-        return info != null ? info.getShortAudioPath() : null;
+        return info != null ? info.getShortAudioId() : null;
     }
 
+    /**
+     * Define as informações de um processo
+     */
     public void setProcessInfo(String processId, String tema, String estiloOracao,
             String duracao, String tipoOracao, String idioma,
             String titulo, String observacoes, Boolean gerarVersaoShort) {
@@ -232,6 +264,9 @@ public class ProcessTrackingService {
                 gerarVersaoShort, null);
     }
 
+    /**
+     * Define as informações de um processo incluindo a flag de áudio
+     */
     public void setProcessInfo(String processId, String tema, String estiloOracao,
             String duracao, String tipoOracao, String idioma,
             String titulo, String observacoes, Boolean gerarVersaoShort, Boolean gerarAudio) {
@@ -295,6 +330,7 @@ public class ProcessTrackingService {
         }
     }
 
+    // Métodos getter para informações do processo
     public String getTema(String processId) {
         ProcessInfo info = processInfos.get(processId);
         return info != null ? info.getTema() : null;
@@ -317,7 +353,7 @@ public class ProcessTrackingService {
 
     public String getIdioma(String processId) {
         ProcessInfo info = processInfos.get(processId);
-        return info != null ? info.getIdioma() : "es"; // Padrão para espanhol
+        return info != null ? info.getIdioma() : null;
     }
 
     public String getTitulo(String processId) {
@@ -335,87 +371,62 @@ public class ProcessTrackingService {
         return info != null ? info.getGerarVersaoShort() : null;
     }
 
-    public void setGerarVersaoShort(String processId, Boolean gerarVersaoShort) {
+    public void setTitulo(String processId, String titulo) {
         ProcessInfo info = processInfos.get(processId);
         if (info != null) {
-            info.setGerarVersaoShort(gerarVersaoShort);
-            log.debug("Flag gerarVersaoShort atualizada para {}: {}", processId, gerarVersaoShort);
+            info.setTitulo(titulo);
         }
     }
 
-    public boolean hasTitulo(String processId) {
-        String titulo = getTitulo(processId);
-        return titulo != null && !titulo.trim().isEmpty();
+    public void setOracaoContent(String processId, String oracaoContent) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setOracaoContent(oracaoContent);
+        }
     }
 
-    public void storeTitles(String processId, List<String> titles) {
-        processTitles.put(processId, titles);
-        log.debug("Títulos armazenados: processId={}, quantidade={}", processId, titles.size());
+    public void setShortContent(String processId, String shortContent) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setShortContent(shortContent);
+        }
     }
 
-    public List<String> getTitles(String processId) {
-        return processTitles.getOrDefault(processId, new ArrayList<>());
+    public void setDescriptionContent(String processId, String descriptionContent) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setDescriptionContent(descriptionContent);
+        }
+    }
+
+    public String getOracaoContent(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getOracaoContent() : null;
+    }
+
+    public String getShortContent(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getShortContent() : null;
+    }
+
+    public String getDescriptionContent(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getDescriptionContent() : null;
     }
 
     public ProcessStatus getStatus(String processId) {
         return processes.get(processId);
     }
 
-    public String getResult(String processId) {
+    public void saveTitles(String processId, List<String> titles) {
+        processTitles.put(processId, titles);
+    }
+
+    public List<String> getTitles(String processId) {
+        return processTitles.getOrDefault(processId, new ArrayList<>());
+    }
+
+    public String getResultId(String processId) {
         return processResults.get(processId);
-    }
-
-    public void storeOracaoContent(String processId, String oracaoContent) {
-        ProcessInfo info = processInfos.get(processId);
-        if (info != null) {
-            info.setOracaoContent(oracaoContent);
-            log.debug("Conteúdo da oração armazenado para processo: {}", processId);
-        }
-    }
-
-    /**
-     * Armazena o conteúdo da versão short para uso posterior
-     */
-    public void storeShortContent(String processId, String shortContent) {
-        ProcessInfo info = processInfos.get(processId);
-        if (info != null) {
-            info.setShortContent(shortContent);
-            log.debug("Conteúdo short armazenado para processo: {}", processId);
-        }
-    }
-
-    /**
-     * Armazena o conteúdo da descrição para uso posterior
-     */
-    public void storeDescriptionContent(String processId, String descriptionContent) {
-        ProcessInfo info = processInfos.get(processId);
-        if (info != null) {
-            info.setDescriptionContent(descriptionContent);
-            log.debug("Conteúdo da descrição armazenado para processo: {}", processId);
-        }
-    }
-
-    /**
-     * Recupera o conteúdo da oração
-     */
-    public String getOracaoContent(String processId) {
-        ProcessInfo info = processInfos.get(processId);
-        return info != null ? info.getOracaoContent() : null;
-    }
-
-    /**
-     * Recupera o conteúdo da versão short
-     */
-    public String getShortContent(String processId) {
-        ProcessInfo info = processInfos.get(processId);
-        return info != null ? info.getShortContent() : null;
-    }
-
-    /**
-     * Recupera o conteúdo da descrição
-     */
-    public String getDescriptionContent(String processId) {
-        ProcessInfo info = processInfos.get(processId);
-        return info != null ? info.getDescriptionContent() : null;
     }
 }

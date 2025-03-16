@@ -13,63 +13,58 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DescriptionGenerationService {
 
-    private final OpenAIService openAIService;
-    private final EventBusService eventBusService;
-    private final ProcessTrackingService processTrackingService;
+        private final OpenAIService openAIService;
+        private final EventBusService eventBusService;
+        private final ProcessTrackingService processTrackingService;
 
-    @EventListener
-    public void handleShortGeneratedEvent(ShortGeneratedEvent event) {
-        try {
-            String processId = event.getProcessId();
+        @EventListener
+        public void handleShortGeneratedEvent(ShortGeneratedEvent event) {
+                try {
+                        String processId = event.getProcessId();
 
-            // Atualizar status
-            processTrackingService.updateStatus(
-                    processId,
-                    "Gerando descrição para YouTube e TikTok...",
-                    85
-            );
+                        // Atualizar status
+                        processTrackingService.updateStatus(
+                                        processId,
+                                        "Gerando descrição para YouTube e TikTok...",
+                                        85);
 
-            // Obter o idioma do processo
-            String idioma = processTrackingService.getIdioma(processId);
-            log.info("Gerando descrição para YouTube e TikTok no idioma: {}", idioma);
+                        // Obter o idioma do processo
+                        String idioma = processTrackingService.getIdioma(processId);
+                        log.info("Gerando descrição para YouTube e TikTok no idioma: {}", idioma);
 
-            // Construir prompt otimizado para descrição
-            String prompt = PromptBuilder.buildDescriptionPrompt(
-                    event.getTitle(),
-                    event.getOracaoContent(),
-                    idioma
-            );
+                        // Construir prompt otimizado para descrição
+                        String prompt = PromptBuilder.buildDescriptionPrompt(
+                                        event.getTitle(),
+                                        event.getOracaoContent(),
+                                        idioma);
 
-            // Chamar OpenAI API
-            log.info("Iniciando geração da descrição no idioma: {}", idioma);
-            String descriptionContent = openAIService.generateDescription(prompt);
-            processTrackingService.storeDescriptionContent(processId, descriptionContent);
+                        // Chamar OpenAI API
+                        log.info("Iniciando geração da descrição no idioma: {}", idioma);
+                        String descriptionContent = openAIService.generateDescription(prompt);
+                        processTrackingService.setDescriptionContent(processId, descriptionContent);
 
-            log.info("Descrição gerada com sucesso: {} caracteres", descriptionContent.length());
+                        log.info("Descrição gerada com sucesso: {} caracteres", descriptionContent.length());
 
-            // Atualizar status
-            processTrackingService.updateStatus(
-                    processId,
-                    "Descrição gerada com sucesso",
-                    90
-            );
+                        // Atualizar status
+                        processTrackingService.updateStatus(
+                                        processId,
+                                        "Descrição gerada com sucesso",
+                                        90);
 
-            // Publicar evento com resultado - isso vai direto para a compilação final
-            eventBusService.publish(new DescriptionGeneratedEvent(
-                    processId,
-                    event.getTitle(),
-                    event.getOracaoContent(),
-                    event.getShortContent(),
-                    descriptionContent
-            ));
-        } catch (Exception e) {
-            // Lidar com erros
-            log.error("Erro ao gerar descrição: {}", e.getMessage(), e);
-            processTrackingService.updateStatus(
-                    event.getProcessId(),
-                    "Erro ao gerar descrição: " + e.getMessage(),
-                    0
-            );
+                        // Publicar evento com resultado - isso vai direto para a compilação final
+                        eventBusService.publish(new DescriptionGeneratedEvent(
+                                        processId,
+                                        event.getTitle(),
+                                        event.getOracaoContent(),
+                                        event.getShortContent(),
+                                        descriptionContent));
+                } catch (Exception e) {
+                        // Lidar com erros
+                        log.error("Erro ao gerar descrição: {}", e.getMessage(), e);
+                        processTrackingService.updateStatus(
+                                        event.getProcessId(),
+                                        "Erro ao gerar descrição: " + e.getMessage(),
+                                        0);
+                }
         }
-    }
 }
