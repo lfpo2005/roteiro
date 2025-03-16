@@ -30,24 +30,23 @@ public class ShortGenerationService {
                 log.info("Pulando geração de versão short para o processo {}", processId);
 
                 // Pular a geração de short e passar direto para a descrição
-                // Vamos criar um "short content" igual ao original para manter a compatibilidade
+                // Vamos criar um "short content" igual ao original para manter a
+                // compatibilidade
                 String shortContent = event.getOracaoContent();
-                processTrackingService.storeShortContent(processId, shortContent);
+                processTrackingService.setShortContent(processId, shortContent);
 
                 // Atualizar status
                 processTrackingService.updateStatus(
                         processId,
                         "Versão short não necessária, prosseguindo...",
-                        80
-                );
+                        80);
 
                 // Publicar evento com o mesmo conteúdo (sem gerar short)
                 eventBusService.publish(new ShortGeneratedEvent(
                         processId,
                         event.getTitle(),
                         event.getOracaoContent(),
-                        shortContent
-                ));
+                        shortContent));
 
                 return;
             }
@@ -57,8 +56,7 @@ public class ShortGenerationService {
             processTrackingService.updateStatus(
                     processId,
                     "Gerando versão short da oração...",
-                    75
-            );
+                    75);
 
             // Obter o idioma do processo
             String idioma = processTrackingService.getIdioma(processId);
@@ -68,14 +66,12 @@ public class ShortGenerationService {
             String prompt = PromptBuilder.buildShortPrompt(
                     event.getOracaoContent(),
                     event.getTitle(),
-                    idioma
-            );
+                    idioma);
 
             // Chamar OpenAI API
             log.info("Iniciando geração da versão short no idioma: {}", idioma);
             String shortContent = openAIService.generateOracao(prompt);
-            processTrackingService.storeShortContent(processId, shortContent);
-
+            processTrackingService.setShortContent(processId, shortContent);
 
             // Verificar se o conteúdo está no idioma correto
             if (necessitaCorrecaoIdioma(shortContent, idioma)) {
@@ -104,8 +100,7 @@ public class ShortGenerationService {
             processTrackingService.updateStatus(
                     processId,
                     "Versão short gerada com sucesso",
-                    80
-            );
+                    80);
 
             log.info("Versão short gerada com sucesso: {} caracteres", shortContent.length());
 
@@ -114,19 +109,16 @@ public class ShortGenerationService {
                     processId,
                     event.getTitle(),
                     event.getOracaoContent(),
-                    shortContent
-            ));
+                    shortContent));
         } catch (Exception e) {
             // Lidar com erros
             log.error("Erro ao gerar versão short: {}", e.getMessage(), e);
             processTrackingService.updateStatus(
                     event.getProcessId(),
                     "Erro ao gerar versão short: " + e.getMessage(),
-                    0
-            );
+                    0);
         }
     }
-
 
     private boolean shouldGenerateShortVersion(String processId, String duracao) {
         // Se duracao for null, trata como caso padrão
@@ -137,29 +129,34 @@ public class ShortGenerationService {
 
         String duracaoLower = duracao.toLowerCase();
 
-        // 1. REGRA PRIORITÁRIA: Se for uma duração menor que padrão (Muito curta, Curta, Mini, Short),
+        // 1. REGRA PRIORITÁRIA: Se for uma duração menor que padrão (Muito curta,
+        // Curta, Mini, Short),
         // NUNCA gera short, independentemente da flag gerarVersaoShort
         if (duracaoLower.contains("muito curta") ||
                 duracaoLower.contains("curta") ||
                 duracaoLower.contains("mini") ||
                 duracaoLower.contains("short")) {
-            log.info("Duração '{}' é menor que padrão (Short/Mini/Curta), NÃO será gerada versão short para o processo {}",
+            log.info(
+                    "Duração '{}' é menor que padrão (Short/Mini/Curta), NÃO será gerada versão short para o processo {}",
                     duracao, processId);
             return false;
         }
 
-        // 2. Para durações Padrão, Completa ou Expandida, só gera short se gerarVersaoShort for EXPLICITAMENTE true
+        // 2. Para durações Padrão, Completa ou Expandida, só gera short se
+        // gerarVersaoShort for EXPLICITAMENTE true
         Boolean gerarVersaoShort = processTrackingService.getGerarVersaoShort(processId);
 
         // Se a flag for explicitamente true, gera a versão short
         if (Boolean.TRUE.equals(gerarVersaoShort)) {
-            log.info("Duração '{}' é compatível e flag gerarVersaoShort é TRUE para o processo {}, gerando versão short",
+            log.info(
+                    "Duração '{}' é compatível e flag gerarVersaoShort é TRUE para o processo {}, gerando versão short",
                     duracao, processId);
             return true;
         }
 
         // Em todos os outros casos (flag null ou false), não gera short
-        log.info("Duração '{}' é compatível mas flag gerarVersaoShort não é true ({}) para o processo {}, NÃO será gerada versão short",
+        log.info(
+                "Duração '{}' é compatível mas flag gerarVersaoShort não é true ({}) para o processo {}, NÃO será gerada versão short",
                 duracao, gerarVersaoShort, processId);
         return false;
     }
@@ -175,10 +172,10 @@ public class ShortGenerationService {
         // Verificação para português
         if (("pt".equalsIgnoreCase(idioma) || "pt-BR".equalsIgnoreCase(idioma))) {
             // Palavras típicas do português que não costumam aparecer em espanhol ou inglês
-            String[] palavrasPortugues = {"em", "não", "você", "para", "são", "também", "muito", "obrigado", "está"};
+            String[] palavrasPortugues = { "em", "não", "você", "para", "são", "também", "muito", "obrigado", "está" };
 
             // Se o texto deve estar em português, verificamos se não há palavras espanholas
-            String[] palavrasEspanhol = {"el", "la", "los", "las", "es", "en", "con", "por", "para", "su"};
+            String[] palavrasEspanhol = { "el", "la", "los", "las", "es", "en", "con", "por", "para", "su" };
 
             return !contemPalavras(text, palavrasPortugues) && contemPalavras(text, palavrasEspanhol);
         }
@@ -186,20 +183,20 @@ public class ShortGenerationService {
         // Verificação para inglês
         if ("en".equalsIgnoreCase(idioma)) {
             // Palavras típicas do inglês
-            String[] palavrasIngles = {"the", "and", "for", "with", "your", "our", "that", "this", "from", "have"};
+            String[] palavrasIngles = { "the", "and", "for", "with", "your", "our", "that", "this", "from", "have" };
 
             // Se o texto deve estar em inglês, verificamos se não há palavras espanholas
-            String[] palavrasEspanhol = {"el", "la", "los", "las", "es", "en", "con", "por", "para", "su"};
+            String[] palavrasEspanhol = { "el", "la", "los", "las", "es", "en", "con", "por", "para", "su" };
 
             return !contemPalavras(text, palavrasIngles) && contemPalavras(text, palavrasEspanhol);
         }
 
         // Verificação para espanhol (padrão)
         // Palavras típicas do espanhol
-        String[] palavrasEspanhol = {"el", "la", "los", "las", "es", "en", "con", "por", "para", "su"};
+        String[] palavrasEspanhol = { "el", "la", "los", "las", "es", "en", "con", "por", "para", "su" };
 
         // Palavras típicas do português
-        String[] palavrasPortugues = {"em", "não", "você", "para", "são", "também", "muito", "obrigado", "está"};
+        String[] palavrasPortugues = { "em", "não", "você", "para", "são", "também", "muito", "obrigado", "está" };
 
         return !contemPalavras(text, palavrasEspanhol) && contemPalavras(text, palavrasPortugues);
     }

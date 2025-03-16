@@ -1,311 +1,229 @@
 package dev.luisoliveira.roteiro.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+import jakarta.annotation.PostConstruct;
+
+/**
+ * Serviço para armazenamento de conteúdo (versão com MongoDB)
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class FileStorageService {
 
+    private final MongoStorageService mongoStorageService;
     private final SrtConverterService srtConverterService;
 
-    // Mapa para acompanhar os diretórios de cada processo
-    private final Map<String, String> processDirectories = new ConcurrentHashMap<>();
-
-    @Value("${file.output.path:./gerados}")
-    private String outputPath;
+    /**
+     * Inicializa o serviço
+     * Método mantido para compatibilidade
+     */
+    @PostConstruct
+    public void initialize() {
+        log.info("Inicializando FileStorageService com MongoDB");
+    }
 
     /**
-     * Atualiza o caminho de saída dos arquivos
+     * Salva o conteúdo da oração formatado
      * 
-     * @param newOutputPath Novo caminho de saída
+     * @param processId        ID do processo
+     * @param formattedContent Conteúdo formatado
+     * @return ID único para o conteúdo salvo
      */
-    public void updateOutputPath(String newOutputPath) {
-        this.outputPath = newOutputPath;
-        initialize(); // Reinicializar para criar o diretório se necessário
-        log.info("Caminho de saída atualizado para: {}", newOutputPath);
-    }
+    public String saveOracaoFile(String processId, String formattedContent) {
+        log.info("Salvando conteúdo formatado para processo: {}", processId);
 
-    public void initialize() {
-        try {
-            Path path = Paths.get(outputPath);
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-                log.info("Diretório de saída criado: {}", outputPath);
-            }
-        } catch (IOException e) {
-            log.error("Não foi possível criar o diretório para armazenar os arquivos gerados", e);
-            throw new RuntimeException("Não foi possível criar o diretório para armazenar os arquivos gerados", e);
+        // Criar ou atualizar documento no MongoDB
+        dev.luisoliveira.roteiro.document.PrayerContent prayerContent = mongoStorageService.getPrayerContent(processId);
+
+        if (prayerContent == null) {
+            // Se não existe, criar um novo com título temporário
+            prayerContent = mongoStorageService.createPrayerContent(processId, "Oração " + processId);
         }
+
+        // Atualizar conteúdo
+        mongoStorageService.updateContent(processId, formattedContent, null, null);
+
+        return processId; // Retorna o ID do processo como identificador de conteúdo
     }
 
-    // // Método simplificado sem referência a imagem
-    // public String saveOracaoFile(String processId, String titulo, String
-    // oracaoContent,
-    // String shortContent, String description, List<String> allTitles) {
-    // return saveOracaoFile(processId, titulo, oracaoContent, shortContent,
-    // description, allTitles, null, null);
-    // }
-
-    // Método simplificado sem referência a arquivos de áudio
+    /**
+     * Salva conteúdo de oração
+     * 
+     * @param processId     ID do processo
+     * @param titulo        Título da oração
+     * @param oracaoContent Conteúdo completo
+     * @param shortContent  Versão curta
+     * @param description   Descrição
+     * @param allTitles     Títulos alternativos
+     * @return ID do conteúdo
+     */
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
             String shortContent, String description, List<String> allTitles) {
         return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
     }
 
+    /**
+     * Salva conteúdo de oração com referências a áudios
+     * 
+     * @param processId     ID do processo
+     * @param titulo        Título da oração
+     * @param oracaoContent Conteúdo completo
+     * @param shortContent  Versão curta
+     * @param description   Descrição
+     * @param allTitles     Títulos alternativos
+     * @param oracaoAudioId ID do áudio completo
+     * @param shortAudioId  ID do áudio da versão curta
+     * @return ID do conteúdo
+     */
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
             String shortContent, String description, List<String> allTitles,
-            String oracaoAudioPath, String shortAudioPath) {
-        try {
-            // Criar nome de arquivo seguro baseado no título
-            String safeTitle = titulo.replaceAll("[^a-zA-Z0-9]", "_")
-                    .replaceAll("_+", "_");
+            String oracaoAudioId, String shortAudioId) {
 
-            // Criar a pasta principal com o título
-            Path mainDir = Paths.get(outputPath, safeTitle);
-            if (!Files.exists(mainDir)) {
-                Files.createDirectories(mainDir);
-            }
+        log.info("Salvando conteúdo para processo: {}", processId);
 
-            // Criar subpastas para texto e áudio
-            Path textoDir = mainDir.resolve("texto");
-            Path audioDir = mainDir.resolve("audio");
+        // Criar ou obter documento existente
+        dev.luisoliveira.roteiro.document.PrayerContent prayerContent = mongoStorageService.getPrayerContent(processId);
 
-            if (!Files.exists(textoDir)) {
-                Files.createDirectories(textoDir);
-            }
-
-            if (!Files.exists(audioDir)) {
-                Files.createDirectories(audioDir);
-            }
-
-            log.info("Estrutura de diretórios criada: {}", mainDir);
-
-            // Armazenar o diretório principal deste processo para uso posterior
-            processDirectories.put(processId, mainDir.toString());
-
-            // Salvar arquivo de metadados em txt na pasta de texto
-            String txtFileName = safeTitle + "_meta.txt";
-            Path txtFilePath = textoDir.resolve(txtFileName);
-
-            // Criar conteúdo do arquivo de metadados
-            StringBuilder txtContent = new StringBuilder();
-            txtContent.append("**Título: ").append(titulo).append("**\n\n");
-
-            // Adicionar outros títulos gerados para referência
-            if (allTitles != null && !allTitles.isEmpty()) {
-                txtContent.append("**Outros títulos possíveis:**\n");
-                for (String altTitle : allTitles) {
-                    if (!altTitle.equals(titulo)) { // Não repetir o título principal
-                        txtContent.append("- ").append(altTitle).append("\n");
-                    }
-                }
-                txtContent.append("\n");
-            }
-
-            txtContent.append("**Oração Completa:**\n\n");
-            txtContent.append(oracaoContent).append("\n\n");
-
-            txtContent.append("**Short (30-60 segundos)**\n\n");
-            txtContent.append(shortContent).append("\n\n");
-
-            txtContent.append("**Descrição para YouTube e TikTok**\n\n");
-            txtContent.append(description);
-
-            // Adicionar informação sobre os áudios gerados, se disponíveis
-            if (oracaoAudioPath != null) {
-                txtContent.append("\n\n**Áudio da Oração Completa**\n\n");
-                txtContent.append("Um áudio da oração completa foi gerado em: ./audio/")
-                        .append(Paths.get(oracaoAudioPath).getFileName());
-
-                // Mover/copiar o áudio para a pasta de áudio, se existir
-                try {
-                    Path sourceAudioPath = Paths.get(oracaoAudioPath);
-                    if (Files.exists(sourceAudioPath)) {
-                        Path targetAudioPath = audioDir.resolve(sourceAudioPath.getFileName());
-                        Files.copy(sourceAudioPath, targetAudioPath);
-                        log.info("Áudio da oração completa copiado para: {}", targetAudioPath);
-                    }
-                } catch (IOException e) {
-                    log.warn("Não foi possível copiar o áudio da oração completa: {}", e.getMessage());
-                }
-            }
-
-            if (shortAudioPath != null) {
-                txtContent.append("\n\n**Áudio da Versão Curta**\n\n");
-                txtContent.append("Um áudio da versão curta foi gerado em: ./audio/")
-                        .append(Paths.get(shortAudioPath).getFileName());
-
-                // Mover/copiar o áudio da versão curta para a pasta de áudio, se existir
-                try {
-                    Path sourceShortAudioPath = Paths.get(shortAudioPath);
-                    if (Files.exists(sourceShortAudioPath)) {
-                        Path targetShortAudioPath = audioDir.resolve(sourceShortAudioPath.getFileName());
-                        Files.copy(sourceShortAudioPath, targetShortAudioPath);
-                        log.info("Áudio da versão curta copiado para: {}", targetShortAudioPath);
-                    }
-                } catch (IOException e) {
-                    log.warn("Não foi possível copiar o áudio da versão curta: {}", e.getMessage());
-                }
-            }
-
-            // Escrever no arquivo de metadados
-            try (FileWriter writer = new FileWriter(txtFilePath.toFile())) {
-                writer.write(txtContent.toString());
-            }
-            log.info("Arquivo de metadados salvo com sucesso: {}", txtFilePath);
-
-            // Converter oração para SRT e salvar na pasta de texto
-            String srtFileName = safeTitle + ".srt";
-            Path srtFilePath = textoDir.resolve(srtFileName);
-            String srtContent = srtConverterService.converterParaSRT(oracaoContent);
-
-            try (FileWriter writer = new FileWriter(srtFilePath.toFile())) {
-                writer.write(srtContent);
-            }
-            log.info("Arquivo SRT salvo com sucesso: {}", srtFilePath);
-
-            // Converter versão curta para SRT e salvar na pasta de texto
-            String shortSrtFileName = safeTitle + "_short.srt";
-            Path shortSrtFilePath = textoDir.resolve(shortSrtFileName);
-            String shortSrtContent = srtConverterService.converterParaSRT(shortContent);
-
-            try (FileWriter writer = new FileWriter(shortSrtFilePath.toFile())) {
-                writer.write(shortSrtContent);
-            }
-            log.info("Arquivo SRT da versão curta salvo com sucesso: {}", shortSrtFilePath);
-
-            // Retornar o caminho do diretório principal que contém todas as subpastas
-            return mainDir.toString();
-        } catch (IOException e) {
-            log.error("Falha ao salvar arquivos", e);
-            throw new RuntimeException("Falha ao salvar arquivos", e);
+        if (prayerContent == null) {
+            prayerContent = mongoStorageService.createPrayerContent(processId, titulo);
+        } else if (titulo != null && !titulo.isEmpty()) {
+            prayerContent.setTitle(titulo);
         }
+
+        // Atualizar conteúdo
+        mongoStorageService.updateContent(processId, oracaoContent, shortContent, description);
+
+        // Atualizar metadados
+        mongoStorageService.updateMetadata(processId, null, null, null, null, allTitles);
+
+        return processId; // Retorna o ID do processo como identificador de conteúdo
     }
 
     /**
-     * Obtém o diretório principal para um processo específico
+     * Salva áudio no GridFS
+     * 
+     * @param audioData Dados do áudio
+     * @return ID do áudio
+     */
+    public String saveAudio(byte[] audioData) {
+        if (audioData == null || audioData.length == 0) {
+            return null;
+        }
+
+        // Gerar um ID temporário para o processo
+        String tempProcessId = "temp_" + java.util.UUID.randomUUID().toString();
+        return mongoStorageService.saveAudio(tempProcessId, audioData, false);
+    }
+
+    /**
+     * Salva áudio associado a um processo
      * 
      * @param processId ID do processo
-     * @return Caminho do diretório principal ou null se não encontrado
+     * @param audioName Nome do áudio
+     * @param audioData Dados do áudio
+     * @return ID do áudio
      */
-    public String getProcessDirectory(String processId) {
-        return processDirectories.get(processId);
+    public String saveAudio(String processId, String audioName, byte[] audioData) {
+        if (audioData == null || audioData.length == 0) {
+            log.warn("Tentativa de salvar áudio vazio para processo: {}", processId);
+            return null;
+        }
+
+        boolean isShortVersion = audioName != null && audioName.contains("short");
+        return mongoStorageService.saveAudio(processId, audioData, isShortVersion);
     }
 
     /**
-     * Salva arquivos de áudio com a mesma estrutura usada para os textos
+     * Recupera conteúdo pelo ID
+     * 
+     * @param contentId ID do conteúdo (processo)
+     * @return Conteúdo formatado
      */
-    public String[] saveAudioFiles(String processId, String titulo, byte[] fullAudioData, byte[] shortAudioData) {
-        log.info("Salvando arquivos de áudio para processId={}, título='{}'", processId, titulo);
+    public String getContent(String contentId) {
+        dev.luisoliveira.roteiro.document.PrayerContent prayerContent = mongoStorageService.getPrayerContent(contentId);
 
+        if (prayerContent != null && prayerContent.getContent() != null) {
+            return prayerContent.getContent().getFullText();
+        }
+
+        return null;
+    }
+
+    /**
+     * Recupera áudio pelo ID
+     * 
+     * @param audioId ID do áudio
+     * @return Dados do áudio
+     */
+    public byte[] getAudio(String audioId) {
+        return mongoStorageService.getAudio(audioId);
+    }
+
+    /**
+     * Obtém ID de conteúdo para um processo
+     * 
+     * @param processId ID do processo
+     * @return ID do conteúdo (mesmo que processId)
+     */
+    public String getContentIdForProcess(String processId) {
+        // No MongoDB, o ID do processo é usado como identificador de conteúdo
+        return processId;
+    }
+
+    /**
+     * Método mantido para compatibilidade
+     */
+    public void updateOutputPath(String newOutputPath) {
+        log.info("Método updateOutputPath chamado mas não tem efeito na versão MongoDB");
+    }
+
+    /**
+     * Verifica se conteúdo existe
+     * 
+     * @param contentId ID do conteúdo (processo)
+     * @return true se existir
+     */
+    public boolean contentExists(String contentId) {
+        return mongoStorageService.getPrayerContent(contentId) != null;
+    }
+
+    /**
+     * Verifica se áudio existe
+     * 
+     * @param audioId ID do áudio
+     * @return true se existir
+     */
+    public boolean audioExists(String audioId) {
         try {
-            // Criar nome de arquivo seguro
-            String safeTitle = createSafeFileName(titulo);
-
-            // Verificar se existe um diretório já mapeado para este processo
-            String existingDirPath = processDirectories.get(processId);
-            Path mainDir;
-
-            if (existingDirPath != null) {
-                // Usar o diretório existente
-                mainDir = Paths.get(existingDirPath);
-                log.debug("Usando diretório existente para processo: {}", mainDir);
-            } else {
-                // Criar novo diretório baseado no título
-                mainDir = Paths.get(outputPath, safeTitle);
-                if (!Files.exists(mainDir)) {
-                    Files.createDirectories(mainDir);
-                }
-                // Armazenar o diretório para referência futura
-                processDirectories.put(processId, mainDir.toString());
-                log.debug("Criado novo diretório para processo: {}", mainDir);
-            }
-
-            // Garantir que a subpasta de áudio existe
-            Path audioDir = mainDir.resolve("audio");
-            if (!Files.exists(audioDir)) {
-                Files.createDirectories(audioDir);
-                log.info("Diretório de áudio criado: {}", audioDir);
-            }
-
-            String fullAudioPathStr = null;
-            String shortAudioPathStr = null;
-
-            // Salvar áudio completo
-            if (fullAudioData != null) {
-                String fullAudioName = safeTitle + ".mp3";
-                Path fullAudioPath = audioDir.resolve(fullAudioName);
-                Files.write(fullAudioPath, fullAudioData);
-                fullAudioPathStr = fullAudioPath.toString();
-                log.info("Áudio completo salvo em: {}", fullAudioPath);
-            }
-
-            // Salvar áudio curto
-            if (shortAudioData != null) {
-                String shortAudioName = safeTitle + "_short.mp3";
-                Path shortAudioPath = audioDir.resolve(shortAudioName);
-                Files.write(shortAudioPath, shortAudioData);
-                shortAudioPathStr = shortAudioPath.toString();
-                log.info("Áudio da versão curta salvo em: {}", shortAudioPath);
-            }
-
-            return new String[] { fullAudioPathStr, shortAudioPathStr };
-        } catch (IOException e) {
-            log.error("Erro ao salvar arquivos de áudio: {}", e.getMessage(), e);
-            throw new RuntimeException("Erro ao salvar arquivos de áudio: " + e.getMessage(), e);
+            return mongoStorageService.getAudio(audioId) != null;
+        } catch (Exception e) {
+            return false;
         }
     }
 
     /**
-     * Versão melhorada do método para criar nomes de arquivos seguros,
-     * removendo também acentos e caracteres especiais
+     * Remove conteúdo
+     * 
+     * @param contentId ID do conteúdo (processo)
      */
-    private String createSafeFileName(String title) {
-        if (title == null) {
-            return "unnamed";
-        }
+    public void removeContent(String contentId) {
+        // Implementação pendente
+        log.info("Requisição para remover conteúdo ignorada: compatibilidade mantida");
+    }
 
-        // Remover acentos e normalizar
-        String normalized = java.text.Normalizer.normalize(title, java.text.Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
-
-        // Remover emojis e caracteres especiais - mais restritivo, apenas letras,
-        // números e alguns símbolos básicos
-        String safeTitle = normalized.replaceAll("[^a-zA-Z0-9 _\\-.]", "");
-
-        // Remover palavras-chave como hashtags e menções
-        safeTitle = safeTitle.replaceAll("#\\w+", "").replaceAll("@\\w+", "");
-
-        // Converter espaços em underscore e remover underscores duplicados
-        safeTitle = safeTitle.trim().replaceAll("\\s+", "_").replaceAll("_+", "_");
-
-        // Truncar se for muito longo
-        if (safeTitle.length() > 50) { // Reduzido para garantir compatibilidade
-            safeTitle = safeTitle.substring(0, 50);
-        }
-
-        // Remover underscores no início e fim
-        safeTitle = safeTitle.replaceAll("^_+|_+$", "");
-
-        // Verificar se não ficou vazio
-        if (StringUtils.isBlank(safeTitle)) {
-            safeTitle = "unnamed";
-        }
-
-        return safeTitle;
+    /**
+     * Remove áudio
+     * 
+     * @param audioId ID do áudio
+     */
+    public void removeAudio(String audioId) {
+        // Implementação pendente
+        log.info("Requisição para remover áudio ignorada: compatibilidade mantida");
     }
 }
