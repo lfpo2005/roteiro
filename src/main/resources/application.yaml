@@ -1,6 +1,11 @@
 spring:
   application:
     name: roteiro
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: roteiro
+      auto-index-creation: true
 
 server:
   port: 8080
@@ -17,9 +22,10 @@ openai:
 # Configuração da ElevenLabs
 elevenlabs:
   api:
-    key: ELEVENLABS_API_KEY
+    key: ELEVENLABS_API_KEY # Chave de acesso à API não altere o intellij só esta reconhecendo assim ambiente de dev
+    url: https://api.elevenlabs.io/v1
   voice:
-   # david_trailer: TxGEqnHWrfWFTfGW9XjX
+    id: ${ELEVENLABS_VOICE_ID:ZQe5CZNOzWyzPSCn5a3c}
     david_trailer: ZQe5CZNOzWyzPSCn5a3c
 
 # Configuração de geração de áudio
@@ -53,4 +59,9 @@ management:
         include: health,info,metrics
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: when_authorized# Configuração de TTL para conteúdos
+app:
+  mongodb:
+    content-expiry-days: 7
+    cleanup-schedule: "0 0 2 * * ?"  # Executar limpeza às 2h da manhã todos os dias
+
