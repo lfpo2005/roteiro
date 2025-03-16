@@ -193,27 +193,34 @@ public class SystemConfigService {
     }
 
     /**
-     * Cria um diretório se não existir
-     *
-     * @param directoryPath Caminho do diretório a ser criado
+     * Cria um novo diretório
+     * 
+     * @param path Caminho completo do diretório a ser criado
+     * @return true se criado com sucesso, false caso contrário
      */
-    public boolean createDirectory(String directoryPath) {
-        if (directoryPath == null || directoryPath.isEmpty()) {
+    public boolean createDirectory(String path) {
+        if (path == null || path.isEmpty()) {
+            log.error("Tentativa de criar diretório com caminho vazio");
             throw new IllegalArgumentException("Caminho não pode ser vazio");
         }
 
+        log.info("Tentando criar diretório: {}", path);
         try {
-            Path path = Paths.get(directoryPath);
-            if (Files.exists(path)) {
-                return Files.isDirectory(path); // Se já existir, verificar se é diretório
+            File dir = new File(path);
+
+            // Se já existir, verificar se é diretório
+            if (dir.exists()) {
+                boolean isDir = dir.isDirectory();
+                log.info("Diretório já existe: {} (isDirectory={})", path, isDir);
+                return isDir;
             }
 
             // Tentar criar o diretório e todos os diretórios pai necessários
-            Files.createDirectories(path);
-            log.info("Diretório criado: {}", path.toAbsolutePath());
-            return true;
-        } catch (IOException e) {
-            log.error("Erro ao criar diretório: {}", directoryPath, e);
+            boolean created = dir.mkdirs();
+            log.info("Resultado da criação do diretório {}: {}", path, created ? "sucesso" : "falha");
+            return created;
+        } catch (Exception e) {
+            log.error("Erro ao criar diretório {}: {}", path, e.getMessage(), e);
             return false;
         }
     }

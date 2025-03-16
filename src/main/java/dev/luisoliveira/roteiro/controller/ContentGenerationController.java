@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/content")
+@RequestMapping("/api/content")
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -36,7 +36,8 @@ public class ContentGenerationController {
     @PostMapping("/generate")
     public ResponseEntity<GenerationResponse> startGeneration(@RequestBody GenerationRequest request) {
         String processId = UUID.randomUUID().toString();
-        log.info("Iniciando processo de geração com ID: {} (idioma: {}, título: {}, gerarVersaoShort: {}, gerarAudio: {})",
+        log.info(
+                "Iniciando processo de geração com ID: {} (idioma: {}, título: {}, gerarVersaoShort: {}, gerarAudio: {})",
                 processId,
                 request.getIdioma() != null ? request.getIdioma() : "es (padrão)",
                 request.getTitulo() != null ? "fornecido" : "não fornecido",
@@ -59,16 +60,16 @@ public class ContentGenerationController {
         Boolean gerarAudio = request.getGerarAudio();
 
         // Se for uma duração curta, definir gerarVersaoShort como false
-        if (duracao != null && (
-                duracao.toLowerCase().contains("muito curta") ||
-                        duracao.toLowerCase().contains("curta") ||
-                        duracao.toLowerCase().contains("mini"))) {
+        if (duracao != null && (duracao.toLowerCase().contains("muito curta") ||
+                duracao.toLowerCase().contains("curta") ||
+                duracao.toLowerCase().contains("mini"))) {
             // Para durações curtas, não oferecemos a opção de gerar short
             gerarVersaoShort = false;
             request.setGerarVersaoShort(false);
         }
 
-        // Proteção contra NullPointerException - verificar se gerarVersaoShort e gerarAudio são null
+        // Proteção contra NullPointerException - verificar se gerarVersaoShort e
+        // gerarAudio são null
         // antes de usar diretamente no método setProcessInfo
         if (gerarVersaoShort == null) {
             log.debug("gerarVersaoShort é null, definindo valor padrão");
@@ -86,8 +87,7 @@ public class ContentGenerationController {
                 request.getTitulo(),
                 request.getObservacoes(),
                 gerarVersaoShort,
-                gerarAudio
-        );
+                gerarAudio);
 
         // Publicar evento inicial
         eventBusService.publish(new ContentInitiatedEvent(
@@ -100,8 +100,7 @@ public class ContentGenerationController {
                 request.getTitulo(),
                 request.getObservacoes(),
                 gerarVersaoShort,
-                gerarAudio
-        ));
+                gerarAudio));
 
         String message;
         if (request.getTitulo() != null && !request.getTitulo().isEmpty()) {
@@ -111,10 +110,9 @@ public class ContentGenerationController {
         }
 
         // Adicionar informação sobre a versão short
-        if (duracao != null && (
-                duracao.toLowerCase().contains("muito curta") ||
-                        duracao.toLowerCase().contains("curta") ||
-                        duracao.toLowerCase().contains("mini"))) {
+        if (duracao != null && (duracao.toLowerCase().contains("muito curta") ||
+                duracao.toLowerCase().contains("curta") ||
+                duracao.toLowerCase().contains("mini"))) {
             message += " Para orações de curta duração, não será gerada uma versão short.";
         } else if (gerarVersaoShort != null) {
             if (gerarVersaoShort) {

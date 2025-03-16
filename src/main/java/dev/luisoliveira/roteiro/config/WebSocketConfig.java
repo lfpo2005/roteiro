@@ -27,7 +27,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // Registra o endpoint WebSocket e habilita SockJS para clientes que não
         // suportam WebSocket
-        registry.addEndpoint("/ws")
+        registry.addEndpoint("/api/ws")
                 .setAllowedOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:8080")
                 .withSockJS();
     }

@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/docs")
+@RequestMapping("/api/docs")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class DocumentationController {
 
     private static final String SYSTEM_ARCHITECTURE_MERMAID = """
             flowchart TB
                 Client(Cliente) --> ContentController
-            
+
                 subgraph Controllers
                     ContentController[ContentGenerationController]
                 end
-            
+
                 subgraph Services
                     EventBus[EventBusService]
                     ProcessTracking[ProcessTrackingService]
@@ -32,7 +32,7 @@ public class DocumentationController {
                     OpenAI[OpenAIService]
                     FileStorage[FileStorageService]
                 end
-            
+
                 subgraph Events
                     ContentInitiated[ContentInitiatedEvent]
                     TitlesGenerated[TitlesGeneratedEvent]
@@ -43,46 +43,46 @@ public class DocumentationController {
                     ImagePromptGenerated[ImagePromptGeneratedEvent]
                     ContentCompleted[ContentCompletedEvent]
                 end
-            
+
                 subgraph External
                     OpenAIAPI[OpenAI API]
                 end
-            
+
                 ContentController --> EventBus
                 ContentController --> ProcessTracking
-                
+
                 EventBus --> ContentInitiated
                 ContentInitiated --> TitleGeneration
-                
+
                 TitleGeneration --> TitlesGenerated
                 TitlesGenerated --> ProcessTracking
-                
+
                 ContentController --> TitleSelected
                 TitleSelected --> OracaoGeneration
-                
+
                 OracaoGeneration --> OracaoGenerated
                 OracaoGenerated --> ShortGeneration
-                
+
                 ShortGeneration --> ShortGenerated
                 ShortGenerated --> DescriptionGeneration
-                
+
                 DescriptionGeneration --> DescriptionGenerated
                 DescriptionGenerated --> ImagePromptGeneration
                 DescriptionGenerated --> ContentCompilation
-                
+
                 ImagePromptGeneration --> ImagePromptGenerated
-                
+
                 ContentCompilation --> ContentCompleted
                 ContentCompleted --> ProcessTracking
-                
+
                 TitleGeneration --> OpenAI
                 OracaoGeneration --> OpenAI
                 ShortGeneration --> OpenAI
                 DescriptionGeneration --> OpenAI
                 ImagePromptGeneration --> OpenAI
-                
+
                 OpenAI --> OpenAIAPI
-                
+
                 ContentCompilation --> FileStorage
             """;
 
@@ -111,7 +111,7 @@ public class DocumentationController {
                     <style>
                         body { font-family: Arial, sans-serif; margin: 20px; }
                         h1 { color: #333; }
-                        .mermaid { 
+                        .mermaid {
                             background-color: white;
                             padding: 20px;
                             border-radius: 5px;
@@ -124,13 +124,13 @@ public class DocumentationController {
                     <div class="mermaid">
                 """ + SYSTEM_ARCHITECTURE_MERMAID + """
                     </div>
-                    
+
                     <script>
                         mermaid.initialize({
                             startOnLoad: true,
                             theme: 'default',
                             securityLevel: 'loose',
-                            flowchart: { 
+                            flowchart: {
                                 useMaxWidth: true,
                                 htmlLabels: true
                             }
