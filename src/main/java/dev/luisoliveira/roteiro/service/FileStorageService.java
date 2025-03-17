@@ -33,197 +33,244 @@ public class FileStorageService {
      * 
      * @param processId        ID do processo
      * @param formattedContent Conteúdo formatado
-     * @return ID único para o conteúdo salvo
+     * @return ID do conteúdo salvo
      */
     public String saveOracaoFile(String processId, String formattedContent) {
-        log.info("Salvando conteúdo formatado para processo: {}", processId);
-
-        // Criar ou atualizar documento no MongoDB
-        dev.luisoliveira.roteiro.document.PrayerContent prayerContent = mongoStorageService.getPrayerContent(processId);
-
-        if (prayerContent == null) {
-            // Se não existe, criar um novo com título temporário
-            prayerContent = mongoStorageService.createPrayerContent(processId, "Oração " + processId);
-        }
-
-        // Atualizar conteúdo
-        mongoStorageService.updateContent(processId, formattedContent, null, null);
-
-        return processId; // Retorna o ID do processo como identificador de conteúdo
+        log.info("Salvando conteúdo da oração para processo: {}", processId);
+        String filename = "oracao_" + processId + ".txt";
+        return mongoStorageService.saveTextFile(filename, formattedContent);
     }
 
     /**
-     * Salva conteúdo de oração
+     * Salva o conteúdo da oração com título, conteúdo completo, versão curta e
+     * descrição
      * 
      * @param processId     ID do processo
      * @param titulo        Título da oração
-     * @param oracaoContent Conteúdo completo
-     * @param shortContent  Versão curta
+     * @param oracaoContent Conteúdo completo da oração
+     * @param shortContent  Conteúdo da versão curta
      * @param description   Descrição
-     * @param allTitles     Títulos alternativos
-     * @return ID do conteúdo
+     * @param allTitles     Lista de todos os títulos sugeridos
+     * @return ID do conteúdo salvo
      */
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
             String shortContent, String description, List<String> allTitles) {
-        return saveOracaoFile(processId, titulo, oracaoContent, shortContent, description, allTitles, null, null);
+        log.info("Salvando conteúdo completo da oração para processo: {}", processId);
+
+        StringBuilder content = new StringBuilder();
+        content.append("# ").append(titulo).append("\n\n");
+        content.append("## Oração Completa\n\n").append(oracaoContent).append("\n\n");
+
+        if (shortContent != null && !shortContent.isEmpty()) {
+            content.append("## Versão Curta\n\n").append(shortContent).append("\n\n");
+        }
+
+        if (description != null && !description.isEmpty()) {
+            content.append("## Descrição\n\n").append(description).append("\n\n");
+        }
+
+        String filename = "oracao_completa_" + processId + ".txt";
+        return mongoStorageService.saveTextFile(filename, content.toString());
     }
 
     /**
-     * Salva conteúdo de oração com referências a áudios
+     * Salva o conteúdo da oração com título, conteúdo completo, versão curta,
+     * descrição e IDs de áudio
      * 
      * @param processId     ID do processo
      * @param titulo        Título da oração
-     * @param oracaoContent Conteúdo completo
-     * @param shortContent  Versão curta
+     * @param oracaoContent Conteúdo completo da oração
+     * @param shortContent  Conteúdo da versão curta
      * @param description   Descrição
-     * @param allTitles     Títulos alternativos
-     * @param oracaoAudioId ID do áudio completo
+     * @param allTitles     Lista de todos os títulos sugeridos
+     * @param oracaoAudioId ID do áudio da oração completa
      * @param shortAudioId  ID do áudio da versão curta
-     * @return ID do conteúdo
+     * @return ID do conteúdo salvo
      */
     public String saveOracaoFile(String processId, String titulo, String oracaoContent,
             String shortContent, String description, List<String> allTitles,
             String oracaoAudioId, String shortAudioId) {
+        log.info("Salvando conteúdo completo da oração com IDs de áudio para processo: {}", processId);
 
-        log.info("Salvando conteúdo para processo: {}", processId);
+        StringBuilder content = new StringBuilder();
+        content.append("# ").append(titulo).append("\n\n");
+        content.append("## Oração Completa\n\n").append(oracaoContent).append("\n\n");
 
-        // Criar ou obter documento existente
-        dev.luisoliveira.roteiro.document.PrayerContent prayerContent = mongoStorageService.getPrayerContent(processId);
-
-        if (prayerContent == null) {
-            prayerContent = mongoStorageService.createPrayerContent(processId, titulo);
-        } else if (titulo != null && !titulo.isEmpty()) {
-            prayerContent.setTitle(titulo);
+        if (oracaoAudioId != null && !oracaoAudioId.isEmpty()) {
+            content.append("### Áudio da Oração Completa\n\n");
+            content.append("ID: ").append(oracaoAudioId).append("\n\n");
         }
 
-        // Atualizar conteúdo
-        mongoStorageService.updateContent(processId, oracaoContent, shortContent, description);
+        if (shortContent != null && !shortContent.isEmpty()) {
+            content.append("## Versão Curta\n\n").append(shortContent).append("\n\n");
 
-        // Atualizar metadados
-        mongoStorageService.updateMetadata(processId, null, null, null, null, allTitles);
+            if (shortAudioId != null && !shortAudioId.isEmpty()) {
+                content.append("### Áudio da Versão Curta\n\n");
+                content.append("ID: ").append(shortAudioId).append("\n\n");
+            }
+        }
 
-        return processId; // Retorna o ID do processo como identificador de conteúdo
+        if (description != null && !description.isEmpty()) {
+            content.append("## Descrição\n\n").append(description).append("\n\n");
+        }
+
+        String filename = "oracao_completa_" + processId + ".txt";
+        return mongoStorageService.saveTextFile(filename, content.toString());
     }
 
     /**
-     * Salva áudio no GridFS
+     * Salva áudio
      * 
      * @param audioData Dados do áudio
-     * @return ID do áudio
+     * @return ID do áudio salvo
      */
     public String saveAudio(byte[] audioData) {
-        if (audioData == null || audioData.length == 0) {
-            return null;
-        }
-
-        // Gerar um ID temporário para o processo
-        String tempProcessId = "temp_" + java.util.UUID.randomUUID().toString();
-        return mongoStorageService.saveAudio(tempProcessId, audioData, false);
+        log.info("Salvando áudio (tamanho: {} bytes)", audioData.length);
+        String filename = "audio_" + System.currentTimeMillis() + ".mp3";
+        return mongoStorageService.saveBinaryFile(filename, audioData, "audio/mpeg");
     }
 
     /**
-     * Salva áudio associado a um processo
+     * Salva áudio com nome específico
      * 
      * @param processId ID do processo
      * @param audioName Nome do áudio
      * @param audioData Dados do áudio
-     * @return ID do áudio
+     * @return ID do áudio salvo
      */
     public String saveAudio(String processId, String audioName, byte[] audioData) {
-        if (audioData == null || audioData.length == 0) {
-            log.warn("Tentativa de salvar áudio vazio para processo: {}", processId);
-            return null;
-        }
-
-        boolean isShortVersion = audioName != null && audioName.contains("short");
-        return mongoStorageService.saveAudio(processId, audioData, isShortVersion);
+        log.info("Salvando áudio {} para processo {} (tamanho: {} bytes)", audioName, processId, audioData.length);
+        String filename = audioName + "_" + processId + ".mp3";
+        return mongoStorageService.saveBinaryFile(filename, audioData, "audio/mpeg");
     }
 
     /**
-     * Recupera conteúdo pelo ID
+     * Obtém o conteúdo de um arquivo
      * 
-     * @param contentId ID do conteúdo (processo)
-     * @return Conteúdo formatado
+     * @param contentId ID do conteúdo
+     * @return Conteúdo do arquivo
      */
     public String getContent(String contentId) {
-        dev.luisoliveira.roteiro.document.PrayerContent prayerContent = mongoStorageService.getPrayerContent(contentId);
-
-        if (prayerContent != null && prayerContent.getContent() != null) {
-            return prayerContent.getContent().getFullText();
+        log.info("Obtendo conteúdo com ID: {}", contentId);
+        try {
+            return mongoStorageService.getTextFile(contentId);
+        } catch (Exception e) {
+            log.error("Erro ao obter conteúdo: {}", e.getMessage(), e);
+            return null;
         }
-
-        return null;
     }
 
     /**
-     * Recupera áudio pelo ID
+     * Obtém os dados de um áudio
      * 
      * @param audioId ID do áudio
      * @return Dados do áudio
      */
     public byte[] getAudio(String audioId) {
-        return mongoStorageService.getAudio(audioId);
+        log.info("Obtendo áudio com ID: {}", audioId);
+        try {
+            return mongoStorageService.getBinaryFile(audioId);
+        } catch (Exception e) {
+            log.error("Erro ao obter áudio: {}", e.getMessage(), e);
+            return null;
+        }
     }
 
     /**
-     * Obtém ID de conteúdo para um processo
+     * Obtém o ID do conteúdo para um processo
      * 
      * @param processId ID do processo
-     * @return ID do conteúdo (mesmo que processId)
+     * @return ID do conteúdo
      */
     public String getContentIdForProcess(String processId) {
-        // No MongoDB, o ID do processo é usado como identificador de conteúdo
-        return processId;
+        // Implementação simplificada - em uma versão real, isso seria buscado no banco
+        // de dados
+        return null;
     }
 
     /**
+     * Atualiza o caminho de saída
      * Método mantido para compatibilidade
+     * 
+     * @param newOutputPath Novo caminho de saída
      */
     public void updateOutputPath(String newOutputPath) {
-        log.info("Método updateOutputPath chamado mas não tem efeito na versão MongoDB");
+        log.info("Método updateOutputPath chamado, mas não tem efeito na versão MongoDB");
     }
 
     /**
-     * Verifica se conteúdo existe
+     * Verifica se um conteúdo existe
      * 
-     * @param contentId ID do conteúdo (processo)
-     * @return true se existir
+     * @param contentId ID do conteúdo
+     * @return true se o conteúdo existe
      */
     public boolean contentExists(String contentId) {
-        return mongoStorageService.getPrayerContent(contentId) != null;
-    }
-
-    /**
-     * Verifica se áudio existe
-     * 
-     * @param audioId ID do áudio
-     * @return true se existir
-     */
-    public boolean audioExists(String audioId) {
+        log.info("Verificando se conteúdo existe: {}", contentId);
         try {
-            return mongoStorageService.getAudio(audioId) != null;
+            return mongoStorageService.getTextFile(contentId) != null;
         } catch (Exception e) {
+            log.error("Erro ao verificar existência de conteúdo: {}", e.getMessage(), e);
             return false;
         }
     }
 
     /**
-     * Remove conteúdo
+     * Verifica se um áudio existe
      * 
-     * @param contentId ID do conteúdo (processo)
+     * @param audioId ID do áudio
+     * @return true se o áudio existe
      */
-    public void removeContent(String contentId) {
-        // Implementação pendente
-        log.info("Requisição para remover conteúdo ignorada: compatibilidade mantida");
+    public boolean audioExists(String audioId) {
+        log.info("Verificando se áudio existe: {}", audioId);
+        try {
+            return mongoStorageService.getBinaryFile(audioId) != null;
+        } catch (Exception e) {
+            log.error("Erro ao verificar existência de áudio: {}", e.getMessage(), e);
+            return false;
+        }
     }
 
     /**
-     * Remove áudio
+     * Remove um conteúdo
+     * 
+     * @param contentId ID do conteúdo
+     */
+    public void removeContent(String contentId) {
+        log.info("Removendo conteúdo: {}", contentId);
+        try {
+            mongoStorageService.deleteFile(contentId);
+        } catch (Exception e) {
+            log.error("Erro ao remover conteúdo: {}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Remove um áudio
      * 
      * @param audioId ID do áudio
      */
     public void removeAudio(String audioId) {
-        // Implementação pendente
-        log.info("Requisição para remover áudio ignorada: compatibilidade mantida");
+        log.info("Removendo áudio: {}", audioId);
+        try {
+            mongoStorageService.deleteFile(audioId);
+        } catch (Exception e) {
+            log.error("Erro ao remover áudio: {}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Obtém os dados binários de um arquivo
+     * 
+     * @param fileId ID do arquivo
+     * @return Dados binários do arquivo
+     */
+    public byte[] getBinaryFile(String fileId) {
+        log.info("Obtendo arquivo binário com ID: {}", fileId);
+        try {
+            return mongoStorageService.getBinaryFile(fileId);
+        } catch (Exception e) {
+            log.error("Erro ao obter arquivo binário: {}", e.getMessage(), e);
+            return null;
+        }
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import dev.luisoliveira.roteiro.event.ContentCompletedEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * Controlador para testar a funcionalidade do WebSocket
@@ -22,6 +24,7 @@ public class WebSocketTestController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * Endpoint para testar o envio de mensagens WebSocket
@@ -89,5 +92,51 @@ public class WebSocketTestController {
                 "ECHO",
                 "Resposta ao teste: " + message.getMessage(),
                 message.getData());
+    }
+
+    /**
+     * Endpoint para testar o envio de um ContentCompletedEvent
+     * 
+     * @param processId ID do processo
+     * @return Mensagem de confirmação
+     */
+    @GetMapping("/api/test/content-completed/{processId}")
+    public String testContentCompletedEvent(@PathVariable String processId) {
+        log.info("Testando envio de ContentCompletedEvent para o processo: {}", processId);
+
+        // Criar e publicar um ContentCompletedEvent
+        ContentCompletedEvent event = new ContentCompletedEvent(processId, "Título de teste", "path/to/test/content");
+        eventPublisher.publishEvent(event);
+
+        return "ContentCompletedEvent enviado para o processo: " + processId;
+    }
+
+    /**
+     * Endpoint para testar o envio de uma notificação de conclusão de processo
+     * 
+     * @param processId ID do processo
+     * @return Mensagem de confirmação
+     */
+    @GetMapping("/api/test/completion-notification/{processId}")
+    public String testCompletionNotification(@PathVariable String processId) {
+        log.info("Testando envio de notificação de conclusão para o processo: {}", processId);
+
+        // Criar uma notificação de conclusão de processo
+        NotificationMessage notification = new NotificationMessage(
+                processId,
+                "PROCESS_COMPLETED",
+                "Processo concluído com sucesso!",
+                "path/to/test/content");
+
+        // Enviar para o tópico específico do processo
+        String destination = "/topic/notifications/" + processId;
+        messagingTemplate.convertAndSend(destination, notification);
+        log.info("Notificação enviada para {}", destination);
+
+        // Enviar para o tópico geral
+        messagingTemplate.convertAndSend("/topic/notifications", notification);
+        log.info("Notificação enviada para /topic/notifications");
+
+        return "Notificação de conclusão enviada para o processo: " + processId;
     }
 }

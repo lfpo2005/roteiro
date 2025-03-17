@@ -43,6 +43,7 @@ public class ProcessTrackingService {
         private Boolean gerarAudio = null;
         private String fullAudioId; // ID do áudio da oração completa
         private String shortAudioId; // ID do áudio da versão curta
+        private String oracaoId; // ID da oração no MongoDB
 
         // Getters e setters
         public String getTema() {
@@ -155,6 +156,14 @@ public class ProcessTrackingService {
 
         public void setShortAudioId(String shortAudioId) {
             this.shortAudioId = shortAudioId;
+        }
+
+        public String getOracaoId() {
+            return oracaoId;
+        }
+
+        public void setOracaoId(String oracaoId) {
+            this.oracaoId = oracaoId;
         }
     }
 
@@ -558,5 +567,32 @@ public class ProcessTrackingService {
         stats.put("processesLast24Hours", recentProcesses);
 
         return stats;
+    }
+
+    /**
+     * Armazena o ID da oração no MongoDB
+     * 
+     * @param processId ID do processo
+     * @param oracaoId  ID da oração no MongoDB
+     */
+    public void storeOracaoId(String processId, String oracaoId) {
+        log.debug("Armazenando ID da oração no MongoDB para processo {}: {}", processId, oracaoId);
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setOracaoId(oracaoId);
+        } else {
+            log.warn("Tentativa de armazenar ID da oração para processo inexistente: {}", processId);
+        }
+    }
+
+    /**
+     * Obtém o ID da oração no MongoDB
+     * 
+     * @param processId ID do processo
+     * @return ID da oração no MongoDB ou null se não existir
+     */
+    public String getOracaoId(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getOracaoId() : null;
     }
 }

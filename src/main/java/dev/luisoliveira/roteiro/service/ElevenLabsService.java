@@ -47,6 +47,9 @@ public class ElevenLabsService {
     @Value("${elevenlabs.api.url:https://api.elevenlabs.io/v1}")
     private String apiUrl;
 
+    @Value("${file.output.path:./gerados}")
+    private String outputPath;
+
     public ElevenLabsService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         log.info("ElevenLabsService inicializado");
@@ -92,5 +95,34 @@ public class ElevenLabsService {
             log.error("Erro ao gerar áudio com ElevenLabs: {}", e.getMessage(), e);
             throw new RuntimeException("Falha ao gerar áudio: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Gera áudio a partir de texto e salva em arquivo
+     * 
+     * @param text      Texto para gerar áudio
+     * @param processId ID do processo para nomear o arquivo
+     * @return Caminho do arquivo de áudio gerado
+     * @throws IOException Se ocorrer erro ao salvar o arquivo
+     */
+    public String generateSpeech(String text, String processId) throws IOException {
+        log.info("Gerando áudio para texto de {} caracteres, processo: {}", text.length(), processId);
+
+        // Gerar o áudio usando o método existente
+        byte[] audioData = generateSpeech(text);
+
+        // Criar diretório de saída se não existir
+        Path outputDir = Paths.get(outputPath);
+        if (!Files.exists(outputDir)) {
+            Files.createDirectories(outputDir);
+        }
+
+        // Salvar o áudio em arquivo
+        String fileName = "audio_" + processId + ".mp3";
+        Path audioFile = outputDir.resolve(fileName);
+        Files.write(audioFile, audioData);
+
+        log.info("Áudio salvo em: {}", audioFile.toString());
+        return audioFile.toString();
     }
 }

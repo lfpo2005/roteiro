@@ -1,92 +1,142 @@
 package dev.luisoliveira.roteiro.service;
 
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
- * Serviço para conversão de texto para formato SRT (legendas)
+ * Serviço para conversão de texto em formato SRT (legendas)
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SrtConverterService {
 
-    private static final int DURACAO_BLOCO = 30; // duração em segundos
-    private static final int INTERVALO_ENTRE_BLOCOS = 20; // intervalo em segundos
-    private static final int CARACTERES_POR_BLOCO = 500;
-    private static final int PALAVRAS_MAX_BLOCO = 100;
+    // Tempo médio de leitura em caracteres por segundo
+    private static final int CHARS_PER_SECOND = 15;
+    // Tamanho máximo de cada legenda
+    private static final int MAX_SUBTITLE_LENGTH = 40;
 
     /**
-     * Converte o texto da oração para o formato SRT
+     * Converte texto em formato SRT (legendas)
      * 
-     * @param texto Texto a ser convertido
-     * @return String no formato SRT
+     * @param text Texto a ser convertido
+     * @return Texto em formato SRT
      */
-    public String converterParaSRT(String texto) {
-        StringBuilder srt = new StringBuilder();
-        int contador = 1;
-        int tempoAcumulado = 0;
-        String[] palavras = texto.split("\\s+");
-        StringBuilder blocoAtual = new StringBuilder();
-        int palavrasNoBloco = 0;
+    public String convertToSrt(String text) {
+        log.info("Convertendo texto para formato SRT (tamanho: {} caracteres)", text.length());
 
-        for (String palavra : palavras) {
-            if (blocoAtual.length() + palavra.length() <= CARACTERES_POR_BLOCO
-                    && palavrasNoBloco < PALAVRAS_MAX_BLOCO) {
-                blocoAtual.append(palavra).append(" ");
-                palavrasNoBloco++;
+        // Dividir o texto em sentenças
+        List<String> sentences = splitIntoSentences(text);
+
+        // Dividir sentenças em legendas de tamanho adequado
+        List<String> subtitles = new ArrayList<>();
+        for (String sentence : sentences) {
+            if (sentence.length() <= MAX_SUBTITLE_LENGTH) {
+                subtitles.add(sentence);
             } else {
-                int ultimoPontoFinal = blocoAtual.lastIndexOf(".");
-                if (ultimoPontoFinal != -1 && ultimoPontoFinal != blocoAtual.length() - 1) {
-                    String resto = blocoAtual.substring(ultimoPontoFinal + 1);
-                    blocoAtual.setLength(ultimoPontoFinal + 1);
-                    srt.append(formatarBlocoSRT(contador, tempoAcumulado, blocoAtual.toString()));
-                    contador++;
-                    tempoAcumulado += DURACAO_BLOCO + INTERVALO_ENTRE_BLOCOS;
-                    blocoAtual = new StringBuilder(resto).append(palavra).append(" ");
-                    palavrasNoBloco = resto.split("\\s+").length + 1;
-                } else {
-                    srt.append(formatarBlocoSRT(contador, tempoAcumulado, blocoAtual.toString()));
-                    contador++;
-                    tempoAcumulado += DURACAO_BLOCO + INTERVALO_ENTRE_BLOCOS;
-                    blocoAtual = new StringBuilder(palavra).append(" ");
-                    palavrasNoBloco = 1;
-                }
+                // Dividir sentenças longas em partes menores
+                subtitles.addAll(splitLongSentence(sentence));
             }
         }
 
-        // Adicionar o último bloco
-        if (blocoAtual.length() > 0) {
-            srt.append(formatarBlocoSRT(contador, tempoAcumulado, blocoAtual.toString()));
+        // Gerar o arquivo SRT
+        StringBuilder srtContent = new StringBuilder();
+        int index = 1;
+        long startTime = 0;
+
+        for (String subtitle : subtitles) {
+            // Calcular duração baseada no número de caracteres
+            long duration = (long) Math.ceil((double) subtitle.length() / CHARS_PER_SECOND) * 1000;
+            long endTime = startTime + duration;
+
+            // Formatar tempos
+            String startTimeFormatted = formatTime(startTime);
+            String endTimeFormatted = formatTime(endTime);
+
+            // Adicionar entrada SRT
+            srtContent.append(index).append("\n");
+            srtContent.append(startTimeFormatted).append(" --> ").append(endTimeFormatted).append("\n");
+            srtContent.append(subtitle).append("\n\n");
+
+            // Preparar para próxima legenda
+            index++;
+            startTime = endTime + 100; // 100ms de pausa entre legendas
         }
 
-        return srt.toString().trim();
-    }
-
-    private String formatarBlocoSRT(int contador, int tempoInicio, String texto) {
-        int tempoFim = tempoInicio + DURACAO_BLOCO;
-        return String.format("%d\n%s --> %s\n%s\n\n",
-                contador,
-                formatarTempo(tempoInicio),
-                formatarTempo(tempoFim),
-                texto.trim());
-    }
-
-    private String formatarTempo(int segundos) {
-        int horas = segundos / 3600;
-        int minutos = (segundos % 3600) / 60;
-        int segsRestantes = segundos % 60;
-        return String.format("%02d:%02d:%02d,000", horas, minutos, segsRestantes);
+        log.info("Conversão para SRT concluída. Geradas {} legendas", subtitles.size());
+        return srtContent.toString();
     }
 
     /**
-     * Converte texto para formato SRT
+     * Divide texto em sentenças
      * 
-     * @param text Texto a ser convertido
-     * @return Texto no formato SRT
+     * @param text Texto a ser dividido
+     * @return Lista de sentenças
      */
-    public String convertToSrt(String text) {
-        log.info("Convertendo texto para formato SRT");
-        // Implementação simplificada
-        return text;
+    private List<String> splitIntoSentences(String text) {
+        List<String> sentences = new ArrayList<>();
+        Pattern pattern = Pattern.compile("[^.!?\\s][^.!?]*(?:[.!?](?!['\"]?\\s|$)[^.!?]*)*[.!?]?['\"]?(?=\\s|$)");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            String sentence = matcher.group().trim();
+            if (!sentence.isEmpty()) {
+                sentences.add(sentence);
+            }
+        }
+
+        return sentences;
+    }
+
+    /**
+     * Divide uma sentença longa em partes menores
+     * 
+     * @param sentence Sentença a ser dividida
+     * @return Lista de partes da sentença
+     */
+    private List<String> splitLongSentence(String sentence) {
+        List<String> parts = new ArrayList<>();
+        int length = sentence.length();
+        int start = 0;
+
+        while (start < length) {
+            int end = Math.min(start + MAX_SUBTITLE_LENGTH, length);
+
+            // Ajustar para não cortar palavras
+            if (end < length && !Character.isWhitespace(sentence.charAt(end))) {
+                int lastSpace = sentence.lastIndexOf(' ', end);
+                if (lastSpace > start) {
+                    end = lastSpace;
+                }
+            }
+
+            parts.add(sentence.substring(start, end).trim());
+            start = end;
+        }
+
+        return parts;
+    }
+
+    /**
+     * Formata tempo em milissegundos para formato SRT (HH:MM:SS,mmm)
+     * 
+     * @param timeMs Tempo em milissegundos
+     * @return Tempo formatado
+     */
+    private String formatTime(long timeMs) {
+        Duration duration = Duration.ofMillis(timeMs);
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+        long millis = duration.toMillisPart();
+
+        return String.format("%02d:%02d:%02d,%03d", hours, minutes, seconds, millis);
     }
 }

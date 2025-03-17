@@ -2,6 +2,8 @@ package dev.luisoliveira.roteiro.service;
 
 import dev.luisoliveira.roteiro.event.OracaoGeneratedEvent;
 import dev.luisoliveira.roteiro.event.TitleSelectedEvent;
+import dev.luisoliveira.roteiro.model.PrayerContent;
+import dev.luisoliveira.roteiro.repository.PrayerContentRepository;
 import dev.luisoliveira.roteiro.util.PromptBuilder;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ public class OracaoGenerationService {
         private final OpenAIService openAIService;
         private final EventBusService eventBusService;
         private final ProcessTrackingService processTrackingService;
+        private final PrayerContentRepository prayerContentRepository;
 
         @EventListener
         public void handleTitleSelectedEvent(TitleSelectedEvent event) {
@@ -62,6 +65,22 @@ public class OracaoGenerationService {
                         String oracaoContent = openAIService.generateOracao(prompt);
                         processTrackingService.setOracaoContent(processId, oracaoContent);
                         log.info("Oração gerada com sucesso (tamanho: {} caracteres)", oracaoContent.length());
+
+                        // Salvar a oração no MongoDB
+                        log.info("Salvando oração no MongoDB...");
+                        PrayerContent oracao = new PrayerContent(oracaoContent);
+                        oracao.setTitle(selectedTitle);
+                        oracao.setTheme(tema);
+                        oracao.setStyle(estiloOracao);
+                        oracao.setDuration(duracao);
+                        oracao.setLanguage(idioma);
+                        oracao.setProcessId(processId);
+
+                        oracao = prayerContentRepository.save(oracao);
+                        log.info("Oração salva no MongoDB com ID: {}", oracao.getId());
+
+                        // Armazenar o ID da oração no processo
+                        processTrackingService.storeOracaoId(processId, oracao.getId());
 
                         // Atualizar status
                         processTrackingService.updateStatus(

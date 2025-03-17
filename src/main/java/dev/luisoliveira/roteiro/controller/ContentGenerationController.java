@@ -6,17 +6,25 @@ import dev.luisoliveira.roteiro.dto.ProcessStatus;
 import dev.luisoliveira.roteiro.dto.TitleSelectionRequest;
 import dev.luisoliveira.roteiro.event.ContentInitiatedEvent;
 import dev.luisoliveira.roteiro.event.TitleSelectedEvent;
+import dev.luisoliveira.roteiro.model.PrayerContent;
+import dev.luisoliveira.roteiro.repository.PrayerContentRepository;
+import dev.luisoliveira.roteiro.service.ContentCompilationService;
 import dev.luisoliveira.roteiro.service.EventBusService;
 import dev.luisoliveira.roteiro.service.ProcessTrackingService;
+import dev.luisoliveira.roteiro.dto.ProcessStatusResponse;
+import dev.luisoliveira.roteiro.dto.TitleCompletionRequest;
+import dev.luisoliveira.roteiro.service.FileStorageService;
+
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -26,6 +34,7 @@ import java.util.UUID;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/content")
@@ -36,8 +45,10 @@ public class ContentGenerationController {
 
     private final EventBusService eventBusService;
     private final ProcessTrackingService processTrackingService;
+    private final ContentCompilationService contentCompilationService;
     private final MongoTemplate mongoTemplate;
-    private final dev.luisoliveira.roteiro.repository.PrayerContentRepository prayerContentRepository;
+    private final PrayerContentRepository prayerContentRepository;
+    private final FileStorageService fileStorageService;
 
     @PostMapping("/generate")
     public ResponseEntity<GenerationResponse> startGeneration(@RequestBody GenerationRequest request) {
@@ -162,16 +173,16 @@ public class ContentGenerationController {
             status.put("message", "Conexão com MongoDB estabelecida com sucesso");
             log.info("[DIAGNÓSTICO] Conexão com MongoDB estabelecida com sucesso");
 
-            // Verificar se a coleção prayer_contents existe
-            boolean collectionExists = mongoTemplate.collectionExists("prayer_contents");
+            // Verificar se a coleção oracoes existe
+            boolean collectionExists = mongoTemplate.collectionExists("oracoes");
             status.put("collectionExists", collectionExists);
-            log.info("[DIAGNÓSTICO] Coleção prayer_contents existe: {}", collectionExists);
+            log.info("[DIAGNÓSTICO] Coleção oracoes existe: {}", collectionExists);
 
             // Contar documentos
             long count = mongoTemplate.count(new org.springframework.data.mongodb.core.query.Query(),
-                    "prayer_contents");
+                    "oracoes");
             status.put("documentCount", count);
-            log.info("[DIAGNÓSTICO] Número de documentos na coleção prayer_contents: {}", count);
+            log.info("[DIAGNÓSTICO] Número de documentos na coleção oracoes: {}", count);
 
             return ResponseEntity.ok(status);
         } catch (Exception e) {
@@ -200,16 +211,15 @@ public class ContentGenerationController {
             testDoc.append("_id", testId);
             testDoc.append("processId", testId);
             testDoc.append("title", "Documento de Teste");
+            testDoc.append("texto", "Conteúdo de teste");
             testDoc.append("createdAt", new java.util.Date());
-            testDoc.append("expiresAt", new java.util.Date(System.currentTimeMillis() + 86400000)); // +1 dia
-            testDoc.append("isDownloaded", false);
-            testDoc.append("downloadCount", 0);
+            testDoc.append("updatedAt", new java.util.Date());
 
-            mongoTemplate.getCollection("prayer_contents").insertOne(testDoc);
+            mongoTemplate.getCollection("oracoes").insertOne(testDoc);
             log.info("[DIAGNÓSTICO] Documento de teste inserido com sucesso: {}", testId);
 
             // Verificar se o documento foi realmente salvo
-            org.bson.Document foundDoc = mongoTemplate.getCollection("prayer_contents")
+            org.bson.Document foundDoc = mongoTemplate.getCollection("oracoes")
                     .find(new org.bson.Document("_id", testId))
                     .first();
 
@@ -245,7 +255,7 @@ public class ContentGenerationController {
 
         try {
             // Buscar o documento pelo ID
-            org.bson.Document foundDoc = mongoTemplate.getCollection("prayer_contents")
+            org.bson.Document foundDoc = mongoTemplate.getCollection("oracoes")
                     .find(new org.bson.Document("_id", id))
                     .first();
 
@@ -337,16 +347,18 @@ public class ContentGenerationController {
             log.debug("[DIAGNÓSTICO] ID do documento de teste: {}", testId);
 
             // Criar um documento usando o repositório
-            dev.luisoliveira.roteiro.document.PrayerContent testContent = new dev.luisoliveira.roteiro.document.PrayerContent(
-                    testId, "Teste via Repositório");
+            PrayerContent testContent = new PrayerContent();
+            testContent.setId(testId);
+            testContent.setTitle("Teste via Repositório");
+            testContent.setProcessId(testId);
+            testContent.setTexto("Conteúdo de teste via repositório");
 
             log.info("[DIAGNÓSTICO] Salvando documento via repositório: {}", testContent);
-            dev.luisoliveira.roteiro.document.PrayerContent savedContent = prayerContentRepository.save(testContent);
+            PrayerContent savedContent = prayerContentRepository.save(testContent);
             log.info("[DIAGNÓSTICO] Documento salvo via repositório com ID: {}", savedContent.getId());
 
             // Verificar se o documento foi realmente salvo
-            java.util.Optional<dev.luisoliveira.roteiro.document.PrayerContent> foundContent = prayerContentRepository
-                    .findById(testId);
+            Optional<PrayerContent> foundContent = prayerContentRepository.findById(testId);
 
             if (foundContent.isPresent()) {
                 log.info("[DIAGNÓSTICO] Documento encontrado via repositório: {}", foundContent.get().getId());
@@ -360,7 +372,7 @@ public class ContentGenerationController {
             }
 
             // Verificar também via MongoTemplate
-            org.bson.Document foundDoc = mongoTemplate.getCollection("prayer_contents")
+            org.bson.Document foundDoc = mongoTemplate.getCollection("oracoes")
                     .find(new org.bson.Document("_id", testId))
                     .first();
 
@@ -398,30 +410,30 @@ public class ContentGenerationController {
             log.info("[DIAGNÓSTICO] ID do documento de teste: {}", testId);
 
             // Criar um documento usando o construtor modificado
-            dev.luisoliveira.roteiro.document.PrayerContent testContent = new dev.luisoliveira.roteiro.document.PrayerContent(
-                    testId, "Teste de ID");
+            PrayerContent testContent = new PrayerContent();
+            testContent.setId(testId);
+            testContent.setTitle("Teste de ID");
+            testContent.setProcessId(testId);
 
             // Verificar se o ID foi definido corretamente
             log.info("[DIAGNÓSTICO] ID antes de salvar: {}", testContent.getId());
             log.info("[DIAGNÓSTICO] ProcessID antes de salvar: {}", testContent.getProcessId());
 
             // Salvar o documento
-            dev.luisoliveira.roteiro.document.PrayerContent savedContent = prayerContentRepository.save(testContent);
+            PrayerContent savedContent = prayerContentRepository.save(testContent);
 
             // Verificar o ID após salvar
             log.info("[DIAGNÓSTICO] ID após salvar: {}", savedContent.getId());
             log.info("[DIAGNÓSTICO] ProcessID após salvar: {}", savedContent.getProcessId());
 
             // Tentar recuperar o documento pelo ID
-            java.util.Optional<dev.luisoliveira.roteiro.document.PrayerContent> foundById = prayerContentRepository
-                    .findById(testId);
+            Optional<PrayerContent> foundById = prayerContentRepository.findById(testId);
 
             // Tentar recuperar o documento pelo processId
-            java.util.Optional<dev.luisoliveira.roteiro.document.PrayerContent> foundByProcessId = prayerContentRepository
-                    .findByProcessId(testId);
+            List<PrayerContent> foundByProcessId = prayerContentRepository.findByProcessId(testId);
 
             // Verificar também via MongoTemplate
-            org.bson.Document foundDoc = mongoTemplate.getCollection("prayer_contents")
+            org.bson.Document foundDoc = mongoTemplate.getCollection("oracoes")
                     .find(new org.bson.Document("_id", testId))
                     .first();
 
@@ -430,15 +442,15 @@ public class ContentGenerationController {
             response.put("savedId", savedContent.getId());
             response.put("savedProcessId", savedContent.getProcessId());
             response.put("foundById", foundById.isPresent());
-            response.put("foundByProcessId", foundByProcessId.isPresent());
+            response.put("foundByProcessId", !foundByProcessId.isEmpty());
             response.put("foundByMongoTemplate", foundDoc != null);
 
             if (foundById.isPresent()) {
                 response.put("foundByIdValue", foundById.get().getId());
             }
 
-            if (foundByProcessId.isPresent()) {
-                response.put("foundByProcessIdValue", foundByProcessId.get().getId());
+            if (!foundByProcessId.isEmpty()) {
+                response.put("foundByProcessIdValue", foundByProcessId.get(0).getId());
             }
 
             if (foundDoc != null) {
@@ -455,6 +467,128 @@ public class ContentGenerationController {
             response.put("error", e.getClass().getName());
             log.error("[DIAGNÓSTICO] Erro ao testar manipulação de IDs: {}", e.getMessage(), e);
             return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    @GetMapping("/download/{processId}/{filename}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String processId, @PathVariable String filename) {
+        log.info("Iniciando download do arquivo {} do processo {}", filename, processId);
+
+        try {
+            // Buscar o arquivo no MongoDB
+            byte[] fileData = fileStorageService.getBinaryFile(filename);
+
+            if (fileData == null) {
+                log.error("Arquivo não encontrado: {}", filename);
+                return ResponseEntity.notFound().build();
+            }
+
+            // Criar o recurso para download
+            ByteArrayResource resource = new ByteArrayResource(fileData);
+
+            // Determinar o tipo de conteúdo baseado na extensão do arquivo
+            String contentType = determineContentType(filename);
+
+            // Configurar os headers para download
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.setContentLength(fileData.length);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(resource);
+
+        } catch (Exception e) {
+            log.error("Erro ao baixar arquivo {}: {}", filename, e.getMessage(), e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    private String determineContentType(String filename) {
+        String extension = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+        switch (extension) {
+            case "mp3":
+                return "audio/mpeg";
+            case "txt":
+                return "text/plain";
+            case "srt":
+                return "text/plain";
+            case "jpg":
+            case "jpeg":
+                return "image/jpeg";
+            case "png":
+                return "image/png";
+            default:
+                return "application/octet-stream";
+        }
+    }
+
+    @GetMapping("/status/{processId}")
+    public ResponseEntity<ProcessStatusResponse> getStatus(@PathVariable String processId) {
+        // Log menos verboso para evitar poluir os logs
+        log.debug("Verificando status do processo: {}", processId);
+
+        try {
+            // Primeiro, tentar obter o status do ProcessTrackingService
+            ProcessStatus processStatus = processTrackingService.getStatus(processId);
+
+            if (processStatus != null) {
+                // Criar resposta com o status do processo
+                ProcessStatusResponse response = new ProcessStatusResponse();
+                response.setProcessId(processId);
+                response.setStatus(processStatus.getCurrentStage());
+                response.setProgress(processStatus.getProgressPercentage());
+                response.setMessage("Processo em andamento: " + processStatus.getCurrentStage());
+                response.setTimestamp(processStatus.getLastUpdated());
+
+                // Se o processo estiver concluído, adicionar os IDs de conteúdo e áudio
+                if (processStatus.isCompleted()) {
+                    response.setContentId(processStatus.getResultPath());
+                    response.setAudioId(processTrackingService.getFullAudioId(processId));
+                    response.setMessage("Processo concluído");
+                }
+
+                // Log apenas para mudanças significativas de status
+                if (processStatus.getProgressPercentage() % 10 == 0) {
+                    log.info("Status do processo {}: {}, progresso: {}",
+                            processId,
+                            response.getStatus(),
+                            response.getProgress());
+                }
+
+                return ResponseEntity.ok(response);
+            }
+
+            // Se não encontrou no ProcessTrackingService, tentar buscar no MongoDB
+            List<PrayerContent> documents = prayerContentRepository.findByProcessId(processId);
+
+            if (!documents.isEmpty()) {
+                PrayerContent document = documents.get(0);
+
+                // Criar resposta com o status do processo
+                ProcessStatusResponse response = new ProcessStatusResponse();
+                response.setProcessId(processId);
+                response.setStatus("COMPLETED"); // Valor padrão para documentos no MongoDB
+                response.setProgress(100); // Valor padrão para documentos no MongoDB
+                response.setMessage("Processo concluído");
+                response.setTimestamp(document.getCreatedAt());
+                response.setContentId(document.getId());
+                response.setAudioId(document.getAudioUrl());
+
+                // Log apenas uma vez por sessão para cada processo
+                log.debug("Status do processo {} (via MongoDB): COMPLETED, progresso: 100", processId);
+
+                return ResponseEntity.ok(response);
+            }
+
+            // Se não encontrou em nenhum lugar, retornar 404
+            log.warn("Processo não encontrado: {}", processId);
+            return ResponseEntity.notFound().build();
+
+        } catch (Exception e) {
+            log.error("Erro ao verificar status do processo: {}", processId, e);
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

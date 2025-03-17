@@ -24,14 +24,14 @@ server:
 # Configuração do OpenAI
 openai:
   api:
-    key: ${OPENAI_API_KEY:chave_não_definida}
+    key: OPENAI_API_KEY # Chave de acesso à API do OpenAI não altera essa linha porque o intellij só esta conseguindo ler a chave assim
   #model: gpt-4
   model: gpt-3.5-turbo
 
 # Configuração da ElevenLabs
 elevenlabs:
   api:
-    key: ${ELEVENLABS_API_KEY:chave_não_definida}
+    key: ELEVENLABS_API_KEY # Chave de acesso à API da ElevenLabs não altera essa linha porque o intellij só esta conseguindo ler a chave assim'
     url: https://api.elevenlabs.io/v1
   voice:
    # david_trailer: TxGEqnHWrfWFTfGW9XjX
@@ -40,7 +40,7 @@ elevenlabs:
 # Configuração do Replicate
 replicate:
   api:
-    key: ${REPLICATE_API_KEY:chave_não_definida}
+    key: REPLICATE_API_KEY # Chave de acesso à API do Replicate não altera essa linha porque o intellij só esta conseguindo ler a chave assim
 
 # Configuração de geração de áudio
 audio:
