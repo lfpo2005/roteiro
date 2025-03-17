@@ -15,6 +15,16 @@ spring:
       fail-on-unknown-properties: false
   jpa:
     open-in-view: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: CLIENT_ID
+            client-secret: CLIENT_SECRET
+            scope: email,profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
 
 server:
   port: 8080
@@ -80,3 +90,7 @@ app:
   mongodb:
     content-expiry-days: 7
     cleanup-schedule: "0 0 2 * * ?"  # Executar limpeza às 2h da manhã todos os dias
+
+jwt:
+  secret: dev_secret_key_for_jwt_signing_development_only_2024
+  expiration: 86400000
