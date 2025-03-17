@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: roteiro-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=roteiro
+    networks:
+      - roteiro-network
+
+networks:
+  roteiro-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local 
