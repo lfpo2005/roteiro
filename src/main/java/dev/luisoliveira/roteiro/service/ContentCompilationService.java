@@ -1,6 +1,8 @@
 package dev.luisoliveira.roteiro.service;
 
+import dev.luisoliveira.roteiro.event.DescriptionGeneratedEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import dev.luisoliveira.roteiro.dto.TitleCompletionRequest;
@@ -177,5 +179,35 @@ public class ContentCompilationService {
                 }
 
                 return content.toString();
+        }
+
+        @EventListener
+        public void handleDescriptionGeneratedEvent(DescriptionGeneratedEvent event) {
+                try {
+                        String processId = event.getProcessId();
+                        log.info("Recebido evento DescriptionGeneratedEvent para processo: {}", processId);
+
+                        // Guardar os conteúdos no ProcessTrackingService se ainda não estiverem lá
+                        processTrackingService.setTitulo(processId, event.getTitle());
+                        processTrackingService.setOracaoContent(processId, event.getOracaoContent());
+                        processTrackingService.setShortContent(processId, event.getShortContent());
+                        processTrackingService.setDescriptionContent(processId, event.getDescriptionContent());
+
+                        // Atualizar status
+                        processTrackingService.updateStatus(
+                                processId,
+                                "Compilando conteúdo final...",
+                                95);
+
+                        // Compilar o conteúdo
+                        compileContent(processId);
+
+                } catch (Exception e) {
+                        log.error("Erro ao compilar conteúdo após geração de descrição: {}", e.getMessage(), e);
+                        processTrackingService.updateStatus(
+                                event.getProcessId(),
+                                "Erro ao compilar conteúdo final: " + e.getMessage(),
+                                0);
+                }
         }
 }

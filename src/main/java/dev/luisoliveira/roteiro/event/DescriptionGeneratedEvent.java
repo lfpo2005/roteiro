@@ -17,4 +17,6 @@ public class DescriptionGeneratedEvent extends ContentEvent {
         this.shortContent = shortContent;
         this.descriptionContent = descriptionContent;
     }
+
+
 }
