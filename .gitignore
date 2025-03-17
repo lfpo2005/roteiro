@@ -31,3 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### API Keys ###
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+### Logs ###
+logs/
+*.log
+
+### Generated files ###
+/gerados/
