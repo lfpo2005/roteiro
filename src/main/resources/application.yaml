@@ -6,6 +6,15 @@ spring:
       uri: mongodb://localhost:27017
       database: roteiro
       auto-index-creation: true
+      uuid-representation: standard
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non-null
+    deserialization:
+      fail-on-unknown-properties: false
+  jpa:
+    open-in-view: false
 
 server:
   port: 8080
@@ -15,18 +24,23 @@ server:
 # Configuração do OpenAI
 openai:
   api:
-    key: OPENAI_API_KEY
+    key: ${OPENAI_API_KEY:chave_não_definida}
   #model: gpt-4
   model: gpt-3.5-turbo
 
 # Configuração da ElevenLabs
 elevenlabs:
   api:
-    key: ELEVENLABS_API_KEY # Chave de acesso à API não altere o intellij só esta reconhecendo assim ambiente de dev
+    key: ${ELEVENLABS_API_KEY:chave_não_definida}
     url: https://api.elevenlabs.io/v1
   voice:
    # david_trailer: TxGEqnHWrfWFTfGW9XjX
     david_trailer: ZQe5CZNOzWyzPSCn5a3c
+
+# Configuração do Replicate
+replicate:
+  api:
+    key: ${REPLICATE_API_KEY:chave_não_definida}
 
 # Configuração de geração de áudio
 audio:

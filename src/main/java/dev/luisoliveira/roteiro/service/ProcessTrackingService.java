@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Serviço para rastreamento de processos de geração de conteúdo (versão
@@ -173,7 +174,7 @@ public class ProcessTrackingService {
 
         processes.put(processId, status);
         processInfos.put(processId, new ProcessInfo());
-        log.debug("Processo inicializado: {}", processId);
+        log.debug("[PROCESSO] Processo inicializado: {}", processId);
     }
 
     /**
@@ -189,8 +190,10 @@ public class ProcessTrackingService {
             status.setCurrentStage(currentStage);
             status.setProgressPercentage(progressPercentage);
             status.setLastUpdated(LocalDateTime.now());
-            log.debug("Status atualizado: processId={}, stage={}, progress={}%",
+            log.debug("[PROCESSO] Status atualizado: processId={}, stage={}, progress={}%",
                     processId, currentStage, progressPercentage);
+        } else {
+            log.warn("[PROCESSO] Tentativa de atualizar status de processo inexistente: {}", processId);
         }
     }
 
@@ -209,7 +212,9 @@ public class ProcessTrackingService {
             status.setCurrentStage("Concluído");
             status.setResultPath(contentId); // Agora armazena o ID em vez do caminho
             status.setLastUpdated(LocalDateTime.now());
-            log.info("Processo concluído: processId={}, contentId={}", processId, contentId);
+            log.info("[PROCESSO] Processo concluído: processId={}, contentId={}", processId, contentId);
+        } else {
+            log.warn("[PROCESSO] Tentativa de armazenar resultado para processo inexistente: {}", processId);
         }
     }
 
@@ -225,10 +230,10 @@ public class ProcessTrackingService {
         if (info != null) {
             info.setFullAudioId(fullAudioId);
             info.setShortAudioId(shortAudioId);
-            log.info("IDs de áudio armazenados para o processo {}: full={}, short={}",
+            log.info("[PROCESSO] IDs de áudio armazenados para o processo {}: full={}, short={}",
                     processId, fullAudioId, shortAudioId);
         } else {
-            log.warn("Tentativa de armazenar IDs de áudio para processo inexistente: {}", processId);
+            log.warn("[PROCESSO] Tentativa de armazenar IDs de áudio para processo inexistente: {}", processId);
         }
     }
 
@@ -426,7 +431,132 @@ public class ProcessTrackingService {
         return processTitles.getOrDefault(processId, new ArrayList<>());
     }
 
+    /**
+     * Recupera o ID do resultado de um processo
+     * 
+     * @param processId ID do processo
+     * @return ID do resultado ou null se não existir
+     */
     public String getResultId(String processId) {
         return processResults.get(processId);
+    }
+
+    /**
+     * Recupera o status de todos os processos ativos
+     * 
+     * @return Lista de processos com seus status
+     */
+    public List<Map<String, Object>> getAllProcessStatus() {
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map.Entry<String, ProcessStatus> entry : processes.entrySet()) {
+            String processId = entry.getKey();
+            ProcessStatus status = entry.getValue();
+            ProcessInfo info = processInfos.get(processId);
+
+            Map<String, Object> processData = new HashMap<>();
+            processData.put("processId", processId);
+            processData.put("currentStage", status.getCurrentStage());
+            processData.put("progressPercentage", status.getProgressPercentage());
+            processData.put("startTime", status.getStartTime());
+            processData.put("lastUpdated", status.getLastUpdated());
+            processData.put("completed", status.isCompleted());
+
+            if (info != null) {
+                processData.put("tema", info.getTema());
+                processData.put("titulo", info.getTitulo());
+                processData.put("hasAudio", info.getFullAudioId() != null || info.getShortAudioId() != null);
+            }
+
+            result.add(processData);
+        }
+
+        return result;
+    }
+
+    /**
+     * Recupera o status detalhado de um processo específico
+     * 
+     * @param processId ID do processo
+     * @return Status detalhado do processo ou null se não existir
+     */
+    public Map<String, Object> getProcessStatus(String processId) {
+        ProcessStatus status = processes.get(processId);
+        if (status == null) {
+            return null;
+        }
+
+        ProcessInfo info = processInfos.get(processId);
+        List<String> titles = processTitles.get(processId);
+        String resultId = processResults.get(processId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("processId", processId);
+        result.put("status", status);
+
+        if (info != null) {
+            Map<String, Object> infoMap = new HashMap<>();
+            infoMap.put("tema", info.getTema());
+            infoMap.put("estiloOracao", info.getEstiloOracao());
+            infoMap.put("duracao", info.getDuracao());
+            infoMap.put("tipoOracao", info.getTipoOracao());
+            infoMap.put("idioma", info.getIdioma());
+            infoMap.put("titulo", info.getTitulo());
+            infoMap.put("observacoes", info.getObservacoes());
+            infoMap.put("gerarVersaoShort", info.getGerarVersaoShort());
+            infoMap.put("gerarAudio", info.getGerarAudio());
+            infoMap.put("fullAudioId", info.getFullAudioId());
+            infoMap.put("shortAudioId", info.getShortAudioId());
+
+            result.put("info", infoMap);
+        }
+
+        if (titles != null) {
+            result.put("titles", titles);
+        }
+
+        if (resultId != null) {
+            result.put("resultId", resultId);
+        }
+
+        return result;
+    }
+
+    /**
+     * Recupera estatísticas gerais sobre os eventos do sistema
+     * 
+     * @return Estatísticas de eventos
+     */
+    public Map<String, Object> getEventStatistics() {
+        Map<String, Object> stats = new HashMap<>();
+
+        // Contagem de processos por status
+        Map<String, Integer> statusCounts = new HashMap<>();
+        Map<Boolean, Integer> completionCounts = new HashMap<>();
+        completionCounts.put(true, 0);
+        completionCounts.put(false, 0);
+
+        for (ProcessStatus status : processes.values()) {
+            String stage = status.getCurrentStage();
+            statusCounts.put(stage, statusCounts.getOrDefault(stage, 0) + 1);
+
+            boolean completed = status.isCompleted();
+            completionCounts.put(completed, completionCounts.get(completed) + 1);
+        }
+
+        // Estatísticas gerais
+        stats.put("totalProcesses", processes.size());
+        stats.put("completedProcesses", completionCounts.get(true));
+        stats.put("activeProcesses", completionCounts.get(false));
+        stats.put("statusDistribution", statusCounts);
+
+        // Processos recentes (últimas 24 horas)
+        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
+        long recentProcesses = processes.values().stream()
+                .filter(status -> status.getStartTime().isAfter(oneDayAgo))
+                .count();
+        stats.put("processesLast24Hours", recentProcesses);
+
+        return stats;
     }
 }
