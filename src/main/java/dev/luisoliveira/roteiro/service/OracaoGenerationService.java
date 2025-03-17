@@ -80,7 +80,7 @@ public class OracaoGenerationService {
                         log.info("Oração salva no MongoDB com ID: {}", oracao.getId());
 
                         // Armazenar o ID da oração no processo
-                        processTrackingService.storeOracaoId(processId, oracao.getId());
+                        processTrackingService.storeOracaoId(processId, String.valueOf(oracao.getId()));
 
                         // Atualizar status
                         processTrackingService.updateStatus(

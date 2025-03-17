@@ -1,5 +1,6 @@
 package dev.luisoliveira.roteiro.controller;
 
+import dev.luisoliveira.roteiro.config.security.UserPrincipal;
 import dev.luisoliveira.roteiro.dto.GenerationRequest;
 import dev.luisoliveira.roteiro.dto.GenerationResponse;
 import dev.luisoliveira.roteiro.dto.ProcessStatus;
@@ -22,6 +23,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +56,34 @@ public class ContentGenerationController {
     @PostMapping("/generate")
     public ResponseEntity<GenerationResponse> startGeneration(@RequestBody GenerationRequest request) {
         String processId = UUID.randomUUID().toString();
+
+        // Obter o usuário autenticado
+        String userId = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() &&
+                !authentication.getPrincipal().equals("anonymousUser")) {
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            userId = String.valueOf(userPrincipal.getId());
+            log.info("Processo iniciado pelo usuário: {}", userId);
+        } else {
+            log.info("Processo iniciado sem usuário autenticado");
+        }
+
+        log.info(
+                "[PROCESSO] Iniciando processo de geração com ID: {} (idioma: {}, título: {}, gerarVersaoShort: {}, gerarAudio: {})",
+                processId,
+                request.getIdioma() != null ? request.getIdioma() : "es (padrão)",
+                request.getTitulo() != null ? "fornecido" : "não fornecido",
+                request.getGerarVersaoShort(),
+                request.getGerarAudio());
+
+        // Inicializar status
+        processTrackingService.initializeProcess(processId);
+
+        // Armazenar o userId no processo
+        if (userId != null) {
+            processTrackingService.setUserId(processId, userId);
+        }
         log.info(
                 "[PROCESSO] Iniciando processo de geração com ID: {} (idioma: {}, título: {}, gerarVersaoShort: {}, gerarAudio: {})",
                 processId,
@@ -334,141 +365,6 @@ public class ContentGenerationController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/test-repository")
-    public ResponseEntity<Map<String, Object>> testRepository() {
-        log.info("[DIAGNÓSTICO] Testando repositório diretamente");
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-
-        try {
-            // Criar um documento de teste usando o repositório
-            String testId = "test_repo_" + System.currentTimeMillis();
-            log.debug("[DIAGNÓSTICO] ID do documento de teste: {}", testId);
-
-            // Criar um documento usando o repositório
-            PrayerContent testContent = new PrayerContent();
-            testContent.setId(testId);
-            testContent.setTitle("Teste via Repositório");
-            testContent.setProcessId(testId);
-            testContent.setTexto("Conteúdo de teste via repositório");
-
-            log.info("[DIAGNÓSTICO] Salvando documento via repositório: {}", testContent);
-            PrayerContent savedContent = prayerContentRepository.save(testContent);
-            log.info("[DIAGNÓSTICO] Documento salvo via repositório com ID: {}", savedContent.getId());
-
-            // Verificar se o documento foi realmente salvo
-            Optional<PrayerContent> foundContent = prayerContentRepository.findById(testId);
-
-            if (foundContent.isPresent()) {
-                log.info("[DIAGNÓSTICO] Documento encontrado via repositório: {}", foundContent.get().getId());
-                response.put("documentFound", true);
-                response.put("documentId", foundContent.get().getId());
-                response.put("documentTitle", foundContent.get().getTitle());
-                response.put("documentProcessId", foundContent.get().getProcessId());
-            } else {
-                log.warn("[DIAGNÓSTICO] Documento NÃO encontrado via repositório!");
-                response.put("documentFound", false);
-            }
-
-            // Verificar também via MongoTemplate
-            org.bson.Document foundDoc = mongoTemplate.getCollection("oracoes")
-                    .find(new org.bson.Document("_id", testId))
-                    .first();
-
-            if (foundDoc != null) {
-                log.info("[DIAGNÓSTICO] Documento encontrado via MongoTemplate: {}", foundDoc.toJson());
-                response.put("documentFoundViaTemplate", true);
-            } else {
-                log.warn("[DIAGNÓSTICO] Documento NÃO encontrado via MongoTemplate!");
-                response.put("documentFoundViaTemplate", false);
-            }
-
-            response.put("status", "SUCCESS");
-            response.put("message", "Teste de repositório concluído");
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("status", "ERROR");
-            response.put("message", "Erro ao testar repositório: " + e.getMessage());
-            response.put("error", e.getClass().getName());
-            log.error("[DIAGNÓSTICO] Erro ao testar repositório: {}", e.getMessage(), e);
-            return ResponseEntity.status(500).body(response);
-        }
-    }
-
-    @PostMapping("/test-id")
-    public ResponseEntity<Map<String, Object>> testIdHandling() {
-        log.info("[DIAGNÓSTICO] Testando manipulação de IDs");
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-
-        try {
-            // Criar um documento de teste com ID explícito
-            String testId = "test_id_" + System.currentTimeMillis();
-            log.info("[DIAGNÓSTICO] ID do documento de teste: {}", testId);
-
-            // Criar um documento usando o construtor modificado
-            PrayerContent testContent = new PrayerContent();
-            testContent.setId(testId);
-            testContent.setTitle("Teste de ID");
-            testContent.setProcessId(testId);
-
-            // Verificar se o ID foi definido corretamente
-            log.info("[DIAGNÓSTICO] ID antes de salvar: {}", testContent.getId());
-            log.info("[DIAGNÓSTICO] ProcessID antes de salvar: {}", testContent.getProcessId());
-
-            // Salvar o documento
-            PrayerContent savedContent = prayerContentRepository.save(testContent);
-
-            // Verificar o ID após salvar
-            log.info("[DIAGNÓSTICO] ID após salvar: {}", savedContent.getId());
-            log.info("[DIAGNÓSTICO] ProcessID após salvar: {}", savedContent.getProcessId());
-
-            // Tentar recuperar o documento pelo ID
-            Optional<PrayerContent> foundById = prayerContentRepository.findById(testId);
-
-            // Tentar recuperar o documento pelo processId
-            List<PrayerContent> foundByProcessId = prayerContentRepository.findByProcessId(testId);
-
-            // Verificar também via MongoTemplate
-            org.bson.Document foundDoc = mongoTemplate.getCollection("oracoes")
-                    .find(new org.bson.Document("_id", testId))
-                    .first();
-
-            // Adicionar resultados à resposta
-            response.put("originalId", testId);
-            response.put("savedId", savedContent.getId());
-            response.put("savedProcessId", savedContent.getProcessId());
-            response.put("foundById", foundById.isPresent());
-            response.put("foundByProcessId", !foundByProcessId.isEmpty());
-            response.put("foundByMongoTemplate", foundDoc != null);
-
-            if (foundById.isPresent()) {
-                response.put("foundByIdValue", foundById.get().getId());
-            }
-
-            if (!foundByProcessId.isEmpty()) {
-                response.put("foundByProcessIdValue", foundByProcessId.get(0).getId());
-            }
-
-            if (foundDoc != null) {
-                response.put("foundByMongoTemplateValue", foundDoc.toJson());
-            }
-
-            response.put("status", "SUCCESS");
-            response.put("message", "Teste de manipulação de IDs concluído");
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("status", "ERROR");
-            response.put("message", "Erro ao testar manipulação de IDs: " + e.getMessage());
-            response.put("error", e.getClass().getName());
-            log.error("[DIAGNÓSTICO] Erro ao testar manipulação de IDs: {}", e.getMessage(), e);
-            return ResponseEntity.status(500).body(response);
-        }
-    }
 
     @GetMapping("/download/{processId}/{filename}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String processId, @PathVariable String filename) {
@@ -573,7 +469,7 @@ public class ContentGenerationController {
                 response.setProgress(100); // Valor padrão para documentos no MongoDB
                 response.setMessage("Processo concluído");
                 response.setTimestamp(document.getCreatedAt());
-                response.setContentId(document.getId());
+                response.setContentId(String.valueOf(document.getId()));
                 response.setAudioId(document.getAudioUrl());
 
                 // Log apenas uma vez por sessão para cada processo

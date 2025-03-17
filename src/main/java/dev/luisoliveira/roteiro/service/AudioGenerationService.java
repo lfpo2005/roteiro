@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Serviço para geração de áudio (versão transitória para MongoDB)
@@ -66,7 +67,7 @@ public class AudioGenerationService {
             processTrackingService.storeAudioIds(processId, audioFilePath, null);
 
             // Atualizar a oração no MongoDB com a URL do áudio
-            String oracaoId = processTrackingService.getOracaoId(processId);
+            UUID oracaoId = UUID.fromString(processTrackingService.getOracaoId(processId));
             if (oracaoId != null) {
                 log.info("Atualizando oração no MongoDB com URL do áudio. ID da oração: {}", oracaoId);
                 Optional<PrayerContent> oracaoOpt = prayerContentRepository.findById(oracaoId);

@@ -44,8 +44,9 @@ public class ProcessTrackingService {
         private String fullAudioId; // ID do áudio da oração completa
         private String shortAudioId; // ID do áudio da versão curta
         private String oracaoId; // ID da oração no MongoDB
+        private String userId; // ID do usuário que criou o processo
 
-        // Getters e setters
+        // Getters e setters para todos os campos, incluindo userId
         public String getTema() {
             return tema;
         }
@@ -165,6 +166,29 @@ public class ProcessTrackingService {
         public void setOracaoId(String oracaoId) {
             this.oracaoId = oracaoId;
         }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+    }
+
+    public void setUserId(String processId, String userId) {
+        ProcessInfo info = processInfos.get(processId);
+        if (info != null) {
+            info.setUserId(userId);
+            log.info("Usuário ID {} associado ao processo {}", userId, processId);
+        } else {
+            log.warn("Tentativa de associar usuário a processo inexistente: {}", processId);
+        }
+    }
+
+    public String getUserId(String processId) {
+        ProcessInfo info = processInfos.get(processId);
+        return info != null ? info.getUserId() : null;
     }
 
     /**

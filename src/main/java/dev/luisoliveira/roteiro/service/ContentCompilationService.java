@@ -14,6 +14,8 @@ import dev.luisoliveira.roteiro.repository.PrayerContentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
+
 /**
  * Serviço para compilação de conteúdo de orações (versão transitória para
  * MongoDB)
@@ -37,11 +39,12 @@ public class ContentCompilationService {
                 log.info("Iniciando compilação de conteúdo para processo: {}", processId);
                 processTrackingService.updateStatus(processId, "Compilando conteúdo", 70);
 
-                // Obtém o conteúdo da oração do serviço de rastreamento
+                // Obter o conteúdo da oração e o userId
                 String oracaoContent = processTrackingService.getOracaoContent(processId);
                 String shortContent = processTrackingService.getShortContent(processId);
                 String descriptionContent = processTrackingService.getDescriptionContent(processId);
                 String title = processTrackingService.getTitulo(processId);
+                String userId = processTrackingService.getUserId(processId);
 
                 // Formata e salva o conteúdo da oração
                 String formattedContent = formatPrayerContent(title, oracaoContent, shortContent, descriptionContent);
@@ -51,7 +54,9 @@ public class ContentCompilationService {
                 log.info("Conteúdo compilado e salvo com ID: {}", contentId);
 
                 // Verifica se já existe uma oração salva no MongoDB para este processo
-                String oracaoId = processTrackingService.getOracaoId(processId);
+                UUID oracaoId = UUID.fromString(processTrackingService.getOracaoId(processId));
+
+                // Ao criar ou atualizar a oração no MongoDB, incluir o userId
                 if (oracaoId == null) {
                         // Se não existir, cria uma nova oração no MongoDB
                         log.info("Criando nova oração no MongoDB para o processo: {}", processId);
@@ -61,6 +66,12 @@ public class ContentCompilationService {
                         oracao.setShortContent(shortContent);
                         oracao.setDescription(descriptionContent);
 
+                        // Adicionar userId se disponível
+                        if (userId != null) {
+                                oracao.setUserId(userId);
+                                log.info("Relacionando oração ao usuário: {}", userId);
+                        }
+
                         // Adicionar outros metadados disponíveis
                         oracao.setTheme(processTrackingService.getTema(processId));
                         oracao.setStyle(processTrackingService.getEstiloOracao(processId));
@@ -69,7 +80,7 @@ public class ContentCompilationService {
 
                         oracao = prayerContentRepository.save(oracao);
                         oracaoId = oracao.getId();
-                        processTrackingService.storeOracaoId(processId, oracaoId);
+                        processTrackingService.storeOracaoId(processId, String.valueOf(oracaoId));
                         log.info("Oração salva no MongoDB com ID: {}", oracaoId);
                 } else {
                         // Se existir, atualiza a oração existente
@@ -79,6 +90,12 @@ public class ContentCompilationService {
                                 oracao.setTitle(title);
                                 oracao.setShortContent(shortContent);
                                 oracao.setDescription(descriptionContent);
+
+                                // Verificar e atualizar userId se necessário
+                                if (oracao.getUserId() == null && userId != null) {
+                                        oracao.setUserId(userId);
+                                        log.info("Adicionando userId à oração existente: {}", userId);
+                                }
 
                                 // Atualizar outros metadados se necessário
                                 if (oracao.getTheme() == null) {
@@ -118,7 +135,6 @@ public class ContentCompilationService {
                         processTrackingService.updateStatus(processId, "Concluído", 100);
                 }
         }
-
         /**
          * Completa o título com base na primeira geração de conteúdo
          * 

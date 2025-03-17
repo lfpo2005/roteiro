@@ -5,6 +5,7 @@ import dev.luisoliveira.roteiro.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,6 +35,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api/mobile/auth/**").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                // Endpoints para acesso ao status do processo (GET apenas)
+                                .requestMatchers(HttpMethod.GET, "/content/status/**").permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 // Endpoints protegidos
                                 .anyRequest().authenticated()
                 )
